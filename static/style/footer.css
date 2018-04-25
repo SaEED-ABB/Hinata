@@ -1,0 +1,27 @@
+.footer{
+	padding:40px 50px;
+	background-color: #fff3ff;
+}
+.socialNet{
+	border-top: 1.5px solid #acacac;
+	border-bottom: 1.5px solid #acacac;
+	height: 55px;
+	text-align: center;
+	margin:0;
+}
+.socialNet a img{
+	height: 41px;
+    margin: 6px 3px;
+}
+div h5 a{
+	font-size: 15px;
+}
+.links{
+	margin-bottom: 20px;
+}
+a{
+	color: black;
+}
+a:hover{
+	
+}

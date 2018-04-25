@@ -1,0 +1,11 @@
+@font-face {
+    font-family: freestyle;
+    src: url('../font/Freestyle.ttf')  format('truetype'),
+    url('../font/freestyle.woff') format('woff'),
+    url('../font/freestyle.eot');
+}
+
+@font-face {
+    font-family: koodak;
+    src: url('../font/koodak.ttf')  format('truetype');
+}

@@ -1,7 +1,7 @@
 from django.urls import path 
 from customer.api import views
 
-customer_urlpatterns = [
+urlpatterns = [
     path('change_password/', views.change_password, name="change_password"),
     path('get_user_info/', views.get_user_info, name="get_user_info"),
     path('login/', views.login, name="login"),

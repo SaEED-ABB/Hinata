@@ -18,17 +18,19 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from frontview.urls import frontview_urlpatterns
-from customer.api.urls import customer_urlpatterns
-from store.api.urls import store_urlpatterns
+# from frontview.urls import frontview_urlpatterns
+# from customer.api.urls import customer_urlpatterns
+# from store.api.urls import store_urlpatterns
 
 api_urlpatterns = [
-    path('customer/', include(customer_urlpatterns)),
-    path('store/', include(store_urlpatterns)),
+    path('customer/', include('customer.api.urls')),
+    path('store/', include('store.api.urls')),
 ]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(api_urlpatterns)),
-    path('', include(frontview_urlpatterns))
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('', include('frontview.urls')),
+]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

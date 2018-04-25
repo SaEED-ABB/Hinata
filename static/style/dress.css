@@ -1,0 +1,191 @@
+html,body{
+	width:100%;
+	height: 100%;
+	margin:0;
+	padding:0;
+	font-family: koodak;
+}
+.row{
+	margin:0;
+}
+.pageSologn{
+	text-align: center;
+	margin-top: 50px;
+	margin-bottom: 30px;
+}
+.mainContent{
+	padding: 10px 25px;
+}
+.pageSologn h3{
+    margin-bottom: 22px; 
+}
+#nextImg,#previousImg{
+    background-image: url('../img/model.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: inline-block;
+    border-radius: 50%;
+    margin:auto 25px;
+    border: 1px solid gray;
+}
+#nextImg img,#previousImg img{
+	width: 100px;
+    height: 100px;
+    visibility: hidden;
+}
+.dressImages{
+	width: 46%;
+    margin: 0 2% 4%;
+    cursor: pointer;
+}
+.dressProp{
+	word-wrap: break-word;
+    padding: 20px 10px;
+}
+h1{
+	font-size: 30px;
+}
+h2{
+	font-size: 26px;
+}
+.dressProp h1,.dressProp h2{
+	margin: 0 auto 15px;
+}
+.range{
+	direction: ltr;
+	padding: 0;
+}
+.color{
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    margin: auto 1px;
+    background-color: blue;
+    border-radius: 5px;
+    margin-bottom: -5px;
+}
+.size{
+    display: inline-block;
+    border: 1px solid black;
+    padding: 0 3px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-family: koodak;
+    margin: auto 1px;
+}
+.scale{
+	border-radius: 5px;
+    border: 1px solid;
+    padding: 5px;
+    outline: none;
+    padding-right: 10px;
+    width: 70px;
+}
+.dressDetail{
+	margin:10px 0;
+}
+.dressDetail label{
+	font-size: 1.2em;
+}
+.dressBuy{
+	text-align: center;
+}
+.link{
+	text-decoration: underline;
+	color: blue;
+}
+.basketProduct{
+	width: 35px;
+	margin: 0 10px;
+}
+.likeProduct{
+    height: 30px;
+    margin-top: 3px;
+}
+.bigButton{
+	background-color: white;
+    border: 1.4px solid #9d9a9a;
+    width: 300px;
+    padding: 8px;
+    font-size: 1.9em;
+    border-radius: 10px;
+    outline: none;
+    margin: 12px;
+}
+.price{
+	font-size: 1.4em;
+    font-weight: 700;
+}
+
+
+.comment_btn{
+    border: none;
+    background: #2196F3;
+    color: #fff !important;
+    font-size: 16px;
+    padding: 8px 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    -o-transition: all 0.1s;
+    transition: all 0.1s;
+}
+
+.comment_btn:hover{
+    background: #1976D2;
+    color: #fff;
+}
+.comment_btn:active,
+.comment_btn:focus{
+    background: #1976D2 !important;
+    color: #fff !important;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+.comment{
+    margin: 0;
+    border-radius: 6px;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+    padding: 5px 0;
+}
+.comment:hover{
+    background: #fff;
+    box-shadow: 0 3px 6px rgba(193, 193, 193, 0.4), 0 6px 12px rgb(179, 179, 179)
+}
+.textarea-comment{
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: transparent;
+    color: #000;
+    resize: none;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+.textarea-comment:focus{
+    background: #fff;
+}
+.textarea-comment::-webkit-input-placeholder { /* Chrome */
+    color: #000;
+}
+.textarea-comment:-ms-input-placeholder { /* IE 10+ */
+    color: #000;
+}
+.textarea-comment::-moz-placeholder { /* Firefox 19+ */
+    color: #000;
+}
+.textarea-comment:-moz-placeholder { /* Firefox 4 - 18 */
+    color: #000;
+}
+.comment_img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+.comment div h4{
+	margin-top: 0;
+}

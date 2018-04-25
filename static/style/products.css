@@ -1,0 +1,143 @@
+html,body{
+	width:100%;
+	height: 100%;
+	margin:0;
+	padding:0;
+	font-family: koodak;
+}
+.row{
+    margin:0;
+}
+.pageSologn{
+	text-align: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+.mainContent{
+	padding: 10px 25px;
+}
+.pageSologn h3{
+	
+    margin-bottom: 22px; 
+}
+select{
+	border: none;
+    outline: none;
+}
+.selectBoxes{
+	padding:0 70px 0;
+}
+.selectBoxes .col-md-6{
+	padding: 0
+}
+.cards{
+	padding: 0 46.5px;
+}
+.pCard{ 
+    background: #fff ;
+/*  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  transition: all 0.2s;*/
+    margin: 20px 1.818%;
+    width: 29.68%;
+    float: right;
+}
+.pCard:hover{
+    box-shadow:  0 10px 22px #4576ff ;
+    margin-top: 16px;
+    margin-bottom: 24px;
+}
+.weed-img{
+    width: 40px;
+    height: 40px;
+}
+.weed-postion{
+    position: relative;
+}
+.weed-position span{
+    font-family: 'Samim-bold' !important;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    -ms-transform:translate(-50%,-50%)
+}
+.city:focus{
+    box-shadow: none;
+}
+.link{
+    color: #333;
+}
+.link:hover{
+    color: #333  !important;
+    text-decoration: none !important;
+}
+.basketProduct{
+	width: 35px;
+	margin: 0 10px;
+}
+.likeProduct{
+    height: 30px;
+    margin-top: 3px;
+}
+.productPrice{
+	font-size: 1.5em;
+}
+.cardPrice{
+	text-align: left;
+	margin-top: 10px;
+}
+.cardPrice span{
+	margin:15px;
+}
+.moreButton{
+	text-align: center;
+	margin: 20px 0;
+}
+
+@media screen and (max-width: 1200px) and (min-width: 992px) {
+    .pCard{
+        margin: 20px 5% ;
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 768px) and (min-width: 610px) {
+	.cardIcons{
+	    float: right;
+	}
+    .shopsStar{
+    float: left;
+    }
+    .pCard{
+      margin: 20px 5% ;
+      width: 40%;
+    }
+}
+
+@media screen and (max-width: 610px) and (min-width: 420px) {
+    .cardIcons{
+    float: right;
+    }
+    .shopsStar{
+    float: left;
+    }
+    .pCard{
+        margin: 20px 22.5% ;
+        width: 55%;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .cardIcons{
+    float: right;
+    }
+    .shopsStar{
+    float: left;
+    }
+    .pCard{
+        margin: 20px 10% ;
+        width: 80%;
+    }
+}

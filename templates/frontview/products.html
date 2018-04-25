@@ -1,4 +1,4 @@
-{% extends "./base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block head %}
@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body %}
-	{% include "./header.html" %}
+	{% include "frontview/header.html" %}
 	<div class="row pageSologn">
 		<h3>سوکا و هیناتا</h3>
 		<h4>زیبا بپوشید و زیبا زندگی کنید </h4>
@@ -54,7 +54,7 @@
 			<img src="{% static 'img/refresh.png' %}" style="width: 50px;">
 		</div>
 	</div>
-	{% include "./footer.html" %}
+	{% include "frontview/footer.html" %}
 {% endblock %}
 
 {% block js %}
