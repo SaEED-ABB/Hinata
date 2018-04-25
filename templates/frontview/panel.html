@@ -1,4 +1,4 @@
-{% extends "./base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 
@@ -7,9 +7,9 @@
 {% endblock %}
 
 {% block body %}
-    {% include "./frontview/header.html" %}
+    {% include "frontview/header.html" %}
     <div class="backImg"></div>
-    {% include "./frontview/footer.html" %}
+    {% include "frontview/footer.html" %}
 {% endblock %}
 
 {% block js %}
