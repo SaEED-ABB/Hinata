@@ -32,7 +32,7 @@ class User(AbstractUser):
 
 
 class UserAddress(BaseData):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
     address = models.TextField()
     phone_number = models.CharField(max_length=200, blank=True, null=True)
 
@@ -53,7 +53,7 @@ class Basket(BaseData):
     )
 
     code = models.CharField(max_length=200, unique=True, default=("HINATA-{}".format(get_random_string(6))).upper())
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.DO_NOTHING, related_name='baskets')
     phone_number = models.CharField(max_length=200, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, default='in_progress', max_length=200, blank=True, null=True)
@@ -64,10 +64,10 @@ class Basket(BaseData):
 
 
 class SelectedProduct(BaseData):
-    basket = models.ForeignKey(Basket, on_delete=models.CASCADE)
-    product = models.ForeignKey('store.product', on_delete=models.DO_NOTHING)
-    size = models.ForeignKey('store.size', on_delete=models.DO_NOTHING)
-    color = models.ForeignKey('store.color', on_delete=models.DO_NOTHING)
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='selected_products')
+    product = models.ForeignKey('store.Product', on_delete=models.DO_NOTHING)
+    size = models.ForeignKey('store.Size', on_delete=models.DO_NOTHING)
+    color = models.ForeignKey('store.Color', on_delete=models.DO_NOTHING)
     count = models.IntegerField(blank=True, null=True, default=1)
     price = models.CharField(max_length=200, blank=True, null=True)
 
@@ -84,8 +84,8 @@ class SelectedProduct(BaseData):
 
 
 class Comment(BaseData):
-    product = models.ForeignKey('store.product', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey('store.Product', on_delete=models.CASCADE, related_name='related_comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     comment = models.TextField()
     is_approved = models.NullBooleanField()
 
@@ -105,8 +105,8 @@ class Image(BaseData):
 
 
 class Favorite(BaseData):
-    product = models.ForeignKey('store.product', on_delete=models.CASCADE)
-    user = models.ForeignKey('customer.user', on_delete=models.CASCADE)
+    product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
+    user = models.ForeignKey('customer.User', on_delete=models.CASCADE, related_name='favorite_products')
 
     def __str__(self):
         return "{} - {}".format(self.user.username, self.product.name)
