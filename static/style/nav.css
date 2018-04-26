@@ -169,7 +169,7 @@
 
 
 
-.loginPopBack{
+.PopBack{
 	display: none;
 	position: fixed;
 	height: 100%;
@@ -182,7 +182,7 @@
 	right: 0;
 	left: 0;
 }
-.loginPop{
+.Pop{
 	display: none;
 	position: fixed;
 	top: 10%;
