@@ -11,12 +11,12 @@ function getProducts(){
 	    },
 		success: function (data) {
 			for(var i=0; i<data.products.length;i++){
-				if(data.products[i].favorite){
+				if(data.products[i].is_favorite){
 					var favoriteText="<img src='/static/img/liked.png' product_id="+data.products[i].id+" class='likeProduct addToFavorite'>";
 				}else{
 					var favoriteText="<img src='/static/img/like.png' product_id="+data.products[i].id+" class='likeProduct'>";
 				}
-				if(data.products[i].basket){
+				if(data.products[i].is_in_basket){
 					var basketText="<img src='/static/img/basketed.png' product_id="+data.products[i].id+" class='basketProduct addToBasket'>";
 				}else{
 					var basketText="<img src='/static/img/basket.png' product_id="+data.products[i].id+" class='basketProduct '>";
@@ -93,6 +93,7 @@ $(document).on('click touchstart','.basketProduct',function(){
 	}
 });
 $(document).on('click touchstart','.likeProduct',function(){
+	var thisElement=$(this);
 	if(!$(this).hasClass('addToFavorite')){
 		$.ajax({
 			type: 'GET',
