@@ -23,12 +23,12 @@ class User(AbstractUser):
         ('user', 'Normal User'),
         ('admin', 'Admin User')
     )
-    national_code = models.CharField(max_length=200, blank=True, null=True)
     phone_number = models.CharField(max_length=200, blank=True, null=True)
     account_type = models.CharField(max_length=200, blank=True, null=True, choices=AC_TYPE)
+    favorites = models.ManyToManyField('store.Product', related_name='lovers')
 
     def __str__(self):
-        return str(self.national_code)
+        return '{}({})'.format(self.username, self.get_full_name())
 
 
 class UserAddress(BaseData):
@@ -60,14 +60,14 @@ class Basket(BaseData):
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return self.user.get_full_name()
+        return "{}'s basket({})".format(self.user.username, self.code)
 
 
 class SelectedProduct(BaseData):
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='selected_products')
     product = models.ForeignKey('store.Product', on_delete=models.DO_NOTHING)
-    size = models.ForeignKey('store.Size', on_delete=models.DO_NOTHING)
-    color = models.ForeignKey('store.Color', on_delete=models.DO_NOTHING)
+    size = models.ForeignKey('store.Size', on_delete=models.DO_NOTHING, blank=True, null=True)
+    color = models.ForeignKey('store.Color', on_delete=models.DO_NOTHING, blank=True, null=True)
     count = models.IntegerField(blank=True, null=True, default=1)
     price = models.CharField(max_length=200, blank=True, null=True)
 
@@ -80,7 +80,7 @@ class SelectedProduct(BaseData):
         return super(SelectedProduct, self).update(*args, **kwargs)
 
     def __str__(self):
-        return self.basket.code
+        return '{} in {}'.format(self.product.name, self.basket)
 
 
 class Comment(BaseData):
@@ -90,7 +90,7 @@ class Comment(BaseData):
     is_approved = models.NullBooleanField()
 
     def __str__(self):
-        return "{}-{}".format(self.product.name, self.user.username)
+        return "by {} for {}".format(self.user.username, self.product.name)
 
 
 class Image(BaseData):
@@ -104,9 +104,9 @@ class Image(BaseData):
         return self.image.name
 
 
-class Favorite(BaseData):
-    product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
-    user = models.ForeignKey('customer.User', on_delete=models.CASCADE, related_name='favorite_products')
-
-    def __str__(self):
-        return "{} - {}".format(self.user.username, self.product.name)
+# class Favorite(BaseData):
+#     product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
+#     user = models.ForeignKey('customer.User', on_delete=models.CASCADE, related_name='favorite_products')
+#
+#     def __str__(self):
+#         return "{} likes {}".format(self.user.username, self.product.name)

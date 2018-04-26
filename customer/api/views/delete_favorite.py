@@ -2,9 +2,11 @@ from json import loads as json_loads
 
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404
 
 from customer.decorators import check_permission_api
-from customer.models import Favorite, User
+from customer.models import User
+from store.models import Product
 
 from ratelimit.decorators import ratelimit
 
@@ -26,12 +28,7 @@ def delete_favorite(request):
         }
         return JsonResponse(res_body, status=400)
 
-    this_favorite = Favorite.objects.filter(pk=favorite_id, user=user)
-    if not this_favorite:
-        res_body = {
-            "error": "Favorite does not exists"
-        }
-        return JsonResponse(res_body, status=400)
+    favorite_product = get_object_or_404(Product, id=favorite_id)
+    user.favorites.delete(favorite_product)
 
-    this_favorite.delete()
     return JsonResponse({})

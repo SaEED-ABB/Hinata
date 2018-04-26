@@ -1,18 +1,18 @@
-from json import loads as json_loads
-
 from django.shortcuts import get_object_or_404
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 
-from store.models import Product, Category
 from ratelimit.decorators import ratelimit
+
+from store.models import Product, Category
 
 
 @require_http_methods(['GET'])
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 def get_products(request):
-    # try:
+    user = request.user
+    print(request.user)
     this_page_number = int(request.GET.get('page', '1'))
     count = int(request.GET.get('count', '12'))
 
@@ -32,21 +32,28 @@ def get_products(request):
     # if context["previous"]:
     #     context["previous_page_number"] = requested_page.previous_page_number()
 
-    for i in requested_page.object_list:
-        front_image_url = get_object_or_404(i.images, name='front').image.image.url
-        back_image_url = get_object_or_404(i.images, name='back').image.image.url
+    for p in requested_page.object_list:
+        front_image_url = get_object_or_404(p.images, name='front').image.image.url
+        back_image_url = get_object_or_404(p.images, name='back').image.image.url
+
+        is_in_basket = False
+        is_favorite = False
+        if not request.user.is_anonymous:
+            is_in_basket = False
+            basket = user.baskets.filter(status='in_progress')
+            if basket.exists() and basket[0].selected_products.filter(product=p).exists():
+                is_in_basket = True
+
+            is_favorite = True if p in user.favorites.all() else False
 
         context['products'].append({
-            "id": i.pk,
-            "name": i.name,
-            "price": i.price,
+            "id": p.pk,
+            "name": p.name,
+            "price": p.price,
             "front_image": front_image_url,
-            "back_image": back_image_url
+            "back_image": back_image_url,
+            "is_in_basket": is_in_basket,
+            "is_favorite": is_favorite
         })
 
     return JsonResponse(context, safe=False)
-    # except:
-    #     res_body = {
-    #         "error": "Bad Request"
-    #     }
-    #     return JsonResponse(res_body, status=400)

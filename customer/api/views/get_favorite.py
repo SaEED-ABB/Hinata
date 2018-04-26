@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.query import Q
 
 from customer.decorators import check_permission_api
-from customer.models import Favorite, User
+from customer.models import User
 
 from ratelimit.decorators import ratelimit
 
@@ -16,9 +16,9 @@ def get_favorite(request):
     user = request.user
     # user = User.objects.get(pk=1)
     context = []
-    for i in Favorite.objects.filter(user=user):
+    for favorite_product in user.favorites.all():
         context.append({
-            "product_name": i.product.name,
-            "product_id": i.product.pk,
+            "product_name": favorite_product.name,
+            "product_id": favorite_product.pk,
         })
     return JsonResponse(context, safe=False)

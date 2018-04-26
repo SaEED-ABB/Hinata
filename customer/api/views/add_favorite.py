@@ -3,9 +3,10 @@ from json import loads as json_loads
 
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404
 
 from customer.decorators import check_permission_api
-from customer.models import Favorite, User
+from customer.models import User
 from store.models import Product
 
 from ratelimit.decorators import ratelimit
@@ -21,27 +22,18 @@ def add_favorite(request):
 
         # user = User.objects.get(pk=1)
         user = request.user
-        product = data['product']
+        product_id = data['product']
     except:
         res_body = {
             "error": "Bad Request"
         }
         return JsonResponse(res_body, status=400)
 
-    try:
-        this_product = Product.objects.get(pk=product)
-    except Product.DoesNotExist:
-        res_body = {
-            "error": "Product not found"
-        }
-        return JsonResponse(res_body, status=400)
+    this_product = get_object_or_404(Product, pk=product_id)
 
-    this_favorite = Favorite()
-    this_favorite.product = this_product
-    this_favorite.user = user
-    this_favorite.save()
+    user.favorites.add(this_product)
 
     res_body = {
-        "id": this_favorite.pk
+        "id": this_product.pk
     }
     return JsonResponse(res_body)

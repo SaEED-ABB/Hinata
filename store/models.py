@@ -26,7 +26,13 @@ class Category(BaseData):
     objects = CategoryManager()
 
     def __str__(self):
-        return self.name
+        full_name = []
+        cur_cat = self
+        while cur_cat:
+            full_name.append(cur_cat.name)
+            cur_cat = cur_cat.parent
+        full_name = ' -> '.join(reversed(full_name))
+        return full_name
 
 
 class Size(BaseData):
@@ -44,11 +50,26 @@ class Color(BaseData):
         return self.name
 
 
+class ProductProperty(BaseData):
+    property = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.property
+
+
+class ProductTags(BaseData):
+    tag = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.tag
+
+
 class Product(BaseData):
     name = models.CharField(max_length=200, blank=True, null=True)
     material = models.CharField(max_length=200, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    properties = models.ManyToManyField(ProductProperty, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='related_products')
+    tags = models.ManyToManyField(ProductTags, related_name='filtered_products')
     sizes = models.ManyToManyField(Size, related_name='sizes', blank=True)
     colors = models.ManyToManyField(Color, related_name='colors', blank=True)
     price = models.IntegerField()
