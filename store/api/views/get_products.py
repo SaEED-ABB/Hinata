@@ -23,19 +23,25 @@ def get_products(request):
     context = {
         "products": [],
         "more": True if all_products.count() > count else False,
-        "next": requested_page.has_next(),
-        "previous": requested_page.has_previous(),
-        "count": all_pages.count
+        "count": all_pages.count,
+        # "next": requested_page.has_next(),
+        # "previous": requested_page.has_previous(),
     }
-    if context["next"]:
-        context["next_page_number"] = requested_page.next_page_number()
-    if context["previous"]:
-        context["previous_page_number"] = requested_page.previous_page_number()
+    # if context["next"]:
+    #     context["next_page_number"] = requested_page.next_page_number()
+    # if context["previous"]:
+    #     context["previous_page_number"] = requested_page.previous_page_number()
 
     for i in requested_page.object_list:
+        front_image_url = get_object_or_404(i.images, name='front').image.image.url
+        back_image_url = get_object_or_404(i.images, name='back').image.image.url
+
         context['products'].append({
+            "id": i.pk,
             "name": i.name,
             "price": i.price,
+            "front_image": front_image_url,
+            "back_image": back_image_url
         })
 
     return JsonResponse(context, safe=False)

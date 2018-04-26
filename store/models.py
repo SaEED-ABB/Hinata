@@ -49,8 +49,8 @@ class Product(BaseData):
     material = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='related_products')
-    sizes = models.ManyToManyField(Size, related_name='sizes')
-    colors = models.ManyToManyField(Color, related_name='colors')
+    sizes = models.ManyToManyField(Size, related_name='sizes', blank=True)
+    colors = models.ManyToManyField(Color, related_name='colors', blank=True)
     price = models.IntegerField()
 
     def __str__(self):
@@ -58,6 +58,12 @@ class Product(BaseData):
 
 
 class ProductImage(BaseData):
+    NAME_CHOICES = (
+        ('front', 'front image'),
+        ('back', 'back image'),
+        ('other', 'other')
+    )
+    name = models.CharField(max_length=200, choices=NAME_CHOICES, default='other')
     image = models.OneToOneField('customer.Image', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
 
