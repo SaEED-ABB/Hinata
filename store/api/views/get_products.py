@@ -15,8 +15,8 @@ def get_products(request):
     this_page_number = int(request.GET.get('page', '1'))
     count = int(request.GET.get('count', '12'))
 
-    category = request.GET.get('category')
-    all_products = Product.objects.filter(category=category)
+    category_name = request.GET.get('category')
+    all_products = Product.objects.filter(category__name=category_name)
     all_pages = Paginator(all_products, count)
     requested_page = all_pages.page(this_page_number)
     context = {
