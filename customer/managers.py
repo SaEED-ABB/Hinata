@@ -31,6 +31,6 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name
         )
-        user.is_admin = True
+        user.account_type = 'admin'
         user.save(using=self._db)
         return user

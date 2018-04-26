@@ -17,12 +17,12 @@ from ratelimit.decorators import ratelimit
 @check_permission_api(['user'])
 def add_favorite(request):
     try:
-        request_body = request.body.decode('utf-8')
-        data = json_loads(request_body)
+        # request_body = request.body.decode('utf-8')
+        # data = json_loads(request_body)
 
         # user = User.objects.get(pk=1)
         user = request.user
-        product_id = data['product']
+        product_id = request.GET.get('product_id')
     except:
         res_body = {
             "error": "Bad Request"

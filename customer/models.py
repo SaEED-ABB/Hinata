@@ -22,13 +22,15 @@ class BaseData(models.Model):
 
 
 class User(AbstractBaseUser, BaseData):
-
+    AC_TYPE = (
+        ('user', 'Normal User'),
+        ('admin', 'Admin User')
+    )
     phone_number = models.CharField(max_length=200, unique=True)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-
+    account_type = models.CharField(max_length=200, blank=True, null=True, choices=AC_TYPE, default='user')
     favorites = models.ManyToManyField('store.Product', related_name='lovers', blank=True)
 
     objects = UserManager()
@@ -58,7 +60,7 @@ class User(AbstractBaseUser, BaseData):
     def is_staff(self):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
-        return self.is_admin
+        return self.account_type == 'admin'
 
     def __str__(self):
         return '{}({})'.format(self.phone_number, self.get_full_name())
@@ -97,7 +99,7 @@ class Basket(BaseData):
 
 
 class SelectedProduct(BaseData):
-    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='selected_products')
+    basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='selected_products', null=True)
     product = models.ForeignKey('store.Product', on_delete=models.DO_NOTHING)
     size = models.ForeignKey('store.Size', on_delete=models.DO_NOTHING, blank=True, null=True)
     color = models.ForeignKey('store.Color', on_delete=models.DO_NOTHING, blank=True, null=True)
