@@ -13,9 +13,14 @@
     <div class="col-sm-3 userNavDiv">
         <img src="{% static 'img/user.png' %}">
         <div class="col-xs-5" style="text-align: right;">
-            <span class="loginButton">ورود</span>
-            <hr style="border-color: #231f20;margin: 10px 0;" />
-            <span class="registerButton">ثبت نام</span>
+            {% if request.user.is_anonymous %}
+                <span class="loginButton">ورود</span>
+                <hr style="border-color: #231f20;margin: 10px 0;" />
+                <span class="registerButton">ثبت نام</span>
+            {% else %} 
+                <a href="#">{{ request.user.get_full_name }}</a>
+            {% endif %}
+            
         </div>
     </div>
 </nav>
@@ -34,15 +39,20 @@
     <div class="col-sm-3 userNavDiv">
         <img src="{% static 'img/user.png' %}">
         <div class="col-xs-5">
-            <span class="loginButton">ورود</span>
-            <span class="slash">/</span>
-            <span class="registerButton">ثبت نام</span>
+            {% if request.user.is_anonymous %}
+                <span class="loginButton">ورود</span>
+                <span class="slash">/</span>
+                <span class="registerButton">ثبت نام</span>
+            {% else %} 
+                <a href="#">{{ request.user.get_full_name }}</a>
+            {% endif %}
         </div>  
     </div>
 </nav>
 
 <div class="menu" style="display: none;">
     <div class="row">
+
         <div class="col-lg-4 submenu">
             <ul class="menuList" style="">
                 <li>مانتو جلوباز</li>
@@ -52,8 +62,11 @@
                 <li>مانتو جلوباز</li>
                 <li>مانتو مجلسی</li>
             </ul>
+
         </div>
-        <div class="col-lg-4 submenu"></div>
+        <div class="col-lg-4 submenu">
+            
+        </div>
         <div class="col-lg-4 submenu">
             <img style="width: 100%;" src="{% static 'img/menu.jpg' %}">
         </div>

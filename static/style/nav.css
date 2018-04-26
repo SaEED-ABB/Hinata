@@ -147,6 +147,7 @@
 	opacity: 0.9;
 	position: absolute;
 	padding: 20px 160px;
+	z-index: 2;
 }
 .menuList{
 	list-style-type: none;
