@@ -1,8 +1,11 @@
 import os
 
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.crypto import get_random_string
+from django.utils.translation import ugettext_lazy as _
+
+from .managers import UserManager
 
 
 def get_path(instance, filename):
@@ -18,17 +21,47 @@ class BaseData(models.Model):
         abstract = True
 
 
-class User(AbstractUser):
-    AC_TYPE = (
-        ('user', 'Normal User'),
-        ('admin', 'Admin User')
-    )
-    phone_number = models.CharField(max_length=200, blank=True, null=True)
-    account_type = models.CharField(max_length=200, blank=True, null=True, choices=AC_TYPE)
-    favorites = models.ManyToManyField('store.Product', related_name='lovers')
+class User(AbstractBaseUser, BaseData):
+
+    phone_number = models.CharField(max_length=200, unique=True)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    favorites = models.ManyToManyField('store.Product', related_name='lovers', blank=True)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'phone_number'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+
+    def get_full_name(self):
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
 
     def __str__(self):
-        return '{}({})'.format(self.username, self.get_full_name())
+        return '{}({})'.format(self.phone_number, self.get_full_name())
 
 
 class UserAddress(BaseData):
@@ -37,7 +70,7 @@ class UserAddress(BaseData):
     phone_number = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return "{} - {}".format(self.user.username, self.address)
+        return "{} - {}".format(self.user.get_full_name(), self.address)
 
 
 class Basket(BaseData):
@@ -60,7 +93,7 @@ class Basket(BaseData):
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return "{}'s basket({})".format(self.user.username, self.code)
+        return "{}'s basket({})".format(self.user.get_full_name(), self.code)
 
 
 class SelectedProduct(BaseData):
@@ -74,7 +107,7 @@ class SelectedProduct(BaseData):
     def save(self, *args, **kwargs):
         self.price = self.count * int(self.product.price)
         return super(SelectedProduct, self).save(*args, **kwargs)
-    
+
     def update(self, *args, **kwargs):
         self.price = self.count * int(self.price)
         return super(SelectedProduct, self).update(*args, **kwargs)
@@ -90,7 +123,7 @@ class Comment(BaseData):
     is_approved = models.NullBooleanField()
 
     def __str__(self):
-        return "by {} for {}".format(self.user.username, self.product.name)
+        return "by {} for {}".format(self.user.get_full_name(), self.product.name)
 
 
 class Image(BaseData):
