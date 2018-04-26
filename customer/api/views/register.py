@@ -16,7 +16,8 @@ def register(request):
         phone_number = request.POST.get('phone_number')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        password = request.POST.get('password')
+        password = request.POST.get('password1')
+        password_confirm = request.POST.get('password2')
     except:
         res_body = {
             "error": "Bad Request"
@@ -31,9 +32,9 @@ def register(request):
     print(request.POST)
     form = UserCreationForm(data=request.POST)
     if form.is_valid():
-        new_user = form.save(commit=False)
-        new_user.set_password(password)
-        new_user.save()
+        new_user = form.save()
+        # new_user.set_password(password)
+        # new_user.save()
 
         login(request, new_user)
 

@@ -69,7 +69,7 @@ class Product(BaseData):
     material = models.CharField(max_length=200, blank=True, null=True)
     properties = models.ManyToManyField(ProductProperty, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='related_products')
-    tags = models.ManyToManyField(ProductTags, related_name='filtered_products')
+    tags = models.ManyToManyField(ProductTags, related_name='filtered_products', blank=True)
     sizes = models.ManyToManyField(Size, related_name='sizes', blank=True)
     colors = models.ManyToManyField(Color, related_name='colors', blank=True)
     price = models.IntegerField()
