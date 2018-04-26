@@ -25,7 +25,7 @@ def get_products(request):
         "more": True if all_products.count() > count else False,
         "next": requested_page.has_next(),
         "previous": requested_page.has_previous(),
-        "count": all_pages.count()
+        "count": all_pages.count
     }
     if context["next"]:
         context["next_page_number"] = requested_page.next_page_number()
