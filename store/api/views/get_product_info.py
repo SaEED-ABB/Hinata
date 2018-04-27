@@ -12,56 +12,62 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 def get_product_info(request):
 
-    this_product_id = request.GET.get('product_id')
-    if not this_product_id:
+    product_id = request.GET.get('product_id')
+    if not product_id:
         res_body = {
             "error": "product_id not provided"
         }
         return JsonResponse(res_body, status=400)
 
-    this_product = get_object_or_404(Product, pk=this_product_id)
+    product = get_object_or_404(Product, pk=product_id)
 
     context = {
-        "name": this_product.name,
-        "price": this_product.price,
+        "name": product.name,
+        "price": product.price,
         "properties": [],
-        "material": this_product.material,
-        "category": this_product.category.name if this_product.category else "",
+        "tags": [],
+        "material": product.material,
+        "category": product.category.name if product.category else "",
         "colors": [],
         "sizes": [],
         "comments": [],
         "images": []
     }
 
-    for i in this_product.properties.all():
+    for property in product.properties.all():
         context['properties'].append({
-            "property": i.property
+            "property": property.property
         })
 
-    for i in this_product.colors.all():
+    for tag in product.tags.all():
+        context['tags'].append({
+            "tag": tag.tag_name
+        })
+
+    for color in product.colors.all():
         context['colors'].append({
-            "name": i.name,
-            "color_code": i.color,
-            "id": i.pk
+            "name": color.name,
+            "color_code": color.color,
+            "id": color.pk
         })
 
-    for i in this_product.sizes.all():
+    for size in product.sizes.all():
         context['sizes'].append({
-            "name": i.name,
-            "id": i.pk
+            "name": size.name,
+            "id": size.pk
         })
 
-    for i in Comment.objects.filter(product=this_product, is_approved=True):
+    for comment in Comment.objects.filter(product=product, is_approved=True):
         context['comments'].append({
-            "comment": i.comment,
-            "username": i.user.username,
-            "full_name": i.user.get_full_name(),
-            "created_at": i.created_at
+            "comment": comment.comment,
+            "phone_number": comment.user.phone_number,
+            "full_name": comment.user.get_full_name(),
+            "created_at": comment.created_at
         })
 
-    for i in ProductImage.objects.filter(product=this_product):
+    for image in ProductImage.objects.filter(product=product):
         context['images'].append({
-            "url": i.image.image.url
+            image.name: image.image.image.url
         })
 
     return JsonResponse(context, safe=False)

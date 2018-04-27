@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 
 from ratelimit.decorators import ratelimit
 
-from store.models import Product, Category
+from store.models import Product, Category, ProductTags
 
 
 @require_http_methods(['GET'])
@@ -16,6 +16,7 @@ def get_products(request):
     this_page_number = int(request.GET.get('page', '1'))
     count = int(request.GET.get('count', '12'))
     category_name = request.GET.get('category')
+    tag_name = request.GET.get('tag')
 
     if not category_name:
         res_body = {
@@ -25,6 +26,9 @@ def get_products(request):
 
     category = get_object_or_404(Category, name=category_name)
     all_products = Product.objects.filter(category=category)
+    if tag_name:
+        tag = get_object_or_404(ProductTags, tag_name=tag_name)
+        all_products = all_products.filter(tags__id=tag.pk)
     all_pages = Paginator(all_products, count)
     requested_page = all_pages.page(this_page_number)
     context = {

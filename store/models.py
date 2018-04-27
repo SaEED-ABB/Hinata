@@ -58,10 +58,10 @@ class ProductProperty(BaseData):
 
 
 class ProductTags(BaseData):
-    tag = models.CharField(max_length=200)
+    tag_name = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.tag
+        return self.tag_name
 
 
 class Product(BaseData):
