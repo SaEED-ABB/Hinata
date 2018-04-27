@@ -106,7 +106,7 @@ class SelectedProduct(BaseData):
     size = models.ForeignKey('store.Size', on_delete=models.DO_NOTHING, blank=True, null=True)
     color = models.ForeignKey('store.Color', on_delete=models.DO_NOTHING, blank=True, null=True)
     count = models.IntegerField(blank=True, null=True, default=1)
-    price = models.CharField(max_length=200, blank=True, null=True)
+    price = models.IntegerField()
 
     def save(self, *args, **kwargs):
         self.price = self.count * int(self.product.price)
@@ -117,7 +117,7 @@ class SelectedProduct(BaseData):
         return super(SelectedProduct, self).update(*args, **kwargs)
 
     def __str__(self):
-        return '{} in {}'.format(self.product.name, self.basket)
+        return "{} in {}'s basket".format(self.product.name, self.basket.user.get_full_name())
 
 
 class Comment(BaseData):

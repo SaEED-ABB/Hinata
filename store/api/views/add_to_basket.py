@@ -26,8 +26,6 @@ def add_to_basket(request):
         }
         return JsonResponse(res_body, status=400)
 
-    this_product = get_object_or_404(Product, pk=product_id)
-
     # try:
     #     this_color = this_product.colors.get(pk=color_id)
     # except ObjectDoesNotExist:
@@ -44,20 +42,20 @@ def add_to_basket(request):
     #     }
     #     return JsonResponse(res_body, status=400)
 
-    this_basket, created = Basket.objects.get_or_create(user=this_user, status='in_progress')
+    product = get_object_or_404(Product, pk=product_id)
+    basket, created = Basket.objects.get_or_create(user=this_user, status='in_progress')
     
-    this_selected_product, created = SelectedProduct.objects.get_or_create(
-        basket=this_basket,
-        product=this_product,
+    selected_product, created = SelectedProduct.objects.get_or_create(
+        basket=basket,
+        product=product,
     )
     if created:
-        this_selected_product.count = count
+        selected_product.count = count
     else:
-        this_selected_product.count += count
-    this_selected_product.price = str(
-        this_product.price * this_selected_product.count
-    )
-    this_selected_product.save()
+        selected_product.count += count
+
+    selected_product.price = selected_product.count * product.price
+    selected_product.save()
 
     res_body = {
         "success": "Such product successfully added to {}'s basket".format(this_user.get_full_name())
