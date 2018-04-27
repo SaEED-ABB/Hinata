@@ -15,7 +15,7 @@ def get_products(request):
 
     this_page_number = int(request.GET.get('page', '1'))
     count = int(request.GET.get('count', '12'))
-    category_name = request.GET.get('category_name')
+    category_name = request.GET.get('category')
 
     if not category_name:
         res_body = {
