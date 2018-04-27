@@ -26,6 +26,6 @@ def delete_favorite(request):
     user.favorites.remove(favorite_product)
 
     res_body = {
-        "success": "{}'s such favorite product removed successfully from his favorites"
+        "success": "{}'s such favorite product removed successfully from his favorites".format(user.get_full_name())
     }
     return JsonResponse(res_body)
