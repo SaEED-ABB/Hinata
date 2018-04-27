@@ -1,10 +1,8 @@
-from json import loads as json_loads
-
+from django.shortcuts import get_object_or_404
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from customer.decorators import check_permission_api
-from customer.models import UserAddress, User
 
 from ratelimit.decorators import ratelimit
 
@@ -13,25 +11,20 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def delete_address(request):
-    try:
-        request_body = request.body.decode('utf-8')
-        data = json_loads(request_body)
 
-        # user = User.objects.get(pk=1)
-        user = request.user
-        address_id = data['address_id']
-    except:
+    user = request.user
+    address_id = request.GET.get('address_id')
+
+    if not address_id:
         res_body = {
-            "error": "Bad Request"
+            "error": "address_id not provided"
         }
         return JsonResponse(res_body, status=400)
 
-    this_user_address = UserAddress.objects.filter(pk=address_id, user=user)
-    if not this_user_address:
-        res_body = {
-            "error": "User address does not exists"
-        }
-        return JsonResponse(res_body, status=400)
+    user_address = get_object_or_404(user.addresses, pk=address_id)
+    user_address.delete()
 
-    this_user_address.delete()
-    return JsonResponse({})
+    res_body = {
+        "success": "{}'s such address successfully removed".format(user.get_full_name())
+    }
+    return JsonResponse(res_body)

@@ -1,5 +1,3 @@
-from json import loads as json_loads
-
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
@@ -13,17 +11,14 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def add_address(request):
-    try:
-        request_body = request.body.decode('utf-8')
-        data = json_loads(request_body)
 
-        # user = User.objects.get(pk=1)
-        user = request.user
-        address = data['address']
-        phone_number = data['phone_number']
-    except:
+    user = request.user
+    address = request.GET.get('address')
+    phone_number = request.GET.get('phone_number')
+
+    if not (address and phone_number):
         res_body = {
-            "error": "Bad Request"
+            "error": "address or phone_number not provided"
         }
         return JsonResponse(res_body, status=400)
 
@@ -31,11 +26,11 @@ def add_address(request):
 
     if not created:
         res_body = {
-            "error": "This address is already exists"
+            "error": "This address already exists"
         }
         return JsonResponse(res_body, status=400)
 
     res_body = {
-        "id": this_user_address.pk
+        "success": "Address added for {}".format(user.get_full_name())
     }
     return JsonResponse(res_body)

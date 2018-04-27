@@ -1,9 +1,7 @@
-from json import loads as json_loads
-
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
 
 from store.models import Product, Color, Size, ProductImage
 from customer.models import Comment
@@ -13,26 +11,20 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['GET'])
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 def get_product_info(request):
-    try:
-        this_product_id = request.GET['product']
-    except:
+
+    this_product_id = request.GET.get('product_id')
+    if not this_product_id:
         res_body = {
-            "error": "Bad Request"
+            "error": "product_id not provided"
         }
         return JsonResponse(res_body, status=400)
 
-    try:
-        this_product = Product.objects.get(pk=this_product_id)
-    except ObjectDoesNotExist:
-        res_body = {
-            "error": "Product not found"
-        }
-        return JsonResponse(res_body, status=400)
+    this_product = get_object_or_404(Product, pk=this_product_id)
 
     context = {
         "name": this_product.name,
         "price": this_product.price,
-        "description": this_product.description,
+        "properties": [],
         "material": this_product.material,
         "category": this_product.category.name if this_product.category else "",
         "colors": [],
@@ -40,6 +32,11 @@ def get_product_info(request):
         "comments": [],
         "images": []
     }
+
+    for i in this_product.properties.all():
+        context['properties'].append({
+            "property": i.property
+        })
 
     for i in this_product.colors.all():
         context['colors'].append({

@@ -1,10 +1,8 @@
-from json import loads as json_loads
-
+from django.shortcuts import get_object_or_404
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from customer.decorators import check_permission_api
-from customer.models import Comment, User 
 
 from ratelimit.decorators import ratelimit
 
@@ -13,25 +11,20 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def delete_comment(request):
-    try:
-        request_body = request.body.decode('utf-8')
-        data = json_loads(request_body)
 
-        # user = User.objects.get(pk=1)
-        user = request.user
-        comment_id = data['comment_id']
-    except:
+    user = request.user
+    comment_id = request.GET.get('comment_id')
+
+    if not comment_id:
         res_body = {
-            "error": "Bad Request"
+            "error": "comment_id not provided"
         }
         return JsonResponse(res_body, status=400)
 
-    this_comment = Comment.objects.filter(pk=comment_id, user=user)
-    if not this_comment:
-        res_body = {
-            "error": "User comment does not exists"
-        }
-        return JsonResponse(res_body, status=400)
-
+    this_comment = get_object_or_404(user.comments, pk=comment_id)
     this_comment.delete()
-    return JsonResponse({})
+
+    res_body = {
+        "success": "{}'s comment successfully deleted for such product"
+    }
+    return JsonResponse(res_body)

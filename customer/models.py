@@ -90,7 +90,7 @@ class Basket(BaseData):
     )
 
     code = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.DO_NOTHING, related_name='baskets')
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL, related_name='baskets')
     phone_number = models.CharField(max_length=200, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, default='in_progress', max_length=200, blank=True, null=True)

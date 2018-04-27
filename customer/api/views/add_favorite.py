@@ -1,12 +1,8 @@
-
-from json import loads as json_loads
-
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import get_object_or_404
 
 from customer.decorators import check_permission_api
-from customer.models import User
 from store.models import Product
 
 from ratelimit.decorators import ratelimit
@@ -16,16 +12,13 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def add_favorite(request):
-    try:
-        # request_body = request.body.decode('utf-8')
-        # data = json_loads(request_body)
 
-        # user = User.objects.get(pk=1)
-        user = request.user
-        product_id = request.GET.get('product_id')
-    except:
+    user = request.user
+    product_id = request.GET.get('product_id')
+
+    if not product_id:
         res_body = {
-            "error": "Bad Request"
+            "error": "product_id not provided"
         }
         return JsonResponse(res_body, status=400)
 
@@ -34,6 +27,6 @@ def add_favorite(request):
     user.favorites.add(this_product)
 
     res_body = {
-        "id": this_product.pk
+        "success": "Favorite product successfully added for {}".format(user.get_full_name())
     }
     return JsonResponse(res_body)

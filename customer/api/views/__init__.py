@@ -7,7 +7,7 @@ from .add_address import add_address
 from .delete_address import delete_address
 from .add_comment import add_comment
 from .delete_comment import delete_comment
-from .get_history import get_history
+from .get_basket_history import get_basket_history
 from .search_product import search_product
 from .get_addresses import get_address
 from .register import register

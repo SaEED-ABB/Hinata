@@ -1,7 +1,7 @@
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from store.models import Product, ProductImage
+from store.models import Product
 from store.helpers import get_one_image
 
 from ratelimit.decorators import ratelimit
@@ -10,11 +10,12 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['GET'])
 def search_product(request):
-    try:
-        search_key = request.GET.get('search_key')
-    except:
+
+    search_key = request.GET.get('search_key')
+
+    if not search_key:
         res_body = {
-            "error": "Bad Request"
+            "error": "search_key not provided"
         }
         return JsonResponse(res_body, status=400)
 

@@ -1,11 +1,8 @@
-from json import loads as json_loads
-
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
-from customer.models import Basket, SelectedProduct, User
+from customer.models import Basket, SelectedProduct
 from store.models import Product
 from customer.decorators import check_authentication_status
 
@@ -16,19 +13,16 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @check_authentication_status()
 def add_to_basket(request):
-    try:
-        # request_body = request.body.decode('utf-8')
-        # data = json_loads(request_body)
 
-        # this_user = User.objects.get(pk=1)
-        this_user = request.user
-        product_id = int(request.GET.get('product_id'))
-        # color_id = int(request.GET.get('color_id'))
-        # size_id = int(request.GET.get('size_id'))
-        count = int(request.GET.get('count', 1))
-    except:
+    this_user = request.user
+    product_id = int(request.GET.get('product_id'))
+    # color_id = int(request.GET.get('color_id'))
+    # size_id = int(request.GET.get('size_id'))
+    count = int(request.GET.get('count', 1))
+
+    if not product_id:
         res_body = {
-            "error": "Bad Request"
+            "error": "product_id not provided"
         }
         return JsonResponse(res_body, status=400)
 
@@ -66,6 +60,6 @@ def add_to_basket(request):
     this_selected_product.save()
 
     res_body = {
-        "id": str(this_selected_product.pk)
+        "success": "Such product successfully added to {}'s basket".format(this_user.get_full_name())
     }
     return JsonResponse(res_body)

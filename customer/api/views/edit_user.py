@@ -1,11 +1,7 @@
-from json import loads as json_loads
-
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.core.exceptions import ObjectDoesNotExist
 
 from customer.decorators import check_permission_api
-from customer.models import User
 
 from ratelimit.decorators import ratelimit
 
@@ -14,20 +10,16 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def edit_user(request):
-    try:
-        # request_body = request.body.decode('utf-8')
-        # data = json_loads(request_body)
-        
-        this_user = request.user
-        # this_user = User.objects.get(pk=1)
 
-        phone_number = request.GET.get('phone_number')
-        first_name = request.GET.get('first_name')
-        last_name = request.GET.get('last_name')
+    this_user = request.user
 
-    except:
+    phone_number = request.GET.get('phone_number')
+    first_name = request.GET.get('first_name')
+    last_name = request.GET.get('last_name')
+
+    if not (phone_number and first_name and last_name):
         res_body = {
-            "error": "Bad Request"
+            "error": "phone_number or first_name or last_name not provided"
         }
         return JsonResponse(res_body, status=400)
 
@@ -35,4 +27,8 @@ def edit_user(request):
     this_user.first_name = first_name
     this_user.last_name = last_name
     this_user.save()
-    return JsonResponse({})
+
+    res_body = {
+        "success": "User successfully updated"
+    }
+    return JsonResponse(res_body)

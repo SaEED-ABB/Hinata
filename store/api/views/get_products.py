@@ -12,11 +12,18 @@ from store.models import Product, Category
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 def get_products(request):
     user = request.user
-    print(request.user)
+
     this_page_number = int(request.GET.get('page', '1'))
     count = int(request.GET.get('count', '12'))
+    category_name = request.GET.get('category_name')
 
-    category = get_object_or_404(Category, name=request.GET.get('category'))
+    if not category_name:
+        res_body = {
+            "error": "category_name not provided"
+        }
+        return JsonResponse(res_body, status=400)
+
+    category = get_object_or_404(Category, name=category_name)
     all_products = Product.objects.filter(category=category)
     all_pages = Paginator(all_products, count)
     requested_page = all_pages.page(this_page_number)
