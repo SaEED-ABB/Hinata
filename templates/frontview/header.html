@@ -75,18 +75,23 @@
 
 <div class="loginPopBack PopBack row">
     <div class="loginPop Pop col-lg-4 col-lg-offset-4 col-md-3 col-md-offset-4 col-sm-12 col-xs-12">
-        <input type="text" name="usernameL"><br>
-        <input type="text" name="passwordL"><br>
-        <button id="entrance">ورود</button>
+        <form id="" runat="server" action="/api/customer/login/" method="POST">
+            <input type="text" name="phone_number"><br>
+            <input type="text" name="password"><br>
+            <button type="submit" id="entrance">ورود</button>
+        </form>
     </div>
 </div>
 
 <div class="registerPopBack PopBack row">
     <div class="registerPop Pop col-lg-4 col-lg-offset-4 col-md-3 col-md-offset-4 col-sm-12 col-xs-12">
-        <input type="text" name="firstnameR"><br>
-        <input type="text" name="lastnameR"><br>
-        <input type="text" name="numberR"><br>
-        <input type="text" name="passwordR"><br>
-        <button id="signup">ورود</button>
+        <form id="" runat="server" action="/api/customer/register/" method="POST">
+            <input type="text" name="first_name"><br>
+            <input type="text" name="last_name"><br>
+            <input type="text" name="phone_number"><br>
+            <input type="text" name="password1"><br>
+            <input type="text" name="password2"><br>
+            <button id="signup" type="submit">ورود</button>
+        </form>
     </div>
 </div>
