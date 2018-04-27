@@ -14,3 +14,4 @@ from .register import register
 from .delete_favorite import delete_favorite
 from .add_favorite import add_favorite
 from .get_favorite import get_favorite
+from .logout import logout

@@ -5,6 +5,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
+import uuid as uuid_lib
+
 from .managers import UserManager
 
 
@@ -87,7 +89,7 @@ class Basket(BaseData):
         ('paid_with_epay', 'Paid With EPay')
     )
 
-    code = models.CharField(max_length=200, unique=True, default=("HINATA-{}".format(get_random_string(6))).upper())
+    code = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.DO_NOTHING, related_name='baskets')
     phone_number = models.CharField(max_length=200, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
