@@ -16,10 +16,10 @@ def get_address(request):
     user = request.user
     # user = User.objects.get(pk=1)
     context = []
-    for i in UserAddress.objects.filter(user=user):
+    for user_addr in user.addresses.all():
         context.append({
-            "address": i.address,
-            "phone": i.phone_number,
-            "id": i.pk
+            "address": user_addr.address,
+            "phone": user_addr.phone_number,
+            "id": user_addr.pk
         })
     return JsonResponse(context, safe=False)

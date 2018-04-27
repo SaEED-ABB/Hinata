@@ -23,8 +23,8 @@ def add_to_basket(request):
         # this_user = User.objects.get(pk=1)
         this_user = request.user
         product_id = int(request.GET.get('product_id'))
-        color_id = int(request.GET.get('color_id'))
-        size_id = int(request.GET.get('size_id'))
+        # color_id = int(request.GET.get('color_id'))
+        # size_id = int(request.GET.get('size_id'))
         count = int(request.GET.get('count', 1))
     except:
         res_body = {
@@ -33,30 +33,28 @@ def add_to_basket(request):
         return JsonResponse(res_body, status=400)
 
     this_product = get_object_or_404(Product, pk=product_id)
-    print(this_product)
-    try:
-        this_color = this_product.colors.get(pk=color_id)
-    except ObjectDoesNotExist:
-        res_body = {
-            "error": "This product doesn't have this color"
-        }
-        return JsonResponse(res_body, status=400)
 
-    try:
-        this_size = this_product.sizes.get(pk=size_id)
-    except ObjectDoesNotExist:
-        res_body = {
-            "error": "This product doesn't have this size"
-        }
-        return JsonResponse(res_body, status=400)
+    # try:
+    #     this_color = this_product.colors.get(pk=color_id)
+    # except ObjectDoesNotExist:
+    #     res_body = {
+    #         "error": "This product doesn't have this color"
+    #     }
+    #     return JsonResponse(res_body, status=400)
+    #
+    # try:
+    #     this_size = this_product.sizes.get(pk=size_id)
+    # except ObjectDoesNotExist:
+    #     res_body = {
+    #         "error": "This product doesn't have this size"
+    #     }
+    #     return JsonResponse(res_body, status=400)
 
     this_basket, created = Basket.objects.get_or_create(user=this_user, status='in_progress')
     
     this_selected_product, created = SelectedProduct.objects.get_or_create(
         basket=this_basket,
         product=this_product,
-        color=this_color,
-        size=this_size
     )
     if created:
         this_selected_product.count = count

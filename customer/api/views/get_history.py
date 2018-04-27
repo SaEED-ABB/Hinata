@@ -17,12 +17,12 @@ def get_history(request):
     user = request.user
     # user = User.objects.get(pk=1)
     context = []
-    for i in Basket.objects.filter(~Q(status='in_progress'), user=user):
+    for basket in Basket.objects.filter(~Q(status='in_progress'), user=user):
         context.append({
-            "code": i.code,
-            "updated_at": i.updated_at,
-            "total_price": total_price(i),
-            "status": i.status,
-            "products": get_selected_products(i),
+            "code": basket.code,
+            "updated_at": basket.updated_at,
+            "total_price": total_price(basket),
+            "status": basket.status,
+            "products": get_selected_products(basket),
         })
     return JsonResponse(context, safe=False)

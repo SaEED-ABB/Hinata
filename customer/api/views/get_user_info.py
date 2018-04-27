@@ -12,12 +12,10 @@ from ratelimit.decorators import ratelimit
 @check_permission_api(['user'])
 def get_user_info(request):
     # request.user = User.objects.get(pk=1)
+    user = request.user
     context = {
-        "username": request.user.username,
-        "national_code": request.user.national_code,
-        "phone_number": request.user.phone_number,
-        "email": request.user.email,
-        "first_name": request.user.first_name,
-        "last_name": request.user.last_name
+        "phone_number": user.phone_number,
+        "first_name": user.first_name,
+        "last_name": user.last_name
     }
     return JsonResponse(context, safe=False)

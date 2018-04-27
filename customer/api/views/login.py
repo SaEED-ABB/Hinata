@@ -4,6 +4,7 @@ from django.contrib.auth import login as auth_login, authenticate
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.hashers import make_password
+from django.shortcuts import redirect, reverse
 
 from ratelimit.decorators import ratelimit
 
@@ -32,7 +33,7 @@ def login(request):
     print(user)
     if user:
         auth_login(request, user)
-        return JsonResponse({})
+        return redirect(reverse("frontview:index"))
     else:
         res_body = {
             'message': 'Please check your username and password'

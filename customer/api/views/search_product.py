@@ -11,7 +11,7 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['GET'])
 def search_product(request):
     try:
-        search_key = request.GET['search_key']
+        search_key = request.GET.get('search_key')
     except:
         res_body = {
             "error": "Bad Request"
@@ -19,10 +19,10 @@ def search_product(request):
         return JsonResponse(res_body, status=400)
 
     context = []
-    for i in Product.objects.filter(name__icontains=search_key):
+    for product in Product.objects.filter(name__icontains=search_key):
         context.append({
-            "name": i.name,
-            "id": i.id,
-            "image": get_one_image(i)
+            "name": product.name,
+            "id": product.id,
+            "image": get_one_image(product)
         })
     return JsonResponse(context, safe=False)

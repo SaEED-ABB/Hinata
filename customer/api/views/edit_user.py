@@ -15,28 +15,23 @@ from ratelimit.decorators import ratelimit
 @check_permission_api(['user'])
 def edit_user(request):
     try:
-        request_body = request.body.decode('utf-8')
-        data = json_loads(request_body)
+        # request_body = request.body.decode('utf-8')
+        # data = json_loads(request_body)
         
         this_user = request.user
         # this_user = User.objects.get(pk=1)
 
-        username = data['username']
-        national_code = data['national_code']
-        phone_number = data['phone_number']
-        email = data['email']
-        first_name = data['first_name']
-        last_name = data['last_name']
+        phone_number = request.GET.get('phone_number')
+        first_name = request.GET.get('first_name')
+        last_name = request.GET.get('last_name')
+
     except:
         res_body = {
             "error": "Bad Request"
         }
         return JsonResponse(res_body, status=400)
 
-    this_user.username = username
-    this_user.national_code = national_code
     this_user.phone_number = phone_number
-    this_user.email = email
     this_user.first_name = first_name
     this_user.last_name = last_name
     this_user.save()

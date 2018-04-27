@@ -12,19 +12,18 @@ from ratelimit.decorators import ratelimit
 @check_permission_api(['admin'])
 def user_search(request):
     try:
-        username = request.GET.get('username')
-        if not username:
+        phone_number = request.GET.get('phone_number')
+        if not phone_number:
             res_body = {
                 "error": "Bad Request"
             }
             return JsonResponse(res_body, status=400)
 
         context = []
-        for i in User.objects.filter(username__icontains=username):
+        for user in User.objects.filter(phone_number=phone_number):
             context.append({
-                "full_name": i.get_full_name(),
-                "username": i.username,
-                "national_code": i.national_code,
+                "full_name": user.get_full_name(),
+                "username": user.phone_number,
             })
         return JsonResponse(context, safe=False)
     except:
