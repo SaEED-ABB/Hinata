@@ -10,8 +10,8 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 def login(request):
 
-    phone_number = request.POST.get('phone_number')
-    password = request.POST.get('password')
+    phone_number = request.GET.get('phone_number')
+    password = request.GET.get('password')
 
     if not (phone_number and password):
         res_body = {
@@ -23,7 +23,10 @@ def login(request):
 
     if user:
         auth_login(request, user)
-        return redirect(reverse("frontview:index"))
+        res_body = {
+            "success": "User {} successfully logged in".format(user.get_full_name())
+        }
+        return JsonResponse(res_body)
     else:
         res_body = {
             'error': 'Username or password is incorrect'

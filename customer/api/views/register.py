@@ -12,11 +12,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 def register(request):
 
-    phone_number = request.POST.get('phone_number')
-    first_name = request.POST.get('first_name')
-    last_name = request.POST.get('last_name')
-    password = request.POST.get('password1')
-    password_confirm = request.POST.get('password2')
+    phone_number = request.GET.get('phone_number')
+    first_name = request.GET.get('first_name')
+    last_name = request.GET.get('last_name')
+    password = request.GET.get('password1')
+    password_confirm = request.GET.get('password2')
 
     if not (phone_number and first_name and last_name and password and password_confirm):
         res_body = {
@@ -30,7 +30,13 @@ def register(request):
         }
         return JsonResponse(res_body, status=400)
 
-    form = UserCreationForm(data=request.POST)
+    form = UserCreationForm(data={
+        "phone_number": phone_number,
+        "first_name": first_name,
+        "last_name": last_name,
+        "password1": password,
+        "password2": password_confirm
+    })
     if form.is_valid():
         new_user = form.save()
         login(request, new_user)
@@ -40,4 +46,7 @@ def register(request):
         }
         return JsonResponse(res_body)
     else:
-        return JsonResponse({'error': 'provided form is invalid'})
+        res_body = {
+            'error': 'provided form is invalid'
+        }
+        return JsonResponse(res_body, status=400)
