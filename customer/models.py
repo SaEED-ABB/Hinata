@@ -87,7 +87,7 @@ class Basket(TimeStampedModel):
     address = models.TextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, default='open_checking', max_length=200, blank=True, null=True)
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
-    total_price = models.IntegerField()
+    total_price = models.IntegerField(null=True)
 
     def get_info(self, all_colors_and_sizes_per_product=False):
 
@@ -101,6 +101,21 @@ class Basket(TimeStampedModel):
             desired_color = sel_pro.color
             desired_size = sel_pro.size
 
+            colors = []
+            sizes = []
+
+            if all_colors_and_sizes_per_product:
+                for color in sel_pro.product.colors.all():
+                    colors.append({
+                        "name": color.name,
+                        "code": color.color
+                    })
+
+                for size in sel_pro.product.sizes.all():
+                    sizes.append({
+                        "name": size.name
+                    })
+
             context['products'].append({
                 "image": sel_pro.product.images.last().image.url,
                 "name": sel_pro.product.name,
@@ -109,23 +124,10 @@ class Basket(TimeStampedModel):
                 "desired_size": desired_size if desired_size else '',
                 "count": sel_pro.count,
                 "price": sel_pro.product.price,
+                "colors": colors,
+                "sizes": sizes
             })
 
-            if all_colors_and_sizes_per_product:
-                colors = []
-                for color in sel_pro.product.colors:
-                    colors.append({
-                        "name": color.name,
-                        "code": color.color
-                    })
-
-                sizes = []
-                for size in sel_pro.product.sizes:
-                    sizes.append({
-                        "name": size.name
-                    })
-                context['products']['colors'] = colors
-                context['products']['sizes'] = sizes
 
         return context
 
@@ -144,7 +146,7 @@ class SelectedProduct(TimeStampedModel):
     size = models.ForeignKey('store.Size', on_delete=models.DO_NOTHING, blank=True, null=True)
     color = models.ForeignKey('store.Color', on_delete=models.DO_NOTHING, blank=True, null=True)
     count = models.IntegerField(blank=True, null=True, default=1)
-    price = models.IntegerField()
+    price = models.IntegerField(null=True)
 
     # def save(self, *args, **kwargs):
     #     self.price = self.count * self.product.price
