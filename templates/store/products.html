@@ -3,6 +3,8 @@
 
 {% block head %}
 	<link rel="stylesheet" type="text/css" href="{% static 'style/products.css' %}">
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 {% endblock %}
 
 {% block body %}
@@ -44,5 +46,6 @@
 {% endblock %}
 
 {% block js %}
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script type="text/javascript" src="{% static 'script/products.js' %}"></script>
 {% endblock %}

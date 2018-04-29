@@ -18,7 +18,7 @@
                 <hr style="border-color: #231f20;margin: 10px 0;" />
                 <span class="registerButton">ثبت نام</span>
             {% else %} 
-                <a href="#">{{ request.user.get_full_name }}</a>
+                <a href="/api/customer/logout">{{ request.user.get_full_name }}</a>
             {% endif %}
             
         </div>
@@ -75,23 +75,22 @@
 
 <div class="loginPopBack PopBack row">
     <div class="loginPop Pop col-lg-4 col-lg-offset-4 col-md-3 col-md-offset-4 col-sm-12 col-xs-12">
-        <form id="" runat="server" action="/api/customer/login/" method="POST">
-            <input type="text" name="phone_number"><br>
-            <input type="text" name="password"><br>
-            <button type="submit" id="entrance">ورود</button>
-        </form>
+        <input type="text" name="phone_numberL"><br>
+        <input type="text" name="passwordL"><br>
+        <button type="submit" id="entrance">ورود</button>
     </div>
 </div>
 
 <div class="registerPopBack PopBack row">
     <div class="registerPop Pop col-lg-4 col-lg-offset-4 col-md-3 col-md-offset-4 col-sm-12 col-xs-12">
-        <form id="" runat="server" action="/api/customer/register/" method="POST">
-            <input type="text" name="first_name"><br>
-            <input type="text" name="last_name"><br>
-            <input type="text" name="phone_number"><br>
-            <input type="text" name="password1"><br>
-            <input type="text" name="password2"><br>
-            <button id="signup" type="submit">ورود</button>
-        </form>
+        <input type="text" name="first_nameR"><br>
+        <input type="text" name="last_nameR"><br>
+        <input type="text" name="phone_numberR"><br>
+        <input type="text" name="password1R"><br>
+        <input type="text" name="password2R"><br>
+        <button id="signup" type="submit">ورود</button>
     </div>
 </div>
+<script type="text/javascript">
+    var logged='{{ request.user.is_authenticated }}';
+</script>

@@ -1,4 +1,24 @@
 var pageCount=1;
+
+toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": false,
+  "positionClass": "toast-top-left",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut",
+  "rtl": true
+}
+
 getProducts();
 function getProducts(){
 	$.ajax({
@@ -12,14 +32,15 @@ function getProducts(){
 		success: function (data) {
 			for(var i=0; i<data.products.length;i++){
 				if(data.products[i].is_favorite){
-					var favoriteText="<img src='/static/img/liked.png' product_id="+data.products[i].id+" class='likeProduct addToFavorite'>";
+					var favoriteText="<i class='fas fa-heart likeProduct addToFavorite' style='color:red;' product_id="+data.products[i].id+" ></i>";
 				}else{
-					var favoriteText="<img src='/static/img/like.png' product_id="+data.products[i].id+" class='likeProduct'>";
+					var favoriteText="<i class='fas fa-heart likeProduct' product_id="+data.products[i].id+" ></i>";
 				}
 				if(data.products[i].is_in_basket){
-					var basketText="<img src='/static/img/basketed.png' product_id="+data.products[i].id+" class='basketProduct addToBasket'>";
+					var basketText="<i class='fas fa-shopping-basket basketProduct addToBasket' style='color:green;' product_id="+data.products[i].id+"></i>";
 				}else{
-					var basketText="<img src='/static/img/basket.png' product_id="+data.products[i].id+" class='basketProduct '>";
+					var basketText="<i class='fas fa-shopping-basket basketProduct' product_id="+data.products[i].id+"></i>";
+
 				}
 				$('.cards').append("<div class='pCard'>"+
 						"<a class='link' href='#' >"+
@@ -60,65 +81,69 @@ $(document).on('click touchstart','.moreButton',function(){
 });
 $(document).on('click touchstart','.basketProduct',function(){
 	var thisElement=$(this);
-	if(!$(this).hasClass('addToBasket')){
-		$.ajax({
-			type: 'GET',
-			url: '/api/store/add_to_basket',
-			dataType: 'JSON',
-			data: {
-		        size: 's',
-		        color:'sdaf',
-		        product: $(this).attr('product_id')
-		    },
-			success: function (data) {
-				thisElement.addClass('addToBasket');
-				thisElement.attr('src','/static/img/basketed.png')
-			}
-		});
+	if(logged=="True"){
+		if(!$(this).hasClass('addToBasket')){
+			$.ajax({
+				type: 'POST',
+				url: '/api/store/add_to_basket/',
+				dataType: 'JSON',
+				data: {
+			        product_id: $(this).attr('product_id')
+			    },
+				success: function (data) {
+					thisElement.addClass('addToBasket');
+					thisElement.css('color','green')
+				}
+			});
+		}else{
+			$.ajax({
+				type: 'POST',
+				url: '/api/store/remove_to_basket/',
+				dataType: 'JSON',
+				data: {
+			        product_id: $(this).attr('product_id')
+			    },
+				success: function (data) {
+					thisElement.removeClass('addToBasket');
+					thisElement.css('color','inherit')
+				}
+			});
+		}
 	}else{
-		$.ajax({
-			type: 'GET',
-			url: '/api/store/add_to_basket',
-			dataType: 'JSON',
-			data: {
-		        size: 's',
-		        color:'sdaf',
-		        product: $(this).attr('product_id')
-		    },
-			success: function (data) {
-				thisElement.removeClass('addToBasket');
-				thisElement.attr('src','/static/img/basket.png')
-			}
-		});
+		toastr.warning('ابتدا وارد سایت شوید.')
 	}
 });
 $(document).on('click touchstart','.likeProduct',function(){
 	var thisElement=$(this);
-	if(!$(this).hasClass('addToFavorite')){
-		$.ajax({
-			type: 'GET',
-			url: '/api/store/add_favorite',
-			dataType: 'JSON',
-			data: {
-		        product: $(this).attr('product_id')
-		    },
-			success: function (data) {
-				thisElement.addClass('addToFavorite');
-				thisElement.attr('src','/static/img/liked.png')
-			}
-		});
+	if(logged=="True"){
+		if(!$(this).hasClass('addToFavorite')){
+			$.ajax({
+				type: 'POST',
+				url: '/api/customer/add_favorite/',
+				dataType: 'JSON',
+				data: {
+			        product_id: $(this).attr('product_id')
+			    },
+				success: function (data) {
+					thisElement.addClass('addToFavorite');
+					thisElement.css('color','red')
+				}
+			});
+		}else{
+			$.ajax({
+				type: 'POST',
+				url: '/api/customer/delete_favorite/',
+				dataType: 'JSON',
+				data: {
+			        product_id: $(this).attr('product_id')
+			    },
+				success: function (data) {
+					thisElement.removeClass('addToFavorite');
+					thisElement.css('color','inherit')
+				}
+			});
+		}
 	}else{
-		$.ajax({
-			type: 'GET',
-			url: '/api/store/delete_favorite',
-			dataType: 'JSON',
-			data: {
-		        product: $(this).attr('product_id')
-		    },
-			success: function (data) {
-				thisElement.removeClass('addToFavorite');
-				thisElement.attr('src','/static/img/like.png')
-			}
-		});
+		toastr.warning('ابتدا وارد سایت شوید.')
 	}
 });

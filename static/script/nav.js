@@ -33,35 +33,37 @@ $(document).on('click touchstart','.menuBarImg',function(){
 		$('.menu').slideUp();
 	}
 });
-// $(document).on('click touchstart','#entrance',function(){
-// 	$.ajax({
-// 		type: 'POST',
-// 		url: '/api/customer/login/',
-// 		dataType: 'JSON',
-// 		data: {
-// 	        username:$('[name=usernameL]').html(),
-// 	        password: $('[name=passwordL]').html()
-// 	    },
-// 		success: function (data) {
-// 			$('.loginPopBack').fadeOut();
-// 			$('.loginPop').fadeOut();
-// 		}
-// 	});
-// });
-// $(document).on('click touchstart','#signup',function(){
-// 	$.ajax({
-// 		type: 'POST',
-// 		url: '/api/customer/register/',
-// 		dataType: 'JSON',
-// 		data: {
-// 	        firstname:$('[name=firstnameR]').html(),
-// 	        lastname:$('[name=lastnameR]').html(),
-// 	        email:$('[name=numberR]').html(),
-// 	        password: $('[name=passwordR]').html()
-// 	    },
-// 		success: function (data) {
-// 			$('.registerPopBack').fadeOut();
-// 			$('.registerPop').fadeOut();
-// 		}
-// 	});
-// });
+$(document).on('click touchstart','#entrance',function(){
+	console.log($('[name=phone_number]').text());
+	$.ajax({
+		type: 'POST',
+		url: '/api/customer/login/',
+		dataType: 'JSON',
+		data: {
+	        phone_number:$('[name=phone_numberL]').val(),
+	        password: $('[name=passwordL]').val()
+	    },
+		success: function (data) {
+			$('.loginPopBack').fadeOut();
+			$('.loginPop').fadeOut();
+		}
+	});
+});
+$(document).on('click touchstart','#signup',function(){
+	$.ajax({
+		type: 'POST',
+		url: '/api/customer/register/',
+		dataType: 'JSON',
+		data: {
+	        first_name:$('[name=first_nameR]').val(),
+	        last_name:$('[name=last_nameR]').val(),
+	        phone_number:$('[name=phone_numberR]').val(),
+	        password1:$('[name=password1R]').val(),
+	        password2: $('[name=password2R]').val()
+	    },
+		success: function (data) {
+			$('.registerPopBack').fadeOut();
+			$('.registerPop').fadeOut();
+		}
+	});
+});
