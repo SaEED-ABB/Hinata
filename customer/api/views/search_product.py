@@ -25,4 +25,4 @@ def search_product(request):
             "id": product.id,
             "image": product.images.last().image.url
         })
-    return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False, status=200)

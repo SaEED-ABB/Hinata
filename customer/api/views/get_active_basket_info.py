@@ -19,4 +19,4 @@ def get_active_basket_info(request):
     basket = get_object_or_404(Basket, user=user, status=Basket.OPEN_CHECKING)
     context = basket.get_info(all_colors_and_sizes_per_product=True)
 
-    return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False, status=200)

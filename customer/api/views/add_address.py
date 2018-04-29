@@ -33,4 +33,4 @@ def add_address(request):
     res_body = {
         "success": "Address added for {}".format(user.get_full_name())
     }
-    return JsonResponse(res_body)
+    return JsonResponse(res_body, status=201)

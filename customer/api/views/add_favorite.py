@@ -29,4 +29,4 @@ def add_favorite(request):
     res_body = {
         "success": "Favorite product successfully added for {}".format(user.get_full_name())
     }
-    return JsonResponse(res_body)
+    return JsonResponse(res_body, status=201)

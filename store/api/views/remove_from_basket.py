@@ -26,7 +26,7 @@ def remove_from_basket(request):
         return JsonResponse(res_body, status=400)
 
     product = get_object_or_404(Product, pk=product_id)
-    basket = get_object_or_404(Basket, user=this_user, status='in_progress')
+    basket = get_object_or_404(Basket, user=this_user, status=Basket.OPEN_CHECKING)
     selected_product = get_object_or_404(SelectedProduct, product=product, basket=basket)
 
     if count == 'all' or int(count) >= selected_product.count:
@@ -44,4 +44,4 @@ def remove_from_basket(request):
     res_body = {
         "success": "Such product successfully removed from {}'s basket".format(this_user.get_full_name())
     }
-    return JsonResponse(res_body)
+    return JsonResponse(res_body, status=204)

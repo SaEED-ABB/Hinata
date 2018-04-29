@@ -27,4 +27,4 @@ def delete_address(request):
     res_body = {
         "success": "{}'s such address successfully removed".format(user.get_full_name())
     }
-    return JsonResponse(res_body)
+    return JsonResponse(res_body, status=204)

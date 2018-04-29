@@ -22,4 +22,4 @@ def get_categories(request):
             "id": i.id,
             "children": childrens
         })
-    return JsonResponse(all_categories, safe=False)
+    return JsonResponse(all_categories, safe=False, status=200)

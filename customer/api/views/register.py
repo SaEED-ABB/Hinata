@@ -44,7 +44,7 @@ def register(request):
         res_body = {
             "success": "User {} successfully registered.".format(new_user.get_full_name())
         }
-        return JsonResponse(res_body)
+        return JsonResponse(res_body, status=201)
     else:
         res_body = {
             'error': 'provided form is invalid'

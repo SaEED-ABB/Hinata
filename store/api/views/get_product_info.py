@@ -4,13 +4,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 
 from store.models import Product, Color, Size, ProductImage
-from customer.models import Comment
+from customer.models import Comment, Basket, SelectedProduct
 from ratelimit.decorators import ratelimit
 
 
 @require_http_methods(['GET'])
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 def get_product_info(request):
+    user = request.user
 
     product_id = request.GET.get('product_id')
     if not product_id:
@@ -20,6 +21,9 @@ def get_product_info(request):
         return JsonResponse(res_body, status=400)
 
     product = get_object_or_404(Product, pk=product_id)
+
+    is_in_user_favorites = product in user.favorites.all()
+    is_in_user_active_basket = SelectedProduct.objects.filter(basket__user=user, basket__status=Basket.OPEN_CHECKING, product=product).exists()
 
     context = {
         "name": product.name,
@@ -31,7 +35,9 @@ def get_product_info(request):
         "colors": [],
         "sizes": [],
         "comments": [],
-        "images": []
+        "images": [],
+        "is_in_user_favorites": is_in_user_favorites,
+        "is_in_user_active_basket": is_in_user_active_basket
     }
 
     for property in product.properties.all():
@@ -70,4 +76,4 @@ def get_product_info(request):
             image.name: image.image.url
         })
 
-    return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False, status=200)

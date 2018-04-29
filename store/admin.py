@@ -17,9 +17,9 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product, ProductAdmin)
-# admin.site.register(Color)
-# admin.site.register(Size)
-# admin.site.register(Category)
+admin.site.register(Color)
+admin.site.register(Size)
+admin.site.register(Category)
 admin.site.register(ProductImage)
-# admin.site.register(ProductTags)
+admin.site.register(ProductTags)
 # admin.site.register(ProductProperty)

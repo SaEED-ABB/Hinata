@@ -19,4 +19,4 @@ def get_user_info(request):
         "last_name": user.last_name
     }
 
-    return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False, status=200)

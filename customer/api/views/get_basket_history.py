@@ -30,4 +30,4 @@ def get_basket_history(request):
             open_basket.get_info()
         )
 
-    return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False, status=200)

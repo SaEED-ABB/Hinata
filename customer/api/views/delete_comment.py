@@ -27,4 +27,4 @@ def delete_comment(request):
     res_body = {
         "success": "{}'s comment successfully deleted for such product".format(user.get_full_name())
     }
-    return JsonResponse(res_body)
+    return JsonResponse(res_body, status=204)

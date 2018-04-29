@@ -67,4 +67,4 @@ def get_products(request):
             "is_favorite": is_favorite
         })
 
-    return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False, status=200)

@@ -31,4 +31,4 @@ def edit_user(request):
     res_body = {
         "success": "User successfully updated"
     }
-    return JsonResponse(res_body)
+    return JsonResponse(res_body, status=201)

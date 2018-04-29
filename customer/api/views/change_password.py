@@ -38,7 +38,7 @@ def change_password(request):
         res_body = {
             "success": "{}'s password changed successfully".format(this_user.get_full_name())
         }
-        return JsonResponse(res_body)
+        return JsonResponse(res_body, status=201)
     else:
         res_body = {
             "error": "Password provided is incorrect"

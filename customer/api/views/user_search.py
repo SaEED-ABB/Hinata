@@ -25,4 +25,4 @@ def user_search(request):
             "full_name": user.get_full_name(),
             "username": user.phone_number,
         })
-    return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False, status=200)

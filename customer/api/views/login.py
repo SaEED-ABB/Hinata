@@ -26,7 +26,7 @@ def login(request):
         res_body = {
             "success": "User {} successfully logged in".format(user.get_full_name())
         }
-        return JsonResponse(res_body)
+        return JsonResponse(res_body, status=200)
     else:
         res_body = {
             'error': 'Username or password is incorrect'

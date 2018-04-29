@@ -66,4 +66,4 @@ def add_to_basket(request):
     res_body = {
         "success": "Such product successfully added to {}'s basket".format(this_user.get_full_name())
     }
-    return JsonResponse(res_body)
+    return JsonResponse(res_body, status=201)

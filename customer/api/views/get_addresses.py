@@ -21,4 +21,4 @@ def get_address(request):
             "id": user_addr.pk
         })
 
-    return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False, status=200)

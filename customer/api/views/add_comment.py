@@ -31,4 +31,4 @@ def add_comment(request):
     res_body = {
         "success": "Comment for such product added successfully for {}".format(user.get_full_name())
     }
-    return JsonResponse(res_body)
+    return JsonResponse(res_body, status=201)

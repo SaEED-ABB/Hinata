@@ -28,4 +28,4 @@ def get_favorite(request):
             "price": favorite_product.price,
         })
 
-    return JsonResponse(context, safe=False)
+    return JsonResponse(context, safe=False, status=200)
