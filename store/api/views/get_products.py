@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from ratelimit.decorators import ratelimit
 
 from store.models import Product, Category, ProductTags
+from customer.models import Basket, SelectedProduct
 
 
 @require_http_methods(['GET'])
@@ -18,14 +19,11 @@ def get_products(request):
     category_name = request.GET.get('category')
     tag_name = request.GET.get('tag')
 
-    if not category_name:
-        res_body = {
-            "error": "category_name not provided"
-        }
-        return JsonResponse(res_body, status=400)
-
-    category = get_object_or_404(Category, name=category_name)
-    all_products = Product.objects.filter(category=category)
+    if category_name:
+        category = get_object_or_404(Category, name=category_name)
+        all_products = Product.objects.filter(category=category)
+    else:
+        all_products = Product.objects.all()
     if tag_name:
         tag = get_object_or_404(ProductTags, tag_name=tag_name)
         all_products = all_products.filter(tags__id=tag.pk)
@@ -44,27 +42,25 @@ def get_products(request):
     #     context["previous_page_number"] = requested_page.previous_page_number()
 
     for p in requested_page.object_list:
-        front_image_url = get_object_or_404(p.images, name='front').image.url
-        back_image_url = get_object_or_404(p.images, name='back').image.url
+        front_image = p.images.filter(name='front').first()
+        back_image = p.images.filter(name='back').first()
 
-        is_in_basket = False
-        is_favorite = False
+        is_in_user_active_basket = False
+        is_in_user_favorites = False
         if not request.user.is_anonymous:
-            is_in_basket = False
-            basket = user.baskets.filter(status='in_progress')
-            if basket.exists() and basket[0].selected_products.filter(product=p).exists():
-                is_in_basket = True
-
-            is_favorite = True if p in user.favorites.all() else False
+            is_in_user_favorites = p in user.favorites.all()
+            is_in_user_active_basket = SelectedProduct.objects.filter(basket__user=user,
+                                                                  basket__status=Basket.OPEN_CHECKING,
+                                                                  product=p).exists()
 
         context['products'].append({
             "id": p.pk,
             "name": p.name,
             "price": p.price,
-            "front_image": front_image_url,
-            "back_image": back_image_url,
-            "is_in_basket": is_in_basket,
-            "is_favorite": is_favorite
+            "front_image": front_image.image.url if front_image else "",
+            "back_image": back_image.image.url if back_image else "",
+            "is_in_user_active_basket": is_in_user_active_basket,
+            "is_in_user_favorites": is_in_user_favorites
         })
 
     return JsonResponse(context, safe=False, status=200)
