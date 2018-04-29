@@ -13,7 +13,7 @@ from ratelimit.decorators import ratelimit
 def delete_comment(request):
 
     user = request.user
-    comment_id = request.GET.get('comment_id')
+    comment_id = request.POST.get('comment_id')
 
     if not comment_id:
         res_body = {

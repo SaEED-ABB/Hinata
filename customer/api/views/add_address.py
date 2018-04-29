@@ -13,8 +13,8 @@ from ratelimit.decorators import ratelimit
 def add_address(request):
 
     user = request.user
-    address = request.GET.get('address')
-    phone_number = request.GET.get('phone_number')
+    address = request.POST.get('address')
+    phone_number = request.POST.get('phone_number')
 
     if not (address and phone_number):
         res_body = {

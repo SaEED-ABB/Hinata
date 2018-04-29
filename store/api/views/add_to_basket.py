@@ -15,10 +15,10 @@ from ratelimit.decorators import ratelimit
 def add_to_basket(request):
 
     this_user = request.user
-    product_id = request.GET.get('product_id')
-    # color_id = int(request.GET.get('color_id'))
-    # size_id = int(request.GET.get('size_id'))
-    count = int(request.GET.get('count', 1))
+    product_id = request.POST.get('product_id')
+    # color_id = int(request.POST.get('color_id'))
+    # size_id = int(request.POST.get('size_id'))
+    count = int(request.POST.get('count', 1))
 
     if not product_id:
         res_body = {

@@ -1,13 +1,7 @@
 from django.db import models
 from colorfield.fields import ColorField
 
-
-class BaseData(models.Model):
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
-
-    class Meta:
-        abstract = True
+from frontview.models import TimeStampedModel
 
 
 class CategoryManager(models.Manager):
@@ -19,7 +13,7 @@ class CategoryManager(models.Manager):
         return children
 
 
-class Category(BaseData):
+class Category(TimeStampedModel):
     name = models.CharField(max_length=200, blank=True, null=True)
     parent = models.ForeignKey('self', related_name="children", on_delete=models.CASCADE, blank=True, null=True)
 
@@ -35,14 +29,14 @@ class Category(BaseData):
         return full_name
 
 
-class Size(BaseData):
+class Size(TimeStampedModel):
     name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return self.name
 
 
-class Color(BaseData):
+class Color(TimeStampedModel):
     name = models.CharField(max_length=200, blank=True, null=True)
     color = ColorField(default='ffffff')
 
@@ -50,24 +44,25 @@ class Color(BaseData):
         return self.name
 
 
-class ProductProperty(BaseData):
+class ProductProperty(TimeStampedModel):
     property = models.CharField(max_length=500)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='properties', null=True)
 
     def __str__(self):
         return self.property
 
 
-class ProductTags(BaseData):
+class ProductTags(TimeStampedModel):
     tag_name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.tag_name
 
 
-class Product(BaseData):
+class Product(TimeStampedModel):
     name = models.CharField(max_length=200, blank=True, null=True)
     material = models.CharField(max_length=200, blank=True, null=True)
-    properties = models.ManyToManyField(ProductProperty, blank=True)
+    # properties = models.ManyToManyField(ProductProperty, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='related_products')
     tags = models.ManyToManyField(ProductTags, related_name='filtered_products', blank=True)
     sizes = models.ManyToManyField(Size, related_name='sizes', blank=True)
@@ -78,7 +73,7 @@ class Product(BaseData):
         return self.name
 
 
-class ProductImage(BaseData):
+class ProductImage(TimeStampedModel):
     NAME_CHOICES = (
         ('front', 'front image'),
         ('back', 'back image'),

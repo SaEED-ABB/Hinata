@@ -12,11 +12,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 def register(request):
 
-    phone_number = request.GET.get('phone_number')
-    first_name = request.GET.get('first_name')
-    last_name = request.GET.get('last_name')
-    password = request.GET.get('password1')
-    password_confirm = request.GET.get('password2')
+    phone_number = request.POST.get('phone_number')
+    first_name = request.POST.get('first_name')
+    last_name = request.POST.get('last_name')
+    password = request.POST.get('password1')
+    password_confirm = request.POST.get('password2')
 
     if not (phone_number and first_name and last_name and password and password_confirm):
         res_body = {

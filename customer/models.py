@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 import uuid as uuid_lib
 
 from .managers import UserManager
+from frontview.models import TimeStampedModel
 
 
 def get_path(instance, filename):
@@ -15,15 +16,7 @@ def get_path(instance, filename):
     return "images/" + name
 
 
-class BaseData(models.Model):
-    updated_at = models.DateTimeField(auto_now=True)
-    created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
-
-    class Meta:
-        abstract = True
-
-
-class User(AbstractBaseUser, BaseData):
+class User(AbstractBaseUser, TimeStampedModel):
     AC_TYPE = (
         ('user', 'Normal User'),
         ('admin', 'Admin User')
@@ -68,7 +61,7 @@ class User(AbstractBaseUser, BaseData):
         return '{}({})'.format(self.phone_number, self.get_full_name())
 
 
-class UserAddress(BaseData):
+class UserAddress(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
     address = models.TextField()
     phone_number = models.CharField(max_length=200, blank=True, null=True)
@@ -77,7 +70,7 @@ class UserAddress(BaseData):
         return "{} - {}".format(self.user.get_full_name(), self.address)
 
 
-class Basket(BaseData):
+class Basket(TimeStampedModel):
     STATUS = (
         ('in_progress', 'In Progress'),
         ('in_way', 'In Way'),
@@ -100,7 +93,7 @@ class Basket(BaseData):
         return "{}'s basket({})".format(self.user.get_full_name(), self.code)
 
 
-class SelectedProduct(BaseData):
+class SelectedProduct(TimeStampedModel):
     basket = models.ForeignKey(Basket, on_delete=models.CASCADE, related_name='selected_products', null=True)
     product = models.ForeignKey('store.Product', on_delete=models.DO_NOTHING)
     size = models.ForeignKey('store.Size', on_delete=models.DO_NOTHING, blank=True, null=True)
@@ -120,7 +113,7 @@ class SelectedProduct(BaseData):
         return "{} in {}'s basket".format(self.product.name, self.basket.user.get_full_name())
 
 
-class Comment(BaseData):
+class Comment(TimeStampedModel):
     product = models.ForeignKey('store.Product', on_delete=models.CASCADE, related_name='related_comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     comment = models.TextField()
@@ -130,7 +123,7 @@ class Comment(BaseData):
         return "by {} for {}".format(self.user.get_full_name(), self.product.name)
 
 
-class Image(BaseData):
+class Image(TimeStampedModel):
     image = models.ImageField(upload_to=get_path)
 
     def delete(self, *args, **kwargs):
@@ -141,7 +134,7 @@ class Image(BaseData):
         return self.image.name
 
 
-# class Favorite(BaseData):
+# class Favorite(TimeStampedModel):
 #     product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
 #     user = models.ForeignKey('customer.User', on_delete=models.CASCADE, related_name='favorite_products')
 #

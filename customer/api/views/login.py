@@ -10,8 +10,8 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 def login(request):
 
-    phone_number = request.GET.get('phone_number')
-    password = request.GET.get('password')
+    phone_number = request.POST.get('phone_number')
+    password = request.POST.get('password')
 
     if not (phone_number and password):
         res_body = {

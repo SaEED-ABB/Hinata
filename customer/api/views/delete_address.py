@@ -13,7 +13,7 @@ from ratelimit.decorators import ratelimit
 def delete_address(request):
 
     user = request.user
-    address_id = request.GET.get('address_id')
+    address_id = request.POST.get('address_id')
 
     if not address_id:
         res_body = {

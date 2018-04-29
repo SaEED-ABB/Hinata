@@ -14,7 +14,7 @@ from ratelimit.decorators import ratelimit
 def add_favorite(request):
 
     user = request.user
-    product_id = request.GET.get('product_id')
+    product_id = request.POST.get('product_id')
 
     if not product_id:
         res_body = {

@@ -16,8 +16,8 @@ def remove_from_basket(request):
 
     this_user = request.user
 
-    product_id = request.GET.get('product_id')
-    count = request.GET.get('count', 'all')
+    product_id = request.POST.get('product_id')
+    count = request.POST.get('count', 'all')
 
     if not product_id:
         res_body = {

@@ -13,9 +13,9 @@ def edit_user(request):
 
     this_user = request.user
 
-    phone_number = request.GET.get('phone_number')
-    first_name = request.GET.get('first_name')
-    last_name = request.GET.get('last_name')
+    phone_number = request.POST.get('phone_number')
+    first_name = request.POST.get('first_name')
+    last_name = request.POST.get('last_name')
 
     if not (phone_number and first_name and last_name):
         res_body = {

@@ -15,9 +15,9 @@ def change_password(request):
 
     this_user = request.user
 
-    old_password = request.GET.get('old_password')
-    new_password = request.GET.get('new_password')
-    new_password_confirm = request.GET.get('new_password_confirm')
+    old_password = request.POST.get('old_password')
+    new_password = request.POST.get('new_password')
+    new_password_confirm = request.POST.get('new_password_confirm')
 
     if not (old_password and new_password and new_password_confirm):
         res_body = {

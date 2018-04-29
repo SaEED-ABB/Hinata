@@ -15,8 +15,8 @@ from ratelimit.decorators import ratelimit
 def add_comment(request):
 
     user = request.user
-    product_id = request.GET.get('product_id')
-    comment = request.GET.get('comment')
+    product_id = request.POST.get('product_id')
+    comment = request.POST.get('comment')
 
     if not (product_id and comment):
         res_body = {
