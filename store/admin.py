@@ -4,12 +4,12 @@ from store.models import Product, Color, Size, ProductImage, Category, ProductTa
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 2
+    extra = 1
 
 
 class PropertyInline(admin.TabularInline):
     model = ProductProperty
-    extra = 3
+    extra = 1
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -17,9 +17,9 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Color)
-admin.site.register(Size)
-admin.site.register(Category)
+# admin.site.register(Color)
+# admin.site.register(Size)
+# admin.site.register(Category)
 admin.site.register(ProductImage)
-admin.site.register(ProductTags)
-admin.site.register(ProductProperty)
+# admin.site.register(ProductTags)
+# admin.site.register(ProductProperty)

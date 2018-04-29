@@ -30,10 +30,16 @@ def remove_from_basket(request):
     selected_product = get_object_or_404(SelectedProduct, product=product, basket=basket)
 
     if count == 'all' or int(count) >= selected_product.count:
+        basket.total_price -= selected_product.price
+        basket.save()
         selected_product.delete()
     else:
         selected_product.count -= int(count)
+        selected_product.price -= int(count) * product.price
         selected_product.save()
+
+        basket.total_price -= selected_product.price
+        basket.save()
 
     res_body = {
         "success": "Such product successfully removed from {}'s basket".format(this_user.get_full_name())

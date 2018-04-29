@@ -1,8 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from customer.models import *
+from customer.models import User, UserAddress, Basket, SelectedProduct, Comment
 from .forms import UserCreationForm, UserChangeForm
+
+
+class UserAddressInline(admin.StackedInline):
+    model = UserAddress
+    extra = 1
 
 
 class UserAdmin(BaseUserAdmin):
@@ -31,6 +36,25 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('phone_number',)
     filter_horizontal = ()
 
+    inlines = [UserAddressInline, ]
+
+
+class SelectedProductInline(admin.StackedInline):
+    model = SelectedProduct
+    extra = 1
+
+
+class BasketAdmin(admin.ModelAdmin):
+    list_display = ('code', 'user', 'status', 'payment_type', 'total_price')
+
+    inlines = [SelectedProductInline]
+
+
+class CommentAdmin(admin.ModelAdmin):
+
+    list_display = ('product', 'user', 'comment', 'is_approved')
+
+
 
 # Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
@@ -40,8 +64,8 @@ admin.site.register(User, UserAdmin)
 
 
 admin.site.register(SelectedProduct)
-admin.site.register(Basket)
-admin.site.register(UserAddress)
-admin.site.register(Comment)
-admin.site.register(Image)
+admin.site.register(Basket, BasketAdmin)
+# admin.site.register(UserAddress)
+admin.site.register(Comment, CommentAdmin)
+# admin.site.register(Image)
 # admin.site.register(Favorite)

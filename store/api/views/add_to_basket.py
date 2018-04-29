@@ -57,6 +57,9 @@ def add_to_basket(request):
     selected_product.price = selected_product.count * product.price
     selected_product.save()
 
+    basket.total_price += selected_product.price
+    basket.save()
+
     res_body = {
         "success": "Such product successfully added to {}'s basket".format(this_user.get_full_name())
     }

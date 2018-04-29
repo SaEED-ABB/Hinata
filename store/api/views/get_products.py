@@ -44,8 +44,8 @@ def get_products(request):
     #     context["previous_page_number"] = requested_page.previous_page_number()
 
     for p in requested_page.object_list:
-        front_image_url = get_object_or_404(p.images, name='front').image.image.url
-        back_image_url = get_object_or_404(p.images, name='back').image.image.url
+        front_image_url = get_object_or_404(p.images, name='front').image.url
+        back_image_url = get_object_or_404(p.images, name='back').image.url
 
         is_in_basket = False
         is_favorite = False

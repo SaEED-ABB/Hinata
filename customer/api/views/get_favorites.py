@@ -15,9 +15,17 @@ def get_favorite(request):
 
     context = []
     for favorite_product in user.favorites.all():
+        images = []
+        for image in favorite_product.images.all()[:3]:
+            images.append({
+                "url": image.image.url,
+            })
+
         context.append({
             "product_name": favorite_product.name,
             "product_id": favorite_product.pk,
+            "images": images,
+            "price": favorite_product.price,
         })
 
     return JsonResponse(context, safe=False)

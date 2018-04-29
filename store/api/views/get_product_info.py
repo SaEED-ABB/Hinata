@@ -67,7 +67,7 @@ def get_product_info(request):
 
     for image in ProductImage.objects.filter(product=product):
         context['images'].append({
-            image.name: image.image.image.url
+            image.name: image.image.url
         })
 
     return JsonResponse(context, safe=False)

@@ -2,7 +2,6 @@ from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from store.models import Product
-from store.helpers import get_one_image
 
 from ratelimit.decorators import ratelimit
 
@@ -24,6 +23,6 @@ def search_product(request):
         context.append({
             "name": product.name,
             "id": product.id,
-            "image": get_one_image(product)
+            "image": product.images.last().image.url
         })
     return JsonResponse(context, safe=False)

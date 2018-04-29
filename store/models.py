@@ -1,7 +1,16 @@
+import os
 from django.db import models
 from colorfield.fields import ColorField
 
 from frontview.models import TimeStampedModel
+# from .helpers import get_path
+
+from django.utils.crypto import get_random_string
+
+
+def get_path(instance, filename):
+    name = get_random_string(length=24) + "." + filename.split('.')[-1]
+    return "images/" + name
 
 
 class CategoryManager(models.Manager):
@@ -80,8 +89,12 @@ class ProductImage(TimeStampedModel):
         ('other', 'other')
     )
     name = models.CharField(max_length=200, choices=NAME_CHOICES, default='other')
-    image = models.OneToOneField('customer.Image', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=get_path)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
 
+    def delete(self, *args, **kwargs):
+        os.remove(self.image.path)
+        return super(ProductImage, self).delete(*args, **kwargs)
+
     def __str__(self):
-        return "{}-{}".format(self.product.name, self.image.image.name)
+        return "{}-{}".format(self.product.name, self.name)
