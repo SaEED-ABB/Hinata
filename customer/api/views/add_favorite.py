@@ -12,7 +12,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def add_favorite(request):
-
+    """
+    user selects a product as its favorite and it will be add to his favorites list
+    :param request: user, product_id
+    :return: error or success message
+    """
     user = request.user
     product_id = request.POST.get('product_id')
 

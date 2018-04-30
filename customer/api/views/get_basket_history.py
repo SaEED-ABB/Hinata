@@ -12,7 +12,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['GET'])
 @check_permission_api(['user'])
 def get_basket_history(request):
-
+    """
+    among closed and open status basket all will return but the Basket.OPEN_CHECKING
+    :param request: user
+    :return: closed[{basket.get_info}], open[{basket.get_info}]
+    """
     user = request.user
 
     context = {

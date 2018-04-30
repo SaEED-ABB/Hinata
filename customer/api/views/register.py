@@ -11,7 +11,11 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['POST'])
 def register(request):
-
+    """
+    to register and finally log the created user in
+    :param request: phone_number, first_name, last_name, password1, password2
+    :return: error or success message
+    """
     phone_number = request.POST.get('phone_number')
     first_name = request.POST.get('first_name')
     last_name = request.POST.get('last_name')

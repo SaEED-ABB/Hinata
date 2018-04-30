@@ -10,15 +10,13 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['GET'])
 @check_permission_api(['user'])
 def get_address(request):
-
+    """
+    returns all user addresses
+    :param request: user
+    :return: addresses[{address, phone, id}]
+    """
     user = request.user
 
-    context = []
-    for user_addr in user.addresses.all():
-        context.append({
-            "address": user_addr.address,
-            "phone": user_addr.phone_number,
-            "id": user_addr.pk
-        })
+    context = user.get_addresses()
 
     return JsonResponse(context, safe=False, status=200)

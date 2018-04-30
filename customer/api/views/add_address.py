@@ -11,6 +11,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def add_address(request):
+    """
+        add a new address to user addresses
+    :param request: user, address, phone_number
+    :return: error or success message
+    """
 
     user = request.user
     address = request.POST.get('address')

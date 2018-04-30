@@ -11,6 +11,14 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['GET'])
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 def get_product_info(request):
+    """
+    get a product info
+    :param request: user, product_id
+    :return: product{name, price, properties[{name}], tags[{tag_name}], material, category,
+            colors[{name, code}], sizes[{name}], comments[{comment, full_name, phone_number, created_at}],
+            images[{url}], is_in_user_favorites, is_in_user_active_basket}
+    """
+
     user = request.user
 
     product_id = request.GET.get('product_id')

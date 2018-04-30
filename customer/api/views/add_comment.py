@@ -13,6 +13,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def add_comment(request):
+    """
+    add a comment for a specific product left by current user
+    :param request: user, product_id, comment
+    :return: error or success message
+    """
 
     user = request.user
     product_id = request.POST.get('product_id')

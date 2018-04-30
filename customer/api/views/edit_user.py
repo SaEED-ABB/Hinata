@@ -10,7 +10,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def edit_user(request):
-
+    """
+    user can change his info
+    :param request: user
+    :return: error or success message
+    """
     this_user = request.user
 
     phone_number = request.POST.get('phone_number')

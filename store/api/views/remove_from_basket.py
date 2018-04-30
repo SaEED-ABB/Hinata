@@ -13,7 +13,11 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @check_authentication_status()
 def remove_from_basket(request):
-
+    """
+    a user can remove a specific product from his active basket
+    :param request:
+    :return:
+    """
     this_user = request.user
 
     product_id = request.POST.get('product_id')

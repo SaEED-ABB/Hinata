@@ -11,7 +11,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['GET'])
 @check_permission_api(['admin'])
 def user_search(request):
-
+    """
+    admin searches for a specific user and his info
+    :param request: phone_number
+    :return: user{full_name, phone_number}
+    """
     phone_number = request.GET.get('phone_number')
     if not phone_number:
         res_body = {
@@ -23,6 +27,6 @@ def user_search(request):
     for user in User.objects.filter(phone_number=phone_number):
         context.append({
             "full_name": user.get_full_name(),
-            "username": user.phone_number,
+            "phone_number": user.phone_number,
         })
     return JsonResponse(context, safe=False, status=200)

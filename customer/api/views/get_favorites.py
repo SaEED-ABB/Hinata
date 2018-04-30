@@ -10,22 +10,13 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['GET'])
 @check_permission_api(['user'])
 def get_favorite(request):
-
+    """
+    each user has a favorite product list which could be returned
+    :param request: user
+    :return: favorites[images[{url}], product_name, product_id, price]
+    """
     user = request.user
 
-    context = []
-    for favorite_product in user.favorites.all():
-        images = []
-        for image in favorite_product.images.all()[:3]:
-            images.append({
-                "url": image.image.url,
-            })
-
-        context.append({
-            "product_name": favorite_product.name,
-            "product_id": favorite_product.pk,
-            "images": images,
-            "price": favorite_product.price,
-        })
+    context = user.get_favorites()
 
     return JsonResponse(context, safe=False, status=200)

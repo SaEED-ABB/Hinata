@@ -9,7 +9,11 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['GET'])
 def search_product(request):
-
+    """
+    search among product names
+    :param request: search_key
+    :return: product{name, id, image}
+    """
     search_key = request.GET.get('search_key')
 
     if not search_key:

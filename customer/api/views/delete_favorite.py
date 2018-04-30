@@ -12,7 +12,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def delete_favorite(request):
-
+    """
+    user can remove a product from his favorite product list
+    :param request: user, product_id
+    :return: error or success message
+    """
     user = request.user
     product_id = request.POST.get('product_id')
 

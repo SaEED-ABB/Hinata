@@ -12,6 +12,12 @@ from customer.models import Basket, SelectedProduct
 @require_http_methods(['GET'])
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 def get_products(request):
+    """
+    returns all products [with specific category and tags]
+    :param request: user, page, count, category, tag
+    :return: products[{id, name, price, front_image, back_image, is_in_user_favorites, is_in_user_active_basket}]
+    """
+
     user = request.user
 
     this_page_number = int(request.GET.get('page', '1'))

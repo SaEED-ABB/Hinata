@@ -78,6 +78,9 @@ class Product(TimeStampedModel):
     colors = models.ManyToManyField(Color, related_name='colors', blank=True)
     price = models.IntegerField()
 
+    class Meta:
+        ordering = ('-created_at', )
+
     def __str__(self):
         return self.name
 

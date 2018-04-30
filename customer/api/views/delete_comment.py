@@ -11,7 +11,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def delete_comment(request):
-
+    """
+    user can delete each of his comments
+    :param request: user, comment_id
+    :return: error or success message
+    """
     user = request.user
     comment_id = request.POST.get('comment_id')
 

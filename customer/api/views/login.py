@@ -9,7 +9,11 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='50/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['POST'])
 def login(request):
-
+    """
+    to log a user in
+    :param request: phone_number, password
+    :return: error or success message
+    """
     phone_number = request.POST.get('phone_number')
     password = request.POST.get('password')
 

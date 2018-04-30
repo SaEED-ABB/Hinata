@@ -26,12 +26,51 @@ class User(AbstractBaseUser, TimeStampedModel):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     class Meta:
+        ordering = ('-created_at', )
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
+
+    def get_addresses(self, count=None):
+        context = []
+        addresses = self.addresses.order_by('created_at')
+        if count:
+            addresses = addresses[:count]
+        for user_addr in addresses:
+            context.append({
+                "address": user_addr.address,
+                "phone": user_addr.phone_number,
+                "id": user_addr.pk
+            })
+        return context
+
+    def get_favorites(self):
+        context = []
+        for favorite_product in self.favorites.all():
+            images = []
+            for image in favorite_product.images.all():
+                images.append({
+                    "url": image.image.url,
+                })
+
+            context.append({
+                "product_name": favorite_product.name,
+                "product_id": favorite_product.pk,
+                "images": images,
+                "price": favorite_product.price,
+            })
+        return context
+
+    def get_info(self):
+        context = {
+            "phone_number": self.phone_number,
+            "first_name": self.first_name,
+            "last_name": self.last_name
+        }
+        return context
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
@@ -89,6 +128,9 @@ class Basket(TimeStampedModel):
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
     total_price = models.IntegerField(null=True)
 
+    class Meta:
+        ordering = ('-created_at', )
+
     def get_info(self, all_colors_and_sizes_per_product=False):
 
         context = {
@@ -128,7 +170,6 @@ class Basket(TimeStampedModel):
                 "sizes": sizes
             })
 
-
         return context
 
     # def save(self, *args, **kwargs):
@@ -161,6 +202,9 @@ class Comment(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     comment = models.TextField()
     is_approved = models.NullBooleanField()
+
+    class Meta:
+        ordering = ('-created_at', )
 
     def __str__(self):
         return "by {} for {}".format(self.user.get_full_name(), self.product.name)

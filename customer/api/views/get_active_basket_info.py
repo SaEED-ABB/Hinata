@@ -13,7 +13,12 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['GET'])
 @check_permission_api(['user'])
 def get_active_basket_info(request):
-
+    """
+    each user has one and only one active basket which its info is returned by this api
+    :param request: user, basket
+    :return: total_price, status, products[{name, image, id, desired_color, desired_size, count, price,
+            colors[{name, color}], sizes[{name}], }]
+    """
     user = request.user
 
     basket = get_object_or_404(Basket, user=user, status=Basket.OPEN_CHECKING)

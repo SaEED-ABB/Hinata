@@ -12,7 +12,11 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['POST'])
 @check_permission_api(['user'])
 def change_password(request):
-
+    """
+    user can change his password
+    :param request: old_password, new_password, new_password_confirm
+    :return: error or success message
+    """
     this_user = request.user
 
     old_password = request.POST.get('old_password')

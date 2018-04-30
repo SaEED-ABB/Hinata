@@ -10,13 +10,13 @@ from ratelimit.decorators import ratelimit
 @require_http_methods(['GET'])
 @check_permission_api(['user'])
 def get_user_info(request):
-
+    """
+    to return user info
+    :param request:
+    :return: phone_number, first_name, last_name
+    """
     user = request.user
 
-    context = {
-        "phone_number": user.phone_number,
-        "first_name": user.first_name,
-        "last_name": user.last_name
-    }
+    context = user.get_info()
 
     return JsonResponse(context, safe=False, status=200)
