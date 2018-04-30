@@ -1,8 +1,7 @@
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from store.models import Product, Color, Size, ProductImage
-from customer.models import Comment, Basket, SelectedProduct
+from store.models import Product
 from ratelimit.decorators import ratelimit
 
 
