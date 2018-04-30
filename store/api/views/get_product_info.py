@@ -28,7 +28,13 @@ def get_product_info(request):
         }
         return JsonResponse(res_body, status=400)
 
-    product = get_object_or_404(Product, pk=product_id)
+    try:
+        product = Product.objects.get(pk=product_id)
+    except Product.DoesNotExist:
+        res_body = {
+            "error": "no such product"
+        }
+        return JsonResponse(res_body, status=404)
 
     is_in_user_favorites = product in user.favorites.all()
     is_in_user_active_basket = SelectedProduct.objects.filter(basket__user=user, basket__status=Basket.OPEN_CHECKING, product=product).exists()

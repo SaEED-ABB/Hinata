@@ -1,8 +1,8 @@
-from django.shortcuts import get_object_or_404
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from customer.decorators import check_permission_api
+from customer.models import UserAddress
 
 from ratelimit.decorators import ratelimit
 
@@ -25,8 +25,14 @@ def delete_address(request):
         }
         return JsonResponse(res_body, status=400)
 
-    user_address = get_object_or_404(user.addresses, pk=address_id)
-    user_address.delete()
+    try:
+        user_address = user.addresses.get(pk=address_id)
+        user_address.delete()
+    except UserAddress.DoesNotExist:
+        res_body = {
+            "error": "no such address for user {}".format(user.get_full_name())
+        }
+        return JsonResponse(res_body, status=404)
 
     res_body = {
         "success": "{}'s such address successfully removed".format(user.get_full_name())

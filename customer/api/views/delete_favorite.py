@@ -26,8 +26,14 @@ def delete_favorite(request):
         }
         return JsonResponse(res_body, status=400)
 
-    favorite_product = get_object_or_404(Product, id=product_id)
-    user.favorites.remove(favorite_product)
+    try:
+        favorite_product = Product.objects.get(pk=product_id)
+        user.favorites.remove(favorite_product)
+    except Product.DoesNotExist:
+        res_body = {
+            "error": "no such favorite product found for {}".format(user.get_full_name())
+        }
+        return JsonResponse(res_body, status=404)
 
     res_body = {
         "success": "{}'s such favorite product removed successfully from his favorites".format(user.get_full_name())

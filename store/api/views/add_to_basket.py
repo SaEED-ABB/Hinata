@@ -30,7 +30,14 @@ def add_to_basket(request):
         }
         return JsonResponse(res_body, status=400)
 
-    product = get_object_or_404(Product, pk=product_id)
+    try:
+        product = Product.objects.get(pk=product_id)
+    except Product.DoesNotExist:
+        res_body = {
+            "error": "no such product"
+        }
+        return JsonResponse(res_body, status=404)
+
     basket, created_basket = Basket.objects.get_or_create(user=this_user, status=Basket.OPEN_CHECKING)
 
     selected_product, created_sel_product = SelectedProduct.objects.get_or_create(
@@ -38,11 +45,25 @@ def add_to_basket(request):
         product=product,
     )
     if color_id:
-        color = get_object_or_404(Color, pk=color_id)
-        selected_product.color = color
+        try:
+            color = Color.objects.get(pk=color_id)
+            selected_product.color = color
+        except Color.DoesNotExist:
+            res_body = {
+                "error": "no such color"
+            }
+            return JsonResponse(res_body, status=404)
+
     if size_id:
-        size = get_object_or_404(Size, pk=size_id)
-        selected_product.size = size
+        try:
+            size = Size.objects.get(pk=size_id)
+            selected_product.size = size
+        except Size.DoesNotExist:
+            res_body = {
+                "error": "no such size"
+            }
+            return JsonResponse(res_body, status=404)
+
     if created_sel_product:
         selected_product.count = count
     else:

@@ -26,9 +26,15 @@ def add_favorite(request):
         }
         return JsonResponse(res_body, status=400)
 
-    this_product = get_object_or_404(Product, pk=product_id)
+    try:
+        this_product = Product.objects.get(pk=product_id)
+        user.favorites.add(this_product)
 
-    user.favorites.add(this_product)
+    except Product.DoesNotExist:
+        res_body = {
+            "error": "no such product"
+        }
+        return JsonResponse(res_body, status=404)
 
     res_body = {
         "success": "Favorite product successfully added for {}".format(user.get_full_name())

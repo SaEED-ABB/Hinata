@@ -9,7 +9,7 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='1000/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['GET'])
 @check_permission_api(['user'])
-def get_address(request):
+def get_addresses(request):
     """
     returns all user addresses
     :param request: user

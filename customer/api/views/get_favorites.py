@@ -9,7 +9,7 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='1000/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['GET'])
 @check_permission_api(['user'])
-def get_favorite(request):
+def get_favorites(request):
     """
     each user has a favorite product list which could be returned
     :param request: user

@@ -2,7 +2,7 @@ from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from customer.decorators import check_permission_api
-from customer.models import UserAddress, User
+from customer.models import UserAddress
 
 from ratelimit.decorators import ratelimit
 
@@ -27,7 +27,9 @@ def add_address(request):
         }
         return JsonResponse(res_body, status=400)
 
-    this_user_address, created = UserAddress.objects.get_or_create(user=user, address=address, phone_number=phone_number)
+    this_user_address, created = UserAddress.objects.get_or_create(user=user, address=address)
+    this_user_address.phone_number=phone_number
+    this_user_address.save()
 
     if not created:
         res_body = {

@@ -25,14 +25,28 @@ def get_products(request):
     category_name = request.GET.get('category')
     tag_name = request.GET.get('tag')
 
+    all_products = Product.objects.all()
+
     if category_name:
-        category = get_object_or_404(Category, name=category_name)
-        all_products = Product.objects.filter(category=category)
-    else:
-        all_products = Product.objects.all()
+        try:
+            category = Category.objects.get(name=category_name)
+            all_products = Product.objects.filter(category=category)
+        except Category.DoesNotExist:
+            res_body = {
+                "error": "no such category"
+            }
+            return JsonResponse(res_body, status=404)
+
     if tag_name:
-        tag = get_object_or_404(ProductTags, tag_name=tag_name)
-        all_products = all_products.filter(tags__id=tag.pk)
+        try:
+            tag = ProductTags.objects.get(tag_name=tag_name)
+            all_products = all_products.filter(tags__id=tag.pk)
+        except ProductTags.DoesNotExist:
+            res_body = {
+                "error": "no such product_tag"
+            }
+            return JsonResponse(res_body, status=404)
+
     all_pages = Paginator(all_products, count)
     requested_page = all_pages.page(this_page_number)
     context = {

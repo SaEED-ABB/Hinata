@@ -21,7 +21,13 @@ def get_active_basket_info(request):
     """
     user = request.user
 
-    basket = get_object_or_404(Basket, user=user, status=Basket.OPEN_CHECKING)
-    context = basket.get_info(all_colors_and_sizes_per_product=True)
+    try:
+        basket = Basket.objects.get(user=user, status=Basket.OPEN_CHECKING)
+        context = basket.get_info(all_colors_and_sizes_per_product=True)
+    except Basket.DoesNotExist:
+        res_body = {
+            "error": "no such active basket found for {}".format(user.get_full_name())
+        }
+        return JsonResponse(res_body, status=404)
 
     return JsonResponse(context, safe=False, status=200)

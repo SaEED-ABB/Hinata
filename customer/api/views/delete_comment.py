@@ -3,6 +3,7 @@ from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from customer.decorators import check_permission_api
+from customer.models import Comment
 
 from ratelimit.decorators import ratelimit
 
@@ -25,8 +26,14 @@ def delete_comment(request):
         }
         return JsonResponse(res_body, status=400)
 
-    this_comment = get_object_or_404(user.comments, pk=comment_id)
-    this_comment.delete()
+    try:
+        this_comment = Comment.objects.get(pk=comment_id)
+        this_comment.delete()
+    except Comment.DoesNotExist:
+        res_body = {
+            "error": "no such comment found on product"
+        }
+        return JsonResponse(res_body, status=404)
 
     res_body = {
         "success": "{}'s comment successfully deleted for such product".format(user.get_full_name())

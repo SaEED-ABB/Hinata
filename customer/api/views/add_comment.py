@@ -29,7 +29,13 @@ def add_comment(request):
         }
         return JsonResponse(res_body, status=400)
 
-    this_product = get_object_or_404(Product, pk=product_id)
+    try:
+        this_product = Product.objects.get(pk=product_id)
+    except Product.DoesNotExist:
+        res_body = {
+            "error": "no such product"
+        }
+        return JsonResponse(res_body, status=404)
 
     Comment.objects.create(comment=comment, product=this_product, user=user)
 

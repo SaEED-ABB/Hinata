@@ -29,9 +29,20 @@ def remove_from_basket(request):
         }
         return JsonResponse(res_body, status=400)
 
-    product = get_object_or_404(Product, pk=product_id)
-    basket = get_object_or_404(Basket, user=this_user, status=Basket.OPEN_CHECKING)
-    selected_product = get_object_or_404(SelectedProduct, product=product, basket=basket)
+    try:
+        product = Product.objects.get(pk=product_id)
+        basket = Basket.objects.get(user=this_user, status=Basket.OPEN_CHECKING)
+        selected_product = SelectedProduct.objects.get(product=product, basket=basket)
+    except (Product.DoesNotExist, SelectedProduct.DoesNotExist):
+        res_body = {
+            "error": "no such product"
+        }
+        return JsonResponse(res_body, status=404)
+    except Basket.DoesNotExist:
+        res_body = {
+            "error": "no such active basket found for user {}".format(this_user.get_full_name())
+        }
+        return JsonResponse(res_body, status=404)
 
     if count == 'all' or int(count) >= selected_product.count:
         basket.total_price -= selected_product.price
