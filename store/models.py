@@ -1,6 +1,8 @@
 import os
 from django.db import models
 from colorfield.fields import ColorField
+from django.utils.text import slugify
+from django.shortcuts import reverse
 
 from frontview.models import TimeStampedModel
 # from .helpers import get_path
@@ -71,6 +73,7 @@ class ProductTags(TimeStampedModel):
 class Product(TimeStampedModel):
     name = models.CharField(max_length=200, blank=True, null=True)
     material = models.CharField(max_length=200, blank=True, null=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
     # properties = models.ManyToManyField(ProductProperty, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='related_products')
     tags = models.ManyToManyField(ProductTags, related_name='filtered_products', blank=True)
@@ -80,6 +83,21 @@ class Product(TimeStampedModel):
 
     class Meta:
         ordering = ('-created_at', )
+
+    def get_absolute_url(self):
+        return reverse('frontview:product_detail', kwargs={'slug': self.slug})
+
+    def _get_unique_slug(self):
+        slug = slugify(self.name)
+        counter = 1
+        while Product.objects.filter(slug=slug).exists():
+            slug = '{}-{}'.format(slug, counter)
+            counter += 1
+        return slug
+
+    def save(self, *args, **kwargs):
+        self.slug = self._get_unique_slug()
+        super(Product, self).save()
 
     def __str__(self):
         return self.name

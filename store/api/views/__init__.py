@@ -3,3 +3,4 @@ from .get_categories import get_categories
 from .add_to_basket import add_to_basket
 from .get_product_info import get_product_info
 from .remove_from_basket import remove_from_basket
+from .get_next_prev_of_product import get_next_prev_of_product

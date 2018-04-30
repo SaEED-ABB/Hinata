@@ -1,7 +1,5 @@
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import get_object_or_404
 
 from store.models import Product, Color, Size, ProductImage
 from customer.models import Comment, Basket, SelectedProduct
