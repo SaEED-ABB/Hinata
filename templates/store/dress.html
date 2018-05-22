@@ -3,36 +3,35 @@
 
 
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="style/dress.css">
+    <link rel="stylesheet" type="text/css" href="/static/style/dress.css">
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 {% endblock %}
 
 {% block body %}
     {% include "frontview/header.html" %}
     
 	<div class="row pageSologn">
-		<div id="nextImg"><img src="img/preIcon.png"></div>
-		<div id="previousImg"><img src="img/nextIcon.png"></div>
+		<div id="nextImg"><img src="/static/img/preIcon.png"></div>
+		<div id="previousImg"><img src="/static/img/nextIcon.png"></div>
 	</div>
 	<div class="row mainContent">
-		<div class="col-md-7">
-			<img class="dressImages" src="img/cloth1.jpg"><img class="dressImages" src="img/cloth1.jpg"><img class="dressImages" src="img/cloth1.jpg"><img class="dressImages" src="img/cloth1.jpg"><img class="dressImages" src="img/cloth1.jpg"><img class="dressImages" src="img/cloth1.jpg">
+		<div class="col-md-7 images">
 
 		</div>
 		<div class="col-md-5">
 			<div class="row dressProp">
 				<h1>سویشرت پاندایی</h1>
-				<div class="row dressDetail">
+				<div class="row dressDetail ">
 					<label class="col-md-2" style="width: 8%;padding:0">رنگ: </label>
-					<div class="col-md-10" style="width: 92%;padding: 0">
-						<div class="color"></div>
-						<div class="color"></div>
+					<div class="col-md-10 colors" style="width: 92%;padding: 0">
+
 					</div>
 				</div>
 				<div class="row dressDetail">
 					<label class="col-md-2" style="width: 8%;padding:0">سایز: </label>
-					<div class="col-md-10" style="width: 92%;padding: 0">
-						<div class="size">44</div>
-						<div class="size">46</div>
+					<div class="col-md-10 sizes" style="width: 92%;padding: 0">
+						
 						<br>
 						<span class="link">راهنمای انتخاب سایز</span>
 					</div>
@@ -44,25 +43,21 @@
 					</div>
 				</div>
 				<div class="dressBuy">
-					<div class="price">119000 تومان</div>
+					<div class="price"></div>
 					<div>
 						<button class="bigButton">خرید</button>
 					</div>
 					<div>
-						<img src="img/basket.png" class="basketProduct">
-						<img src="img/like.png" class="likeProduct">
+						<i class='fas fa-heart likeProduct' ></i>
+						<i class='fas fa-shopping-basket basketProduct'></i>
 					</div>
 				</div>
 			</div>
 			<hr>
-			<div class="row dressProp">
+			<div class="row dressProp ">
 				<h2>مشخصات</h2>
-				<ul>
-					<li>مانتو ساده پاییزه زنانه، پوششی شیک و مناسب</li>
-					<li> برای استفاده خانم های خوش استایل</li>
-					<li>با آب سرد و مشکین تاژ شسته شود </li>
-					<li>دست بچه های زیر سه سال ندهید ضرر دارد</li>
-					<li>توی هوای سر خواستید بپوشید ، نپوشید سرما میخورید </li>
+				<ul class="properties">
+
 				</ul>
 			</div>
 			<hr>
@@ -113,7 +108,7 @@
 
 		          	<div class="comment row">
 		           		<div class="col-md-2" style="padding-right: 8px; padding-left: 0">
-		              		<img class="comment_img" src="img/cloth1.jpg" />
+		              		<img class="comment_img" src="/static/img/cloth1.jpg" />
 		            	</div>
 			            <div class="col-md-10" style="padding-right:0">
 			                <h4>محمد ظهرابی</h4>
@@ -123,7 +118,7 @@
 
 		            <div class="comment row">
 		           		<div class="col-md-2" style="padding-right: 8px; padding-left: 0">
-		              		<img class="comment_img" src="img/cloth1.jpg" />
+		              		<img class="comment_img" src="/static/img/cloth1.jpg" />
 		            	</div>
 			            <div class="col-md-10" style="padding-right:0">
 			                <h4>محمد ظهرابی</h4>
@@ -133,7 +128,7 @@
 
 		            <div class="comment row">
 		           		<div class="col-md-2" style="padding-right: 8px; padding-left: 0">
-		              		<img class="comment_img" src="img/cloth1.jpg" />
+		              		<img class="comment_img" src="/static/img/cloth1.jpg" />
 		            	</div>
 			            <div class="col-md-10" style="padding-right:0">
 			                <h4>محمد ظهرابی</h4>
@@ -150,5 +145,6 @@
 
 {% block js %}
     <script type="text/javascript" src="script/plugins/rangeslider.min.js"></script>
-	<script type="text/javascript" src="script/dress.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script type="text/javascript" src="/static/script/dress.js"></script>
 {% endblock %}
