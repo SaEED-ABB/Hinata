@@ -26,7 +26,7 @@ def search_product(request):
     for product in Product.objects.filter(name__icontains=search_key):
         context.append({
             "name": product.name,
-            "id": product.id,
+            "slug": product.slug,
             "image": product.images.last().image.url
         })
     return JsonResponse(context, safe=False, status=200)

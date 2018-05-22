@@ -15,22 +15,22 @@ from ratelimit.decorators import ratelimit
 def add_comment(request):
     """
     add a comment for a specific product left by current user
-    :param request: user, product_id, comment
+    :param request: user, product_slug, comment
     :return: error or success message
     """
 
     user = request.user
-    product_id = request.POST.get('product_id')
+    product_slug = request.POST.get('product_slug')
     comment = request.POST.get('comment')
 
-    if not (product_id and comment):
+    if not (product_slug and comment):
         res_body = {
-            "error": "product_id or comment not provided"
+            "error": "product_slug or comment not provided"
         }
         return JsonResponse(res_body, status=400)
 
     try:
-        this_product = Product.objects.get(pk=product_id)
+        this_product = Product.objects.get(slug=product_slug)
     except Product.DoesNotExist:
         res_body = {
             "error": "no such product"

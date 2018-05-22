@@ -14,20 +14,20 @@ from ratelimit.decorators import ratelimit
 def delete_favorite(request):
     """
     user can remove a product from his favorite product list
-    :param request: user, product_id
+    :param request: user, product_slug
     :return: error or success message
     """
     user = request.user
-    product_id = request.POST.get('product_id')
+    product_slug = request.POST.get('product_slug')
 
-    if not product_id:
+    if not product_slug:
         res_body = {
-            "error": "product_id not provided"
+            "error": "product_slug not provided"
         }
         return JsonResponse(res_body, status=400)
 
     try:
-        favorite_product = Product.objects.get(pk=product_id)
+        favorite_product = user.favorites.get(slug=product_slug)
         user.favorites.remove(favorite_product)
     except Product.DoesNotExist:
         res_body = {

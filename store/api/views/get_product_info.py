@@ -11,7 +11,7 @@ from ratelimit.decorators import ratelimit
 def get_product_info(request):
     """
     get a product info
-    :param request: user, product_id
+    :param request: user, product_slug
     :return: product{name, price, properties[{name}], tags[{tag_name}], material, category,
             colors[{name, code}], sizes[{name}], comments[{comment, full_name, phone_number, created_at}],
             images[{url}], is_in_user_favorites, is_in_user_active_basket}
@@ -19,15 +19,15 @@ def get_product_info(request):
 
     user = request.user
 
-    product_id = request.GET.get('product_id')
-    if not product_id:
+    product_slug = request.GET.get('product_slug')
+    if not product_slug:
         res_body = {
-            "error": "product_id not provided"
+            "error": "product_slug not provided"
         }
         return JsonResponse(res_body, status=400)
 
     try:
-        product = Product.objects.get(pk=product_id)
+        product = Product.objects.get(slug=product_slug)
     except Product.DoesNotExist:
         res_body = {
             "error": "no such product"
@@ -39,6 +39,7 @@ def get_product_info(request):
 
     context = {
         "name": product.name,
+        "slug": product.slug,
         "price": product.price,
         "properties": [],
         "tags": [],
@@ -66,13 +67,13 @@ def get_product_info(request):
         context['colors'].append({
             "name": color.name,
             "color_code": color.color,
-            "id": color.pk
+            "slug": color.slug
         })
 
     for size in product.sizes.all():
         context['sizes'].append({
             "name": size.name,
-            "id": size.pk
+            "slug": size.slug
         })
 
     for comment in Comment.objects.filter(product=product, is_approved=True):

@@ -20,17 +20,17 @@ def remove_from_basket(request):
     """
     this_user = request.user
 
-    product_id = request.POST.get('product_id')
+    product_slug = request.POST.get('product_slug')
     count = request.POST.get('count', 'all')
 
-    if not product_id:
+    if not product_slug:
         res_body = {
-            "error": "product_id not provided"
+            "error": "product_slug not provided"
         }
         return JsonResponse(res_body, status=400)
 
     try:
-        product = Product.objects.get(pk=product_id)
+        product = Product.objects.get(slug=product_slug)
         basket = Basket.objects.get(user=this_user, status=Basket.OPEN_CHECKING)
         selected_product = SelectedProduct.objects.get(product=product, basket=basket)
     except (Product.DoesNotExist, SelectedProduct.DoesNotExist):
