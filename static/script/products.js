@@ -43,7 +43,7 @@ function getProducts(){
 
 				}
 				$('.cards').append("<div class='pCard'>"+
-						"<a class='link' href='#' >"+
+						"<a class='link' href='/product/"+data.products[i].id+"' >"+
 							"<img class='img-responsive front' src="+data.products[i].front_image+" />" +
 							"<img class='img-responsive back' style='display: none;' src="+data.products[i].back_image+" />"+
 							"<h4 class='text-center' style='margin-top: 16px;margin-bottom: 20px;'>"+data.products[i].name+"</h4>"+
@@ -98,7 +98,7 @@ $(document).on('click touchstart','.basketProduct',function(){
 		}else{
 			$.ajax({
 				type: 'POST',
-				url: '/api/store/remove_to_basket/',
+				url: '/api/store/remove_from_basket/',
 				dataType: 'JSON',
 				data: {
 			        product_id: $(this).attr('product_id')
