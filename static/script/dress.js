@@ -23,16 +23,16 @@ $(document).on('mouseover','#previousImg,#nextImg',function(){
 $(document).on('mouseout','#previousImg,#nextImg',function(){
 	$(this).find('img').css('visibility','hidden');
 });
-product_id=window.location.href.split('/')[4];
-$('.likeProduct').attr('product_id',product_id);
-$('.basketProduct').attr('product_id',product_id);
+product_slug=window.location.href.split('/')[4];
+$('.likeProduct').attr('product_slug',product_slug);
+$('.basketProduct').attr('product_slug',product_slug);
 
 $.ajax({
 	type: 'GET',
 	url: '/api/store/get_product_info/',
 	dataType: 'JSON',
 	data: {
-        product_id: product_id
+        product_slug: product_slug
     },
 	success: function (data) {
 		$('.dressProp h1').html(data.name);
@@ -68,7 +68,7 @@ $(document).on('click touchstart','.basketProduct',function(){
 				url: '/api/store/add_to_basket/',
 				dataType: 'JSON',
 				data: {
-			        product_id: $(this).attr('product_id')
+			        product_slug: $(this).attr('product_slug')
 			    },
 				success: function (data) {
 					thisElement.addClass('addToBasket');
@@ -81,7 +81,7 @@ $(document).on('click touchstart','.basketProduct',function(){
 				url: '/api/store/remove_from_basket/',
 				dataType: 'JSON',
 				data: {
-			        product_id: $(this).attr('product_id')
+			        product_slug: $(this).attr('product_slug')
 			    },
 				success: function (data) {
 					thisElement.removeClass('addToBasket');
@@ -102,7 +102,7 @@ $(document).on('click touchstart','.likeProduct',function(){
 				url: '/api/customer/add_favorite/',
 				dataType: 'JSON',
 				data: {
-			        product_id: $(this).attr('product_id')
+			        product_slug: $(this).attr('product_slug')
 			    },
 				success: function (data) {
 					thisElement.addClass('addToFavorite');
@@ -115,7 +115,7 @@ $(document).on('click touchstart','.likeProduct',function(){
 				url: '/api/customer/delete_favorite/',
 				dataType: 'JSON',
 				data: {
-			        product_id: $(this).attr('product_id')
+			        product_slug: $(this).attr('product_slug')
 			    },
 				success: function (data) {
 					thisElement.removeClass('addToFavorite');
