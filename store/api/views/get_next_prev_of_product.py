@@ -9,16 +9,16 @@ from ratelimit.decorators import ratelimit
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 def get_next_prev_of_product(request):
 
-    product_id = request.GET.get('product_id')
+    product_slug = request.GET.get('product_slug')
 
-    if not product_id:
+    if not product_slug:
         res_body = {
-            "error": "product_id not provided"
+            "error": "product_slug not provided"
         }
         return JsonResponse(res_body, status=400)
 
     try:
-        product = Product.objects.get(pk=product_id)
+        product = Product.objects.get(slug=product_slug)
     except Product.DoesNotExist:
         res_body = {
             "error": "no such product"
@@ -36,13 +36,13 @@ def get_next_prev_of_product(request):
         context['next'] = {
             'link': later_created[0].get_absolute_url(),
             'image': later_created[0].images.last().image.url if later_created[0].images.exists() else "",
-            'id': later_created[0].pk
+            'slug': later_created[0].slug
         }
     if sooner_created.exists():
         context['prev'] = {
             'link': sooner_created[0].get_absolute_url(),
             'image': sooner_created[0].images.last().image.url if sooner_created[0].images.exists() else "",
-            'id': sooner_created[0].pk
+            'slug': sooner_created[0].slug
         }
 
     return JsonResponse(context, status=200)

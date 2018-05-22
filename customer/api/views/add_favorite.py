@@ -14,20 +14,20 @@ from ratelimit.decorators import ratelimit
 def add_favorite(request):
     """
     user selects a product as its favorite and it will be add to his favorites list
-    :param request: user, product_id
+    :param request: user, product_slug
     :return: error or success message
     """
     user = request.user
-    product_id = request.POST.get('product_id')
+    product_slug = request.POST.get('product_slug')
 
-    if not product_id:
+    if not product_slug:
         res_body = {
-            "error": "product_id not provided"
+            "error": "product_slug not provided"
         }
         return JsonResponse(res_body, status=400)
 
     try:
-        this_product = Product.objects.get(pk=product_id)
+        this_product = Product.objects.get(slug=product_slug)
         user.favorites.add(this_product)
 
     except Product.DoesNotExist:

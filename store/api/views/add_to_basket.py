@@ -15,23 +15,23 @@ from ratelimit.decorators import ratelimit
 def add_to_basket(request):
     """
     a user can add each of the products to his basket
-    :param request: user, product_id, count=1, color_id="", size_id=""
+    :param request: user, product_slug, count=1, color_slug="", size_slug=""
     :return:
     """
     this_user = request.user
-    product_id = request.POST.get('product_id')
-    color_id = int(request.POST.get('color_id'))
-    size_id = int(request.POST.get('size_id'))
+    product_slug = request.POST.get('product_slug')
+    color_slug = request.POST.get('color_slug')
+    size_slug = request.POST.get('size_slug')
     count = int(request.POST.get('count', 1))
 
-    if not product_id:
+    if not product_slug:
         res_body = {
-            "error": "product_id not provided"
+            "error": "product_slug not provided"
         }
         return JsonResponse(res_body, status=400)
 
     try:
-        product = Product.objects.get(pk=product_id)
+        product = Product.objects.get(slug=product_slug)
     except Product.DoesNotExist:
         res_body = {
             "error": "no such product"
@@ -44,9 +44,9 @@ def add_to_basket(request):
         basket=basket,
         product=product,
     )
-    if color_id:
+    if color_slug:
         try:
-            color = Color.objects.get(pk=color_id)
+            color = Color.objects.get(slug=color_slug)
             selected_product.color = color
         except Color.DoesNotExist:
             res_body = {
@@ -54,9 +54,9 @@ def add_to_basket(request):
             }
             return JsonResponse(res_body, status=404)
 
-    if size_id:
+    if size_slug:
         try:
-            size = Size.objects.get(pk=size_id)
+            size = Size.objects.get(slug=size_slug)
             selected_product.size = size
         except Size.DoesNotExist:
             res_body = {

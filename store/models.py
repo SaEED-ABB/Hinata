@@ -27,8 +27,13 @@ class CategoryManager(models.Manager):
 class Category(TimeStampedModel):
     name = models.CharField(max_length=200, blank=True, null=True)
     parent = models.ForeignKey('self', related_name="children", on_delete=models.CASCADE, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
 
     objects = CategoryManager()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
         full_name = []
@@ -42,6 +47,11 @@ class Category(TimeStampedModel):
 
 class Size(TimeStampedModel):
     name = models.CharField(max_length=200, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super(Size, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -50,6 +60,11 @@ class Size(TimeStampedModel):
 class Color(TimeStampedModel):
     name = models.CharField(max_length=200, blank=True, null=True)
     color = ColorField(default='ffffff')
+    slug = models.SlugField(unique=True, null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name, self.color)
+        return super(Color, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -58,6 +73,11 @@ class Color(TimeStampedModel):
 class ProductProperty(TimeStampedModel):
     property = models.CharField(max_length=500)
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='properties', null=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.property)
+        return super(ProductProperty, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.property
@@ -65,6 +85,11 @@ class ProductProperty(TimeStampedModel):
 
 class ProductTags(TimeStampedModel):
     tag_name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.tag_name)
+        return super(ProductTags, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.tag_name
@@ -97,7 +122,7 @@ class Product(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         self.slug = self._get_unique_slug()
-        super(Product, self).save()
+        return super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name

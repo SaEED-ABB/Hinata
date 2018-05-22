@@ -14,22 +14,22 @@ from customer.models import Basket, SelectedProduct
 def get_products(request):
     """
     returns all products [with specific category and tags]
-    :param request: user, page, count, category, tag
-    :return: products[{id, name, price, front_image, back_image, is_in_user_favorites, is_in_user_active_basket}]
+    :param request: user, page, count, category_slug, tag_slug
+    :return: products[{slug, name, price, front_image, back_image, is_in_user_favorites, is_in_user_active_basket}]
     """
 
     user = request.user
 
     this_page_number = int(request.GET.get('page', '1'))
     count = int(request.GET.get('count', '12'))
-    category_name = request.GET.get('category')
-    tag_name = request.GET.get('tag')
+    category_slug = request.GET.get('category_slug')
+    tag_slug = request.GET.get('tag_slug')
 
     all_products = Product.objects.all()
 
-    if category_name:
+    if category_slug:
         try:
-            category = Category.objects.get(name=category_name)
+            category = Category.objects.get(slug=category_slug)
             all_products = Product.objects.filter(category=category)
         except Category.DoesNotExist:
             res_body = {
@@ -37,10 +37,10 @@ def get_products(request):
             }
             return JsonResponse(res_body, status=404)
 
-    if tag_name:
+    if tag_slug:
         try:
-            tag = ProductTags.objects.get(tag_name=tag_name)
-            all_products = all_products.filter(tags__id=tag.pk)
+            tag = ProductTags.objects.get(tag_name=tag_slug)
+            all_products = all_products.filter(tags_in=tag)
         except ProductTags.DoesNotExist:
             res_body = {
                 "error": "no such product_tag"
@@ -74,7 +74,7 @@ def get_products(request):
                                                                   product=p).exists()
 
         context['products'].append({
-            "id": p.pk,
+            "slug": p.slug,
             "name": p.name,
             "price": p.price,
             "front_image": front_image.image.url if front_image else "",

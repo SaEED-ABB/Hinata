@@ -58,7 +58,7 @@ class User(AbstractBaseUser, TimeStampedModel):
 
             context.append({
                 "product_name": favorite_product.name,
-                "product_id": favorite_product.pk,
+                "product_slug": favorite_product.slug,
                 "images": images,
                 "price": favorite_product.price,
             })
@@ -150,18 +150,20 @@ class Basket(TimeStampedModel):
                 for color in sel_pro.product.colors.all():
                     colors.append({
                         "name": color.name,
+                        "slug": color.slug,
                         "code": color.color
                     })
 
                 for size in sel_pro.product.sizes.all():
                     sizes.append({
-                        "name": size.name
+                        "name": size.name,
+                        "slug": size.slug
                     })
 
             context['products'].append({
                 "image": sel_pro.product.images.last().image.url,
                 "name": sel_pro.product.name,
-                "id": sel_pro.product.pk,
+                "slug": sel_pro.product.slug,
                 "desired_color": desired_color if desired_color else '',
                 "desired_size": desired_size if desired_size else '',
                 "count": sel_pro.count,

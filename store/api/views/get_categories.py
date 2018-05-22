@@ -11,7 +11,7 @@ def get_categories(request):
     """
     we have a 2 level categories for products for now
     :param request:
-    :return: categories[{name, id, children}]
+    :return: categories[{name, slug, children}]
     """
     all_categories = []
     for i in Category.objects.filter(parent=None):
@@ -19,11 +19,11 @@ def get_categories(request):
         for j in Category.objects.filter(parent=i):
             childrens.append({
                 "name": j.name,
-                "id": j.id
+                "slug": j.slug
             })
         all_categories.append({
             "name": i.name,
-            "id": i.id,
+            "slug": i.slug,
             "children": childrens
         })
     return JsonResponse(all_categories, safe=False, status=200)
