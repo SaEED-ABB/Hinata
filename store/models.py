@@ -3,11 +3,13 @@ from django.db import models
 from colorfield.fields import ColorField
 from django.utils.text import slugify
 from django.shortcuts import reverse
+from django.utils.crypto import get_random_string
+from django.template import defaultfilters
+from unidecode import unidecode
+
 
 from frontview.models import TimeStampedModel
 # from .helpers import get_path
-
-from django.utils.crypto import get_random_string
 
 
 def get_path(instance, filename):
@@ -32,7 +34,8 @@ class Category(TimeStampedModel):
     objects = CategoryManager()
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        if not self.slug:
+            self.slug = defaultfilters.slugify(unidecode(self.name))
         return super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -50,7 +53,8 @@ class Size(TimeStampedModel):
     slug = models.SlugField(unique=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        if not self.slug:
+            self.slug = defaultfilters.slugify(unidecode(self.name))
         return super(Size, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -63,7 +67,8 @@ class Color(TimeStampedModel):
     slug = models.SlugField(unique=True, null=True, blank=True)
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name, self.color)
+        if not self.slug:
+            self.slug = defaultfilters.slugify(unidecode(self.name) + ' ' + self.color)
         return super(Color, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -76,7 +81,8 @@ class ProductProperty(TimeStampedModel):
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.property)
+        if not self.slug:
+            self.slug = defaultfilters.slugify(unidecode(self.property))
         return super(ProductProperty, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -88,7 +94,8 @@ class ProductTags(TimeStampedModel):
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.tag_name)
+        if not self.slug:
+            self.slug = defaultfilters.slugify(unidecode(self.tag_name))
         return super(ProductTags, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -113,7 +120,7 @@ class Product(TimeStampedModel):
         return reverse('frontview:product_detail', kwargs={'slug': self.slug})
 
     def _get_unique_slug(self):
-        slug = slugify(self.name)
+        slug = defaultfilters.slugify(unidecode(self.name))
         counter = 1
         while Product.objects.filter(slug=slug).exists():
             slug = '{}-{}'.format(slug, counter)
@@ -121,7 +128,8 @@ class Product(TimeStampedModel):
         return slug
 
     def save(self, *args, **kwargs):
-        self.slug = self._get_unique_slug()
+        if not self.slug:
+            self.slug = self._get_unique_slug()
         return super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
