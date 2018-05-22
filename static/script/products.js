@@ -32,18 +32,18 @@ function getProducts(){
 		success: function (data) {
 			for(var i=0; i<data.products.length;i++){
 				if(data.products[i].is_favorite){
-					var favoriteText="<i class='fas fa-heart likeProduct addToFavorite' style='color:red;' product_id="+data.products[i].id+" ></i>";
+					var favoriteText="<i class='fas fa-heart likeProduct addToFavorite' style='color:red;' product_slug="+data.products[i].slug+" ></i>";
 				}else{
-					var favoriteText="<i class='fas fa-heart likeProduct' product_id="+data.products[i].id+" ></i>";
+					var favoriteText="<i class='fas fa-heart likeProduct' product_slug="+data.products[i].slug+" ></i>";
 				}
 				if(data.products[i].is_in_basket){
-					var basketText="<i class='fas fa-shopping-basket basketProduct addToBasket' style='color:green;' product_id="+data.products[i].id+"></i>";
+					var basketText="<i class='fas fa-shopping-basket basketProduct addToBasket' style='color:green;' product_slug="+data.products[i].slug+"></i>";
 				}else{
-					var basketText="<i class='fas fa-shopping-basket basketProduct' product_id="+data.products[i].id+"></i>";
+					var basketText="<i class='fas fa-shopping-basket basketProduct' product_slug="+data.products[i].slug+"></i>";
 
 				}
 				$('.cards').append("<div class='pCard'>"+
-						"<a class='link' href='/product/"+data.products[i].id+"' >"+
+						"<a class='link' href='/product/"+data.products[i].slug+"' >"+
 							"<img class='img-responsive front' src="+data.products[i].front_image+" />" +
 							"<img class='img-responsive back' style='display: none;' src="+data.products[i].back_image+" />"+
 							"<h4 class='text-center' style='margin-top: 16px;margin-bottom: 20px;'>"+data.products[i].name+"</h4>"+
@@ -88,7 +88,7 @@ $(document).on('click touchstart','.basketProduct',function(){
 				url: '/api/store/add_to_basket/',
 				dataType: 'JSON',
 				data: {
-			        product_id: $(this).attr('product_id')
+			        product_slug: $(this).attr('product_slug')
 			    },
 				success: function (data) {
 					thisElement.addClass('addToBasket');
@@ -101,7 +101,7 @@ $(document).on('click touchstart','.basketProduct',function(){
 				url: '/api/store/remove_from_basket/',
 				dataType: 'JSON',
 				data: {
-			        product_id: $(this).attr('product_id')
+			        product_slug: $(this).attr('product_slug')
 			    },
 				success: function (data) {
 					thisElement.removeClass('addToBasket');
@@ -122,7 +122,7 @@ $(document).on('click touchstart','.likeProduct',function(){
 				url: '/api/customer/add_favorite/',
 				dataType: 'JSON',
 				data: {
-			        product_id: $(this).attr('product_id')
+			        product_slug: $(this).attr('product_slug')
 			    },
 				success: function (data) {
 					thisElement.addClass('addToFavorite');
@@ -135,7 +135,7 @@ $(document).on('click touchstart','.likeProduct',function(){
 				url: '/api/customer/delete_favorite/',
 				dataType: 'JSON',
 				data: {
-			        product_id: $(this).attr('product_id')
+			        product_slug: $(this).attr('product_slug')
 			    },
 				success: function (data) {
 					thisElement.removeClass('addToFavorite');
