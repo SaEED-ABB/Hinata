@@ -53,7 +53,7 @@ def remove_from_basket(request):
         selected_product.price -= int(count) * product.price
         selected_product.save()
 
-        basket.total_price -= selected_product.price
+        basket.total_price -= int(count) * product.price
         basket.save()
 
     res_body = {

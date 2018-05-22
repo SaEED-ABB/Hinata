@@ -73,7 +73,7 @@ def add_to_basket(request):
     selected_product.save()
 
     if created_basket:
-        basket.total_price = 0
+        basket.total_price = selected_product.price
     else:
         basket.total_price += selected_product.price
     basket.save()
