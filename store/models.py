@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 from django.template import defaultfilters
 from unidecode import unidecode
 
-
+from .helpers import validators
 from frontview.models import TimeStampedModel
 # from .helpers import get_path
 
@@ -132,6 +132,11 @@ class Product(TimeStampedModel):
             self.slug = self._get_unique_slug()
         return super(Product, self).save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        for product_image in self.images.all():
+            product_image.delete()
+        return super(Product, self).delete(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -143,11 +148,12 @@ class ProductImage(TimeStampedModel):
         ('other', 'other')
     )
     name = models.CharField(max_length=200, choices=NAME_CHOICES, default='other')
-    image = models.ImageField(upload_to=get_path)
+    image = models.ImageField(upload_to=get_path, validators=[validators.file_size])
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
 
     def delete(self, *args, **kwargs):
-        os.remove(self.image.path)
+        if os.path.exists(self.image.path) and os.path.isfile(self.image.path):
+            os.remove(self.image.path)
         return super(ProductImage, self).delete(*args, **kwargs)
 
     def __str__(self):
