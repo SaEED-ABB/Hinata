@@ -21,6 +21,7 @@ toastr.options = {
 
 getProducts();
 function getProducts(){
+	$('.moreButton img').addClass('spin');
 	$.ajax({
 		type: 'GET',
 		url: '/api/store/get_products',
@@ -34,19 +35,22 @@ function getProducts(){
 				if(data.products[i].is_favorite){
 					var favoriteText="<i class='fas fa-heart likeProduct addToFavorite' style='color:red;' product_slug="+data.products[i].slug+" ></i>";
 				}else{
-					var favoriteText="<i class='fas fa-heart likeProduct' product_slug="+data.products[i].slug+" ></i>";
+					var favoriteText="<i class='fas fa-heart likeProduct' style='color:#949494;font-size:26px;' product_slug="+data.products[i].slug+" ></i>";
 				}
 				if(data.products[i].is_in_basket){
-					var basketText="<i class='fas fa-shopping-basket basketProduct addToBasket' style='color:green;' product_slug="+data.products[i].slug+"></i>";
+					var basketText="<i class='fas fa-shopping-basket basketProduct addToBasket' style='color:#00da00;' product_slug="+data.products[i].slug+"></i>";
 				}else{
-					var basketText="<i class='fas fa-shopping-basket basketProduct' product_slug="+data.products[i].slug+"></i>";
+					var basketText="<i class='fas fa-shopping-basket basketProduct' style='color:#949494;font-size:26px;' product_slug="+data.products[i].slug+"></i>";
 
 				}
 				$('.cards').append("<div class='pCard'>"+
 						"<a class='link' href='/product/"+data.products[i].slug+"' >"+
 							"<img class='img-responsive front' src="+data.products[i].front_image+" />" +
 							"<img class='img-responsive back' style='display: none;' src="+data.products[i].back_image+" />"+
+						"</a>"+
+						"<a class='' href='/product/"+data.products[i].slug+"' >"+
 							"<h4 class='text-center' style='margin-top: 16px;margin-bottom: 20px;'>"+data.products[i].name+"</h4>"+
+						"</a>"+
 							"<div class='row' style='margin-bottom: 15px;'> "+
 								"<div class='col-sm-6 cardIcons' style='margin-top: 6px;'> "+
 									basketText+
@@ -56,27 +60,32 @@ function getProducts(){
 									"<span class='productPrice'>"+data.products[i].price+"</span>"+
 								"</div>"+
 							"</div> "+
-						"</a>"+
+
 					"</div>"
 				);
+				$('.moreButton img').removeClass('spin');
 			}
 			if(!data.more){
 				$('.moreButton').css('display','none');
 			}else{
 				pageCount=pageCount+1;
 			}
+		},
+		error: function(){
+			toastr.error('بارگذاری محصولات با مشکل مواجه شده است. لطفا صفحه را بارگذاری مجدد نمایید.')
+			$('.moreButton img').removeClass('spin');
 		}
 	});
 }
 $(document).on('mouseenter','.pCard a',function(){
 	$(this).find('.front').css('display','none');
-	$(this).find('.back').fadeIn();
+	$(this).find('.back').fadeIn(50);
 });
 $(document).on('mouseleave','.pCard a',function(){
-	$(this).find('.front').fadeIn();
+	$(this).find('.front').fadeIn(50);
 	$(this).find('.back').css('display','none');
 });
-$(document).on('click touchstart','.moreButton',function(){
+$(document).on('click touchstart','.moreButton img',function(){
 	getProducts();
 });
 $(document).on('click touchstart','.basketProduct',function(){
@@ -92,7 +101,11 @@ $(document).on('click touchstart','.basketProduct',function(){
 			    },
 				success: function (data) {
 					thisElement.addClass('addToBasket');
-					thisElement.css('color','green')
+					thisElement.css('color','#00da00')
+          toastr.success('محصول مورد نظر به شبد خرید اضافه شد.')
+				},
+				error: function(){
+					toastr.error('مشکلی خ داده است. لطفا ممجددا امتحان کنید.')
 				}
 			});
 		}else{
@@ -105,7 +118,11 @@ $(document).on('click touchstart','.basketProduct',function(){
 			    },
 				success: function (data) {
 					thisElement.removeClass('addToBasket');
-					thisElement.css('color','inherit')
+					thisElement.css('color','#949494')
+          toastr.success('محصول مورد نظر از سبد خرید حذف شد.')
+				},
+				error: function(){
+					toastr.error('مشکلی خ داده است. لطفا ممجددا امتحان کنید.')
 				}
 			});
 		}
@@ -127,6 +144,10 @@ $(document).on('click touchstart','.likeProduct',function(){
 				success: function (data) {
 					thisElement.addClass('addToFavorite');
 					thisElement.css('color','red')
+          toastr.success('محصول مورد نظر به لیست علاقه مندی ها اضافه شد.')
+				},
+				error: function(){
+					toastr.error('مشکلی خ داده است. لطفا ممجددا امتحان کنید.')
 				}
 			});
 		}else{
@@ -139,7 +160,11 @@ $(document).on('click touchstart','.likeProduct',function(){
 			    },
 				success: function (data) {
 					thisElement.removeClass('addToFavorite');
-					thisElement.css('color','inherit')
+					thisElement.css('color','#949494')
+          toastr.success('محصول مورد نظر از لیست علاقه مندی ها حذف شد.')
+				},
+				error: function(){
+					toastr.error('مشکلی خ داده است. لطفا ممجددا امتحان کنید.')
 				}
 			});
 		}
