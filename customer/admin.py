@@ -49,10 +49,50 @@ class BasketAdmin(admin.ModelAdmin):
 
     inlines = [SelectedProductInline]
 
+    actions = ['really_delete_selected']
+
+    def get_actions(self, request):
+        actions = super(BasketAdmin, self).get_actions(request)
+        del actions['delete_selected']
+        return actions
+
+    def really_delete_selected(self, request, queryset):
+        for obj in queryset:
+            obj.delete()
+
+        if queryset.count() == 1:
+            message_bit = "1 set_basket entry was"
+        else:
+            message_bit = "%s set_basket entries were" % queryset.count()
+        self.message_user(request, "%s successfully deleted." % message_bit)
+
+    really_delete_selected.short_description = "Delete selected entries"
+
 
 class CommentAdmin(admin.ModelAdmin):
-
     list_display = ('product', 'user', 'comment', 'is_approved')
+
+
+class SelectedProductAdmin(admin.ModelAdmin):
+
+    actions = ['really_delete_selected']
+
+    def get_actions(self, request):
+        actions = super(SelectedProductAdmin, self).get_actions(request)
+        del actions['delete_selected']
+        return actions
+
+    def really_delete_selected(self, request, queryset):
+        for obj in queryset:
+            obj.delete()
+
+        if queryset.count() == 1:
+            message_bit = "1 set_selected_product entry was"
+        else:
+            message_bit = "%s set_selected_products entries were" % queryset.count()
+        self.message_user(request, "%s successfully deleted." % message_bit)
+
+    really_delete_selected.short_description = "Delete selected entries"
 
 
 
@@ -63,7 +103,7 @@ admin.site.register(User, UserAdmin)
 # admin.site.unregister(Group)
 
 
-admin.site.register(SelectedProduct)
+admin.site.register(SelectedProduct, SelectedProductAdmin)
 admin.site.register(Basket, BasketAdmin)
 # admin.site.register(UserAddress)
 admin.site.register(Comment, CommentAdmin)
