@@ -17,6 +17,6 @@ def get_addresses(request):
     """
     user = request.user
 
-    context = user.get_addresses()
+    res_body, status = user.get_addresses()
 
-    return JsonResponse(context, safe=False, status=200)
+    return JsonResponse(res_body, safe=False, status=status)

@@ -25,16 +25,6 @@ def delete_address(request):
         }
         return JsonResponse(res_body, status=400)
 
-    try:
-        user_address = user.addresses.get(pk=address_id)
-        user_address.delete()
-    except UserAddress.DoesNotExist:
-        res_body = {
-            "error": "no such address for user {}".format(user.get_full_name())
-        }
-        return JsonResponse(res_body, status=404)
+    res_body, status = user.delete_address(address_id=address_id)
 
-    res_body = {
-        "success": "{}'s such address successfully removed".format(user.get_full_name())
-    }
-    return JsonResponse(res_body, status=204)
+    return JsonResponse(res_body, status=status)

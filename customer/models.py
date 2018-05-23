@@ -34,18 +34,29 @@ class User(AbstractBaseUser, TimeStampedModel):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
-    def get_addresses(self, count=None):
+    def add_address(self, address, phone_number):
+        new_addr, created = self.addresses.get_or_create(address=address, phone_number=phone_number)
+        if created:
+            context, status = new_addr.get_info(), 201
+        else:
+            context, status = {"error": "This address already exists"}, 400
+        return context, status
+
+    def get_addresses(self):
         context = []
-        addresses = self.addresses.order_by('created_at')
-        if count:
-            addresses = addresses[:count]
-        for user_addr in addresses:
-            context.append({
-                "address": user_addr.address,
-                "phone": user_addr.phone_number,
-                "id": user_addr.pk
-            })
-        return context
+        for addr in self.addresses.all():
+            context.append(addr.get_info())
+        return context, 200
+
+    def delete_address(self, address_id):
+        try:
+            addr = self.addresses.get(id=address_id)
+            context, status = addr.get_info(), 204
+            addr.delete()
+        except UserAddress.DoesNotExist:
+            context, status = {"error": "There is no such address for user {}".format(self.get_full_name())}, 400
+
+        return context, status
 
     def get_favorites(self):
         context = []
@@ -96,6 +107,15 @@ class UserAddress(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
     address = models.TextField()
     phone_number = models.CharField(max_length=200, blank=True, null=True)
+
+    def get_info(self):
+        context = {
+            "id": self.id,
+            "user": self.user.get_full_name(),
+            "address": self.address,
+            "phone_number": self.phone_number
+        }
+        return context
 
     def __str__(self):
         return "{} - {}".format(self.user.get_full_name(), self.address)
