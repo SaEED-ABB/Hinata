@@ -25,10 +25,21 @@ select{
     outline: none;
 }
 .selectBoxes{
-	padding:0 70px 0;
+	padding:0 5% 0;
 }
-.selectBoxes .col-md-6{
+.selectBoxes .col-sm-3, .selectBoxes .col-sm-6{
 	padding: 0
+}
+.selectBoxes .col-sm-6{
+    text-align: left;
+}
+.selectBoxes select{
+    min-width: 200px;
+    border-bottom: 0.1px solid #8e8e8e;
+    color: #282828;
+}
+.cardIcons i{
+    cursor: pointer;
 }
 .cards{
 	padding: 0 46.5px;
@@ -43,10 +54,12 @@ select{
     width: 29.68%;
     float: right;
 }
+.pCard img{
+    width: 100%;
+    height: 570px;
+}
 .pCard:hover{
-    box-shadow:  0 10px 22px #4576ff ;
-    margin-top: 16px;
-    margin-bottom: 24px;
+    box-shadow:  0 10px 22px #949494 ;
 }
 .weed-img{
     width: 40px;
@@ -93,8 +106,20 @@ select{
 }
 .moreButton{
 	text-align: center;
-	margin: 20px 0;
+    margin: 20px 0 35px;
 }
+.moreButton img{
+    cursor: pointer;
+}
+
+.spin{
+    -webkit-animation:spin 1s linear infinite;
+    -moz-animation:spin 1s linear infinite;
+    animation:spin 1s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 @media screen and (max-width: 1200px) and (min-width: 992px) {
     .pCard{
@@ -103,41 +128,111 @@ select{
     }
 }
 
-@media screen and (max-width: 768px) and (min-width: 610px) {
+@media screen and (max-width: 992px) and (min-width: 768px) {
+    .selectBoxes select{
+        min-width: 150px;
+    }
+    .productPrice{
+        margin: 0 !important;
+        font-size: 18px;
+    }
+    .cardIcons{
+        padding-left: 0;
+        padding-right: 9px;
+    }
+    .cardIcons i{
+        font-size: 23px !important;
+        margin: 0;
+    }
+    .cards{
+        padding: 0 !important;
+    }
+}
+
+@media screen and (max-width: 767px) and (min-width: 610px) {
 	.cardIcons{
 	    float: right;
 	}
     .shopsStar{
-    float: left;
+        float: left;
     }
     .pCard{
-      margin: 20px 5% ;
-      width: 40%;
+        margin: 20px 5% ;
+        width: 40%;
+    }
+    .selectBoxes div{
+        text-align: right !important;
+        width: 50% !important;
+        margin-bottom: 10px;
+    }
+    .cards{
+        padding: 0 !important;
+    }
+    .cardPrice span{
+        margin: 0;
+    }
+    .basketProduct {
+        margin: 0 0 0 10px;
     }
 }
 
 @media screen and (max-width: 610px) and (min-width: 420px) {
     .cardIcons{
-    float: right;
+        float: right;
     }
     .shopsStar{
-    float: left;
+        float: left;
     }
-    .pCard{
-        margin: 20px 22.5% ;
-        width: 55%;
+    .pCard {
+        margin: 20px 17%;
+        width: 66%;
+    }
+    .selectBoxes .col-sm-6{
+        text-align: right;
+    }
+    .selectBoxes div{
+        margin-bottom: 10px;
+    }
+    .cards{
+        padding: 0 !important;
     }
 }
 
 @media screen and (max-width: 420px) {
+    .cards{
+        padding: 0 !important;
+    }
     .cardIcons{
-    float: right;
+        float: right;
     }
     .shopsStar{
-    float: left;
+        float: left;
     }
     .pCard{
-        margin: 20px 10% ;
-        width: 80%;
+        margin: 20px 0% ;
+        width: 100%;
+    }
+    .selectBoxes .col-sm-6{
+        text-align: right;
+    }
+    .selectBoxes .col-xs-12, .selectBoxes .col-xs-12 select {
+        width: 100%;
+    }
+    .selectBoxes div{
+        margin-bottom: 10px;
+    }
+    .cardPrice span{
+        margin: 0;
+        font-size: 18px;
+    }
+    .basketProduct {
+        font-size: 21px !important;
+        margin: 0 0 0 10px;
+    }
+    .likeProduct{
+        font-size: 21px !important;
+    }
+    .mainContent{
+        padding: 0 !important;
     }
 }
