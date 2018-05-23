@@ -17,7 +17,7 @@ urlpatterns = [
     path('add_favorite/', views.add_favorite, name="add_favorite"),
     path('delete_favorite/', views.delete_favorite, name="delete_favorite"),
     path('get_favorites/', views.get_favorites, name="get_favorite"),
-    path('search_user/', views.user_search, name="user_search"),
+    # path('search_user/', views.user_search, name="user_search"),
     path('logout/', views.logout, name='logout'),
     path('get_active_basket_info/', views.get_active_basket_info, name='get_active_basket_info'),
 ]

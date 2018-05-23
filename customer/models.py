@@ -34,6 +34,18 @@ class User(AbstractBaseUser, TimeStampedModel):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
+    def edit_yourself(self, phone_number=None, first_name=None, last_name=None):
+        if phone_number:
+            self.phone_number = phone_number
+        if first_name:
+            self.first_name = first_name
+        if last_name:
+            self.last_name = last_name
+        self.save()
+        status = 201
+
+        return self.get_info(), status
+
     def add_address(self, address, phone_number):
         new_addr, created = self.addresses.get_or_create(address=address, phone_number=phone_number)
         if created:

@@ -2,7 +2,6 @@ from .change_password import change_password
 from .edit_user import edit_user
 from .get_user_info import get_user_info
 from .login import login
-from .user_search import user_search
 from .add_address import add_address
 from .delete_address import delete_address
 from .add_comment import add_comment
