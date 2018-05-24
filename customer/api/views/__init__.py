@@ -2,17 +2,13 @@ from .change_password import change_password
 from .edit_user import edit_user
 from .get_user_info import get_user_info
 from .login import login
-from .user_search import user_search
 from .add_address import add_address
 from .delete_address import delete_address
 from .add_comment import add_comment
 from .delete_comment import delete_comment
-from .get_basket_history import get_basket_history
-from .search_product import search_product
 from .get_addresses import get_addresses
 from .register import register
 from .delete_favorite import delete_favorite
 from .add_favorite import add_favorite
 from .get_favorites import get_favorites
 from .logout import logout
-from .get_active_basket_info import get_active_basket_info

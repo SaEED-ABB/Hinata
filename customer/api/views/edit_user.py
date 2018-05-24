@@ -15,7 +15,7 @@ def edit_user(request):
     :param request: user
     :return: error or success message
     """
-    this_user = request.user
+    user = request.user
 
     phone_number = request.POST.get('phone_number')
     first_name = request.POST.get('first_name')
@@ -27,12 +27,5 @@ def edit_user(request):
         }
         return JsonResponse(res_body, status=400)
 
-    this_user.phone_number = phone_number
-    this_user.first_name = first_name
-    this_user.last_name = last_name
-    this_user.save()
-
-    res_body = {
-        "success": "User successfully updated"
-    }
-    return JsonResponse(res_body, status=201)
+    res_body, status = user.edit_yourself(phone_number=phone_number, first_name=first_name, last_name=last_name)
+    return JsonResponse(res_body, status=status)

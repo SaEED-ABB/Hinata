@@ -6,6 +6,7 @@ import uuid as uuid_lib
 
 from .managers import UserManager
 from frontview.models import TimeStampedModel
+from store.models import Product, Color, Size
 
 
 class User(AbstractBaseUser, TimeStampedModel):
@@ -34,18 +35,41 @@ class User(AbstractBaseUser, TimeStampedModel):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
-    def get_addresses(self, count=None):
+    def edit_yourself(self, phone_number=None, first_name=None, last_name=None):
+        if phone_number:
+            self.phone_number = phone_number
+        if first_name:
+            self.first_name = first_name
+        if last_name:
+            self.last_name = last_name
+        self.save()
+        status = 201
+
+        return self.get_info(), status
+
+    def add_address(self, address, phone_number):
+        new_addr, created = self.addresses.get_or_create(address=address, phone_number=phone_number)
+        if created:
+            context, status = new_addr.get_info(), 201
+        else:
+            context, status = {"error": "This address already exists"}, 400
+        return context, status
+
+    def get_addresses(self):
         context = []
-        addresses = self.addresses.order_by('created_at')
-        if count:
-            addresses = addresses[:count]
-        for user_addr in addresses:
-            context.append({
-                "address": user_addr.address,
-                "phone": user_addr.phone_number,
-                "id": user_addr.pk
-            })
-        return context
+        for addr in self.addresses.all():
+            context.append(addr.get_info())
+        return context, 200
+
+    def delete_address(self, address_id):
+        try:
+            addr = self.addresses.get(id=address_id)
+            context, status = addr.get_info(), 204
+            addr.delete()
+        except UserAddress.DoesNotExist:
+            context, status = {"error": "There is no such address for user {}".format(self.get_full_name())}, 400
+
+        return context, status
 
     def get_favorites(self):
         context = []
@@ -97,6 +121,15 @@ class UserAddress(TimeStampedModel):
     address = models.TextField()
     phone_number = models.CharField(max_length=200, blank=True, null=True)
 
+    def get_info(self):
+        context = {
+            "id": self.id,
+            "user": self.user.get_full_name(),
+            "address": self.address,
+            "phone_number": self.phone_number
+        }
+        return context
+
     def __str__(self):
         return "{} - {}".format(self.user.get_full_name(), self.address)
 
@@ -126,7 +159,7 @@ class Basket(TimeStampedModel):
     address = models.TextField(blank=True, null=True)
     status = models.CharField(choices=STATUS, default='open_checking', max_length=200, blank=True, null=True)
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
-    total_price = models.IntegerField(null=True)
+    total_price = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('-created_at', )
@@ -142,6 +175,7 @@ class Basket(TimeStampedModel):
         for sel_pro in self.selected_products.all():
             desired_color = sel_pro.color
             desired_size = sel_pro.size
+            last_image = sel_pro.product.images.last()
 
             colors = []
             sizes = []
@@ -161,7 +195,7 @@ class Basket(TimeStampedModel):
                     })
 
             context['products'].append({
-                "image": sel_pro.product.images.last().image.url,
+                "image": last_image.image.url if last_image else '',
                 "name": sel_pro.product.name,
                 "slug": sel_pro.product.slug,
                 "desired_color": desired_color if desired_color else '',
@@ -173,6 +207,63 @@ class Basket(TimeStampedModel):
             })
 
         return context
+
+    def add_product_to_yourself(self, product_slug, color_slug, size_slug, count):
+        try:
+            product = Product.objects.get(slug=product_slug)
+            if color_slug and size_slug:
+                color = Color.objects.get(slug=color_slug)
+                size = Size.objects.get(slug=size_slug)
+                sel_pro = self.selected_products.get_or_create(product=product, color=color, size=size)[0]
+            elif color_slug:
+                color = Color.objects.get(slug=color_slug)
+                sel_pro = self.selected_products.get_or_create(product=product, color=color)[0]
+            elif size_slug:
+                size = Size.objects.get(slug=size_slug)
+                sel_pro = self.selected_products.get_or_create(product=product, size=size)[0]
+            else:
+                sel_pro = self.selected_products.get_or_create(product=product)[0]
+
+            sel_pro.count += count
+            sel_pro.save()  # it does set sel_pro.price and sel_pro.basket.total_price automatically according to count and product.price
+
+            context = {"success": "Such product successfully added to {}'s basket".format(self.user.get_full_name())}
+            status = 201
+
+        except Product.DoesNotExist:
+            context = {"error": "no such product"}
+            status = 404
+        except Color.DoesNotExist:
+            context = {"error": "no such color"}
+            status = 404
+        except Size.DoesNotExist:
+            context = {"error": "no such size"}
+            status = 404
+
+        return context, status
+
+    def remove_product_from_yourself(self, product_slug, count):
+        try:
+            sel_pro = self.selected_products.get(product__slug=product_slug)
+            if count == 'all' or int(count) >= sel_pro.count:
+                sel_pro.delete()
+            else:
+                sel_pro.count -= int(count)
+                sel_pro.save()
+            context = {
+                "success": "Such product successfully removed from {}'s basket".format(self.user.get_full_name())
+            }
+            status = 201
+        except SelectedProduct.DoesNotExist:
+            context = {"error": "no such product"}
+            status = 404
+
+        return context, status
+
+    def delete(self, *args, **kwargs):
+        for sel_pro in self.selected_products.all():
+            sel_pro.delete()
+        return super(Basket, self).delete(*args, **kwargs)
 
     # def save(self, *args, **kwargs):
     #     for sel_pro in self.selected_products.all():
@@ -188,12 +279,22 @@ class SelectedProduct(TimeStampedModel):
     product = models.ForeignKey('store.Product', on_delete=models.DO_NOTHING)
     size = models.ForeignKey('store.Size', on_delete=models.DO_NOTHING, blank=True, null=True)
     color = models.ForeignKey('store.Color', on_delete=models.DO_NOTHING, blank=True, null=True)
-    count = models.IntegerField(blank=True, null=True, default=1)
-    price = models.IntegerField(null=True)
+    count = models.IntegerField(default=0)
+    price = models.IntegerField(default=0)
 
-    # def save(self, *args, **kwargs):
-    #     self.price = self.count * self.product.price
-    #     return super(SelectedProduct, self).save(*args, **kwargs)
+    def delete(self, *args, **kwargs):
+        self.basket.total_price -= self.price
+        self.basket.save()
+        return super(SelectedProduct, self).delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        last_price = self.price
+        new_price = self.count * self.product.price
+        if last_price != new_price:
+            self.price = new_price
+            self.basket.total_price += new_price - last_price
+            self.basket.save()
+        return super(SelectedProduct, self).save(*args, **kwargs)
 
     def __str__(self):
         return "{} in {}'s basket".format(self.product.name, self.basket.user.get_full_name())

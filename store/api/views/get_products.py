@@ -48,11 +48,13 @@ def get_products(request):
             return JsonResponse(res_body, status=404)
 
     all_pages = Paginator(all_products, count)
+    print(all_pages)
     requested_page = all_pages.page(this_page_number)
+    print(requested_page)
     context = {
         "products": [],
-        "more": True if all_products.count() > count else False,
-        "count": all_pages.count,
+        "more": requested_page.has_next(),
+        "count": count if requested_page.has_next() else all_products.count() % count,
         # "next": requested_page.has_next(),
         # "previous": requested_page.has_previous(),
     }

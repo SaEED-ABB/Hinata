@@ -27,17 +27,6 @@ def add_address(request):
         }
         return JsonResponse(res_body, status=400)
 
-    this_user_address, created = UserAddress.objects.get_or_create(user=user, address=address)
-    this_user_address.phone_number=phone_number
-    this_user_address.save()
+    res_body, status = user.add_address(address=address, phone_number=phone_number)
 
-    if not created:
-        res_body = {
-            "error": "This address already exists"
-        }
-        return JsonResponse(res_body, status=400)
-
-    res_body = {
-        "success": "Address added for {}".format(user.get_full_name())
-    }
-    return JsonResponse(res_body, status=201)
+    return JsonResponse(res_body, status=status)
