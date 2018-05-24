@@ -58,10 +58,11 @@ def get_next_prev_of_product(request):
             next_pro = desired_products.filter(created_at__lt=product.created_at).order_by('-created_at').first()
             prev_pro = desired_products.filter(created_at__gt=product.created_at).order_by('created_at').first()
         elif filter_option_slug_sort_by == 'most-viewed':
-            pass
+            next_pro = desired_products.filter(view_counter__lte=product.view_counter).exclude(slug=product.slug).order_by('-view_counter').first()
+            prev_pro = desired_products.filter(view_counter__gte=product.view_counter).exclude(slug=product.slug).exclude(slug=next_pro.slug).order_by('view_counter').first()
         elif filter_option_slug_sort_by == 'most-favorite':
             next_pro = desired_products.annotate(lovers_count=Count('lovers')).filter(lovers_count__lte=product.lovers.count()).exclude(slug=product.slug).order_by('-lovers_count').first()
-            prev_pro = desired_products.annotate(lovers_count=Count('lovers')).filter(lovers_count__gte=product.lovers.count()).exclude(slug=product.slug).order_by('lovers_count').first()
+            prev_pro = desired_products.annotate(lovers_count=Count('lovers')).filter(lovers_count__gte=product.lovers.count()).exclude(slug=product.slug).exclude(slug=next_pro.slug).order_by('lovers_count').first()
     else:
         next_pro = desired_products.filter(created_at__lt=product.created_at).order_by('-created_at').first()
         prev_pro = desired_products.filter(created_at__gt=product.created_at).order_by('created_at').first()

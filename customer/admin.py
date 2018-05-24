@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.html import format_html
 
 from customer.models import User, UserAddress, Basket, SelectedProduct, Comment
 from .forms import UserCreationForm, UserChangeForm
@@ -18,7 +19,7 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('phone_number', 'first_name', 'last_name', 'account_type')
+    list_display = ('phone_number', 'first_name', 'last_name', 'account_type', 'get_user_panel_link')
     list_filter = ('account_type',)
     fieldsets = (
         (None, {'fields': ('phone_number', )}),
@@ -37,6 +38,11 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
     inlines = [UserAddressInline, ]
+
+    def get_user_panel_link(self, obj):
+        return format_html('<a href="{url}">{url}</a>', url=obj.get_absolute_url())
+
+    get_user_panel_link.short_description = 'User Panel Link'
 
 
 class SelectedProductInline(admin.StackedInline):

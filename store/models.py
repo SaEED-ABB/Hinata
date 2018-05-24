@@ -145,6 +145,8 @@ class Product(TimeStampedModel):
     sizes = models.ManyToManyField(Size, related_name='sizes', blank=True)
     colors = models.ManyToManyField(Color, related_name='colors', blank=True)
 
+    view_counter = models.IntegerField(default=0)
+
     class Meta:
         ordering = ('-created_at', )
 

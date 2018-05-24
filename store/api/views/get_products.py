@@ -63,7 +63,7 @@ def get_products(request):
         if filter_option_slug_sort_by == 'newest':
             desired_products = desired_products.order_by('-created_at')
         elif filter_option_slug_sort_by == 'most-viewed':
-            pass
+            desired_products = desired_products.order_by('-view_counter')
         elif filter_option_slug_sort_by == 'most-favorite':
             desired_products = desired_products.annotate(lovers_count=Count('lovers')).order_by('-lovers_count')
     else:
