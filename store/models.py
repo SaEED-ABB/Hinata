@@ -100,6 +100,22 @@ class ProductFilter(TimeStampedModel):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, blank=True)
 
+    @classmethod
+    def get_all_info(cls):
+        context = []
+        for pro_filter in cls.objects.all():
+            fil_options = []
+            for fil_option in pro_filter.options.all():
+                fil_options.append({
+                    'name': fil_option.name,
+                    'slug': fil_option.slug
+                })
+            context.append({
+                'name': pro_filter.name,
+                'slug': pro_filter.slug,
+                'options': fil_options
+            })
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = defaultfilters.slugify(unidecode(self.name))
