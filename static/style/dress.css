@@ -41,38 +41,41 @@ html,body{
 }
 .dressProp{
 	word-wrap: break-word;
-    padding: 20px 10px;
+    padding: 5px 10px 20px;
 }
 h1{
-	font-size: 30px;
+	font-size: 35px;
 }
 h2{
 	font-size: 26px;
 }
 .dressProp h1,.dressProp h2{
-	margin: 0 auto 15px;
+	margin: 0 auto 30px;
 }
 .range{
 	direction: ltr;
 	padding: 0;
 }
 .color{
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
     display: inline-block;
-    margin: auto 1px;
+    margin: auto 3px;
     background-color: blue;
     border-radius: 5px;
     margin-bottom: -5px;
 }
 .size{
+    width: 30px;
+    height: 30px;
     display: inline-block;
     border: 1px solid black;
-    padding: 0 3px;
+    padding: 2px 5px;
     border-radius: 5px;
     font-size: 1.2em;
     font-family: koodak;
-    margin: auto 1px;
+    margin: auto 3px;
+    cursor: pointer;
 }
 .scale{
 	border-radius: 5px;
@@ -81,15 +84,22 @@ h2{
     outline: none;
     padding-right: 10px;
     width: 70px;
+    cursor: pointer;
 }
 .dressDetail{
-	margin:10px 0;
+	margin:15px 0;
 }
 .dressDetail label{
 	font-size: 1.2em;
 }
 .dressBuy{
 	text-align: center;
+    margin: 8% 0 0;
+}
+.buyOptions i{
+    color: #949494;
+    font-size: 26px;
+    cursor: pointer;
 }
 .link{
 	text-decoration: underline;
