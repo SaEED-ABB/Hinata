@@ -18,8 +18,6 @@ def get_products(request):
     :return: products[{slug, name, price, front_image, back_image, is_in_user_favorites, is_in_user_active_basket}]
     """
 
-    user = request.user
-
     this_page_number = int(request.GET.get('page', '1'))
     count = int(request.GET.get('count', '12'))
     category_slug = request.GET.get('category_slug')
@@ -92,23 +90,21 @@ def get_products(request):
         front_image = p.images.filter(name='front').first()
         back_image = p.images.filter(name='back').first()
 
-        is_in_user_active_basket = False
-        is_in_user_favorites = False
-        if not request.user.is_anonymous:
-            is_in_user_favorites = p in user.favorites.all()
-            is_in_user_active_basket = SelectedProduct.objects.filter(basket__user=user,
-                                                                  basket__status=Basket.OPEN_CHECKING,
-                                                                  product=p).exists()
-
-        context['products'].append({
+        context_products_value = {
             # "lovers": p.lovers.count(),
             "slug": p.slug,
             "name": p.name,
             "price": p.price,
             "front_image": front_image.image.url if front_image else "",
             "back_image": back_image.image.url if back_image else "",
-            "is_in_user_active_basket": is_in_user_active_basket,
-            "is_in_user_favorites": is_in_user_favorites
-        })
+        }
+        user = request.user
+        if user.is_authenticated:
+            is_in_user_favorites = p in user.favorites.all()
+            is_in_user_active_basket = SelectedProduct.objects.filter(basket__user=user, basket__status=Basket.OPEN_CHECKING, product=p).exists()
+            context_products_value["is_in_user_active_basket"] = is_in_user_active_basket
+            context_products_value["is_in_user_favorites"] = is_in_user_favorites
+
+        context['products'].append(context_products_value)
 
     return JsonResponse(context, safe=False, status=200)

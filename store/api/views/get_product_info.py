@@ -17,8 +17,6 @@ def get_product_info(request):
             images[{url}], is_in_user_favorites, is_in_user_active_basket}
     """
 
-    user = request.user
-
     product_slug = request.GET.get('product_slug')
     if not product_slug:
         res_body = {
@@ -34,24 +32,24 @@ def get_product_info(request):
         }
         return JsonResponse(res_body, status=404)
 
-    is_in_user_favorites = product in user.favorites.all()
-    is_in_user_active_basket = SelectedProduct.objects.filter(basket__user=user, basket__status=Basket.OPEN_CHECKING, product=product).exists()
-
     context = {
         "name": product.name,
         "slug": product.slug,
         "price": product.price,
         "properties": [],
         "tags": [],
-        "material": product.material,
+        "material": product.material if product.material else "",
         "category": product.category.name if product.category else "",
         "colors": [],
         "sizes": [],
         "comments": [],
         "images": [],
-        "is_in_user_favorites": is_in_user_favorites,
-        "is_in_user_active_basket": is_in_user_active_basket
     }
+
+    user = request.user
+    if user.is_authenticated:
+        context["is_in_user_favorites"] = product in user.favorites.all()
+        context["is_in_user_active_basket"] = SelectedProduct.objects.filter(basket__user=user, basket__status=Basket.OPEN_CHECKING, product=product).exists()
 
     for property in product.properties.all():
         context['properties'].append({
