@@ -1,20 +1,15 @@
 import os
+from unidecode import unidecode
+
 from django.db import models
 from colorfield.fields import ColorField
 from django.utils.text import slugify
 from django.shortcuts import reverse
-from django.utils.crypto import get_random_string
 from django.template import defaultfilters
-from unidecode import unidecode
+from django.utils.crypto import get_random_string
 
 from .helpers import validators
 from frontview.models import TimeStampedModel
-# from .helpers import get_path
-
-
-def get_path(instance, filename):
-    name = get_random_string(length=24) + "." + filename.split('.')[-1]
-    return "images/" + name
 
 
 class CategoryManager(models.Manager):
@@ -179,13 +174,18 @@ class Product(TimeStampedModel):
 
 
 class ProductImage(TimeStampedModel):
+    def get_image_path(self, filename):
+        filename = get_random_string(length=24) + "." + filename.split('.')[-1]
+        path = 'products/images/{}'.format(filename)
+        return path
+
     NAME_CHOICES = (
         ('front', 'front image'),
         ('back', 'back image'),
         ('other', 'other')
     )
     name = models.CharField(max_length=200, choices=NAME_CHOICES, default='other')
-    image = models.ImageField(upload_to=get_path, validators=[validators.file_size])
+    image = models.ImageField(upload_to=get_image_path, validators=[validators.file_size])
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
 
     def delete(self, *args, **kwargs):

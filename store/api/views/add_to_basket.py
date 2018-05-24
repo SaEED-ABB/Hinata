@@ -1,12 +1,10 @@
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.shortcuts import get_object_or_404
-
-from customer.models import Basket, SelectedProduct
-from store.models import Product, Color, Size
-from customer.decorators import check_permission_api
 
 from ratelimit.decorators import ratelimit
+
+from customer.models import Basket
+from customer.decorators import check_permission_api
 
 
 @require_http_methods(['POST'])

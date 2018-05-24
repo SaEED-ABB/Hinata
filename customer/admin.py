@@ -21,16 +21,16 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('phone_number', 'first_name', 'last_name', 'account_type')
     list_filter = ('account_type',)
     fieldsets = (
-        (None, {'fields': ('phone_number', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'favorites')}),
+        (None, {'fields': ('phone_number', )}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'favorites', 'profile_picture')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('phone_number', 'first_name', 'last_name', 'password1', 'password2')}
-        ),
+            'fields': ('phone_number', 'first_name', 'last_name', 'password1', 'password2')
+        }),
     )
     search_fields = ('phone_number',)
     ordering = ('phone_number',)
@@ -95,17 +95,7 @@ class SelectedProductAdmin(admin.ModelAdmin):
     really_delete_selected.short_description = "Delete selected entries"
 
 
-
-# Now register the new UserAdmin...
 admin.site.register(User, UserAdmin)
-# ... and, since we're not using Django's built-in permissions,
-# unregister the Group model from admin.
-# admin.site.unregister(Group)
-
-
 admin.site.register(SelectedProduct, SelectedProductAdmin)
 admin.site.register(Basket, BasketAdmin)
-# admin.site.register(UserAddress)
 admin.site.register(Comment, CommentAdmin)
-# admin.site.register(Image)
-# admin.site.register(Favorite)

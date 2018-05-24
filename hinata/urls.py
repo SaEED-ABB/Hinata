@@ -32,7 +32,7 @@ urlpatterns = [
     path('api/', include(api_urlpatterns)),
     path('', include('frontview.urls')),
     path('store/', include('store.urls')),
-    path('customer/', include('customer.urls')),
+    path('user/', include('customer.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

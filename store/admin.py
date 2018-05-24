@@ -12,7 +12,7 @@ class PropertyInline(admin.StackedInline):
     extra = 1
 
 
-class ProductFilterInline(admin.TabularInline):
+class ProductFilterInline(admin.StackedInline):
     model = ProductFilter
     extra = 1
 
@@ -62,7 +62,7 @@ class ProductImageAdmin(admin.ModelAdmin):
     really_delete_selected.short_description = "Delete selected entries (image file will be deleted)"
 
 
-class FilterOptionsInline(admin.TabularInline):
+class FilterOptionsInline(admin.StackedInline):
     model = FilterOption
     extra = 3
 

@@ -1,25 +1,35 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import reverse
+from django.utils.crypto import get_random_string
 
 import uuid as uuid_lib
 
 from .managers import UserManager
 from frontview.models import TimeStampedModel
 from store.models import Product, Color, Size
+from store.helpers import validators
 
 
 class User(AbstractBaseUser, TimeStampedModel):
+    def generate_picture_path(self, filename):
+        filename = get_random_string(length=24) + "." + filename.split('.')[-1]
+        path = 'users/profile_pictures/{}'.format(filename)
+        return path
+
     AC_TYPE = (
         ('user', 'Normal User'),
         ('admin', 'Admin User')
     )
+    uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
     phone_number = models.CharField(max_length=200, unique=True)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     is_active = models.BooleanField(default=True)
     account_type = models.CharField(max_length=200, blank=True, null=True, choices=AC_TYPE, default='user')
     favorites = models.ManyToManyField('store.Product', related_name='lovers', blank=True)
+    profile_picture = models.ImageField(upload_to=generate_picture_path, validators=[validators.file_size], blank=True, null=True)
 
     objects = UserManager()
 
@@ -92,9 +102,14 @@ class User(AbstractBaseUser, TimeStampedModel):
         context = {
             "phone_number": self.phone_number,
             "first_name": self.first_name,
-            "last_name": self.last_name
+            "last_name": self.last_name,
+            "uuid": self.uuid,
+            "profile_picture_url": self.profile_picture.url
         }
         return context
+
+    def get_absolute_url(self):
+        return reverse('customer:user_panel', kwargs={'slug': self.uuid})
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
@@ -288,7 +303,10 @@ class SelectedProduct(TimeStampedModel):
         return super(SelectedProduct, self).delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        last_price = self.price
+        if not self.pk:
+            last_price = 0
+        else:
+            last_price = self.price
         new_price = self.count * self.product.price
         if last_price != new_price:
             self.price = new_price
@@ -311,22 +329,3 @@ class Comment(TimeStampedModel):
 
     def __str__(self):
         return "by {} for {}".format(self.user.get_full_name(), self.product.name)
-
-
-# class Image(TimeStampedModel):
-#     image = models.ImageField(upload_to=get_path)
-#
-#     def delete(self, *args, **kwargs):
-#         os.remove(self.image.path)
-#         return super(Image, self).delete(*args, **kwargs)
-#
-#     def __str__(self):
-#         return self.image.name
-
-
-# class Favorite(TimeStampedModel):
-#     product = models.ForeignKey('store.Product', on_delete=models.CASCADE)
-#     user = models.ForeignKey('customer.User', on_delete=models.CASCADE, related_name='favorite_products')
-#
-#     def __str__(self):
-#         return "{} likes {}".format(self.user.username, self.product.name)
