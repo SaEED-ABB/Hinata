@@ -1,14 +1,19 @@
 from django.contrib import admin
-from store.models import Product, Color, Size, ProductImage, Category, ProductTags, ProductProperty
+from store.models import Product, Color, Size, ProductImage, Category, ProductTags, ProductProperty, ProductFilter, FilterOption
 
 
-class ProductImageInline(admin.TabularInline):
+class ProductImageInline(admin.StackedInline):
     model = ProductImage
     extra = 1
 
 
-class PropertyInline(admin.TabularInline):
+class PropertyInline(admin.StackedInline):
     model = ProductProperty
+    extra = 1
+
+
+class ProductFilterInline(admin.TabularInline):
+    model = ProductFilter
     extra = 1
 
 
@@ -57,10 +62,19 @@ class ProductImageAdmin(admin.ModelAdmin):
     really_delete_selected.short_description = "Delete selected entries (image file will be deleted)"
 
 
+class FilterOptionsInline(admin.TabularInline):
+    model = FilterOption
+    extra = 3
+
+
+class ProductFilterAdmin(admin.ModelAdmin):
+    inlines = [FilterOptionsInline, ]
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Color)
 admin.site.register(Size)
 admin.site.register(Category)
 admin.site.register(ProductImage, ProductImageAdmin)
 admin.site.register(ProductTags)
-# admin.site.register(ProductProperty)
+admin.site.register(ProductFilter, ProductFilterAdmin)

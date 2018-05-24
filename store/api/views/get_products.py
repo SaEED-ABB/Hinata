@@ -1,11 +1,11 @@
-from django.shortcuts import get_object_or_404
+from django.db.models import Count
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
 
 from ratelimit.decorators import ratelimit
 
-from store.models import Product, Category, ProductTags
+from store.models import Product, Category, ProductTags, FilterOption
 from customer.models import Basket, SelectedProduct
 
 
@@ -25,12 +25,19 @@ def get_products(request):
     category_slug = request.GET.get('category_slug')
     tag_slug = request.GET.get('tag_slug')
 
-    all_products = Product.objects.all()
+    filter_slug_sort_by = request.GET.get('filter_slug_sort_by')
+    filter_option_slug_sort_by = request.GET.get('filter_option_slug_sort_by')
+    filter_slug_1 = request.GET.get('filter_slug_1')
+    filter_option_slug_1 = request.GET.get('filter_option_slug_1')
+    filter_slug_2 = request.GET.get('filter_slug_2')
+    filter_option_slug_2 = request.GET.get('filter_option_slug_2')
+
+    desired_products = Product.objects.all()
 
     if category_slug:
         try:
             category = Category.objects.get(slug=category_slug)
-            all_products = Product.objects.filter(category=category)
+            desired_products = desired_products.filter(category=category)
         except Category.DoesNotExist:
             res_body = {
                 "error": "no such category"
@@ -40,21 +47,39 @@ def get_products(request):
     if tag_slug:
         try:
             tag = ProductTags.objects.get(tag_name=tag_slug)
-            all_products = all_products.filter(tags_in=tag)
+            desired_products = desired_products.filter(tags_in=tag)
         except ProductTags.DoesNotExist:
             res_body = {
                 "error": "no such product_tag"
             }
             return JsonResponse(res_body, status=404)
 
-    all_pages = Paginator(all_products, count)
+    if filter_slug_1 and filter_option_slug_1:
+        option = FilterOption.objects.get(related_filter__slug=filter_slug_1, slug=filter_option_slug_1)
+        desired_products = desired_products.filter(filter_options__name__in=option)
+    if filter_slug_2 and filter_option_slug_2:
+        option = FilterOption.objects.get(related_filter__slug=filter_slug_2, slug=filter_option_slug_2)
+        desired_products = desired_products.filter(filter_options__name__in=option)
+
+    if filter_slug_sort_by and filter_option_slug_sort_by:
+        if filter_option_slug_sort_by == 'newest':
+            desired_products = desired_products.order_by('-created_at')
+        elif filter_option_slug_sort_by == 'most-viewed':
+            pass
+        elif filter_option_slug_sort_by == 'most-favorite':
+            desired_products = desired_products.annotate(lovers_count=Count('lovers')).order_by('-lovers_count')
+    else:
+        desired_products = desired_products.order_by('-created_at')
+
+    all_pages = Paginator(desired_products, count)
+
     print(all_pages)
     requested_page = all_pages.page(this_page_number)
     print(requested_page)
     context = {
         "products": [],
         "more": requested_page.has_next(),
-        "count": count if requested_page.has_next() else all_products.count() % count,
+        "count": count if requested_page.has_next() else desired_products.count() % count,
         # "next": requested_page.has_next(),
         # "previous": requested_page.has_previous(),
     }
@@ -76,6 +101,7 @@ def get_products(request):
                                                                   product=p).exists()
 
         context['products'].append({
+            # "lovers": p.lovers.count(),
             "slug": p.slug,
             "name": p.name,
             "price": p.price,

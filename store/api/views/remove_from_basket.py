@@ -4,14 +4,14 @@ from django.shortcuts import get_object_or_404
 
 from customer.models import Basket, SelectedProduct, User
 from store.models import Product
-from customer.decorators import check_authentication_status
+from customer.decorators import check_permission_api
 
 from ratelimit.decorators import ratelimit
 
 
 @require_http_methods(['POST'])
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
-@check_authentication_status()
+@check_permission_api(['user'])
 def remove_from_basket(request):
     """
     a user can remove a specific product from his active basket

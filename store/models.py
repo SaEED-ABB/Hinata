@@ -77,13 +77,7 @@ class Color(TimeStampedModel):
 
 class ProductProperty(TimeStampedModel):
     property = models.CharField(max_length=500)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='properties', null=True)
-    slug = models.SlugField(unique=True, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = defaultfilters.slugify(unidecode(self.property))
-        return super(ProductProperty, self).save(*args, **kwargs)
+    related_product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='properties', null=True)
 
     def __str__(self):
         return self.property
@@ -102,16 +96,43 @@ class ProductTags(TimeStampedModel):
         return self.tag_name
 
 
+class ProductFilter(TimeStampedModel):
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = defaultfilters.slugify(unidecode(self.name))
+        return super(ProductFilter, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class FilterOption(models.Model):
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, null=True, blank=True)
+    related_filter = models.ForeignKey(ProductFilter, on_delete=models.CASCADE, related_name='options')
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = defaultfilters.slugify(unidecode(self.name))
+        return super(FilterOption, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(TimeStampedModel):
     name = models.CharField(max_length=200, blank=True, null=True)
-    material = models.CharField(max_length=200, blank=True, null=True)
     slug = models.SlugField(unique=True, null=True, blank=True)
-    # properties = models.ManyToManyField(ProductProperty, blank=True)
+    material = models.CharField(max_length=200, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='related_products')
-    tags = models.ManyToManyField(ProductTags, related_name='filtered_products', blank=True)
+    price = models.IntegerField()
+    filter_options = models.ManyToManyField(FilterOption, related_name='filtered_products', blank=True)
+    tags = models.ManyToManyField(ProductTags, related_name='tagged_products', blank=True)
     sizes = models.ManyToManyField(Size, related_name='sizes', blank=True)
     colors = models.ManyToManyField(Color, related_name='colors', blank=True)
-    price = models.IntegerField()
 
     class Meta:
         ordering = ('-created_at', )
