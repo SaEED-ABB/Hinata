@@ -1,9 +1,6 @@
-from django.shortcuts import get_object_or_404
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from customer.decorators import check_permission_api
-from customer.models import Comment, User
 from store.models import Product
 
 from ratelimit.decorators import ratelimit
@@ -11,7 +8,7 @@ from ratelimit.decorators import ratelimit
 
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['POST'])
-@check_permission_api(['user'])
+# @check_permission_api(['user'])
 def add_comment(request):
     """
     add a comment for a specific product left by current user
@@ -19,7 +16,6 @@ def add_comment(request):
     :return: error or success message
     """
 
-    user = request.user
     product_slug = request.POST.get('product_slug')
     comment = request.POST.get('comment')
 
@@ -37,9 +33,19 @@ def add_comment(request):
         }
         return JsonResponse(res_body, status=404)
 
-    Comment.objects.create(comment=comment, product=this_product, user=user)
+    user = request.user
+    if user.is_authenticated:
+        this_product.related_comments.create(comment=comment, user=user)
+        res_body = {
+            "success": "Comment for such product added successfully for {}".format(user.get_full_name())
+        }
+    else:
+        if not request.session.session_key:
+            request.session.save()
+        session_id = request.session.session_key
+        this_product.related_comments.create(comment=comment, session_id=session_id)
+        res_body = {
+            "success": "Comment for such product added successfully for {}".format(session_id)
+        }
 
-    res_body = {
-        "success": "Comment for such product added successfully for {}".format(user.get_full_name())
-    }
     return JsonResponse(res_body, status=201)

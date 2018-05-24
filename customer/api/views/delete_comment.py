@@ -10,14 +10,13 @@ from ratelimit.decorators import ratelimit
 
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['POST'])
-@check_permission_api(['user'])
+# @check_permission_api(['user'])
 def delete_comment(request):
     """
     user can delete each of his comments
     :param request: user, comment_id
     :return: error or success message
     """
-    user = request.user
     comment_id = request.POST.get('comment_id')
 
     if not comment_id:
@@ -35,7 +34,12 @@ def delete_comment(request):
         }
         return JsonResponse(res_body, status=404)
 
-    res_body = {
-        "success": "{}'s comment successfully deleted for such product".format(user.get_full_name())
-    }
+    if this_comment.user:
+        res_body = {
+            "success": "{}'s comment successfully deleted for such product".format(this_comment.user.get_full_name())
+        }
+    else:
+        res_body = {
+            "success": "{}'s comment successfully deleted for such product".format(this_comment.session_id)
+        }
     return JsonResponse(res_body, status=204)

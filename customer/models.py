@@ -320,7 +320,8 @@ class SelectedProduct(TimeStampedModel):
 
 class Comment(TimeStampedModel):
     product = models.ForeignKey('store.Product', on_delete=models.CASCADE, related_name='related_comments')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', blank=True, null=True)
+    session_id = models.CharField(max_length=200, blank=True, null=True)
     comment = models.TextField()
     is_approved = models.NullBooleanField()
 
@@ -328,4 +329,8 @@ class Comment(TimeStampedModel):
         ordering = ('-created_at', )
 
     def __str__(self):
-        return "by {} for {}".format(self.user.get_full_name(), self.product.name)
+        if self.user:
+            client_name = self.user.get_full_name()
+        else:
+            client_name = self.session_id
+        return "by {} for {}".format(client_name, self.product.name)
