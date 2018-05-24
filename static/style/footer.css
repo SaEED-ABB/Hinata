@@ -18,10 +18,30 @@ div h5 a{
 }
 .links{
 	margin-bottom: 20px;
+    display: table; /* Make the container element behave like a table */
+    width: 100%; /* Set full-width to expand the whole page */
+}
+.col {
+    display: table-cell; /* Make elements inside the container behave like table cells */
 }
 a{
 	color: black;
 }
-a:hover{
+
+@media screen and (max-width: 992px) and (min-width: 768px) {
+    .links .firstCol, .links .thirdCol{
+    	border-bottom:  1.5px solid #acacac;
+    }
+}
+
+@media screen and (max-width: 767px) and (min-width: 610px) {
 	
+}
+
+@media screen and (max-width: 610px) and (min-width: 420px) {
+    
+}
+
+@media screen and (max-width: 420px) {
+    
 }

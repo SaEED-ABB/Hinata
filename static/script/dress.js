@@ -1,3 +1,22 @@
+toastr.options = {
+  "closeButton": false,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": false,
+  "positionClass": "toast-top-left",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut",
+  "rtl": true
+}
+
 $(document).ready(function() {
 	new RangeSlider($("#materialRangeSlider"), {
 	    size: 1,
@@ -46,11 +65,11 @@ $.ajax({
 		for(var i=0;i<data.properties.length;i++){
 			$('.properties').prepend('<li>'+data.properties[i].property+'</li>');
 		}
-		if(data.is_in_user_active_basket=='true'){
-			$('.basketProduct').css('color','green');
+		if(data.is_in_user_active_basket==true){
+			$('.basketProduct').css('color','#00da00');
 			$('.basketProduct').addClass('addToBasket');
 		}
-		if(data.is_in_user_favorites=='true'){
+		if(data.is_in_user_favorites==true){
 			$('.likeProduct').css('color','red');
 			$('.likeProduct').addClass('addToFavorite');
 		}
@@ -72,7 +91,11 @@ $(document).on('click touchstart','.basketProduct',function(){
 			    },
 				success: function (data) {
 					thisElement.addClass('addToBasket');
-					thisElement.css('color','green')
+					thisElement.css('color','#00da00')
+					toastr.success('محصول مورد نظر به شبد خرید اضافه شد.')
+				},
+				error: function(){
+					toastr.error('مشکلی خ داده است. لطفا ممجددا امتحان کنید.')
 				}
 			});
 		}else{
@@ -85,7 +108,11 @@ $(document).on('click touchstart','.basketProduct',function(){
 			    },
 				success: function (data) {
 					thisElement.removeClass('addToBasket');
-					thisElement.css('color','inherit')
+					thisElement.css('color','#949494')
+					toastr.success('محصول مورد نظر از سبد خرید حذف شد.')
+				},
+				error: function(){
+					toastr.error('مشکلی خ داده است. لطفا ممجددا امتحان کنید.')
 				}
 			});
 		}
@@ -107,6 +134,10 @@ $(document).on('click touchstart','.likeProduct',function(){
 				success: function (data) {
 					thisElement.addClass('addToFavorite');
 					thisElement.css('color','red')
+					toastr.success('محصول مورد نظر به لیست علاقه مندی ها اضافه شد.')
+				},
+				error: function(){
+					toastr.error('مشکلی خ داده است. لطفا ممجددا امتحان کنید.')
 				}
 			});
 		}else{
@@ -119,7 +150,11 @@ $(document).on('click touchstart','.likeProduct',function(){
 			    },
 				success: function (data) {
 					thisElement.removeClass('addToFavorite');
-					thisElement.css('color','inherit')
+					thisElement.css('color','#949494')
+					toastr.success('محصول مورد نظر از لیست علاقه مندی ها حذف شد.')
+				},
+				error: function(){
+					toastr.error('مشکلی خ داده است. لطفا ممجددا امتحان کنید.')
 				}
 			});
 		}
