@@ -336,3 +336,15 @@ class Comment(TimeStampedModel):
         else:
             client_name = self.session_id
         return "by {} for {}".format(client_name, self.product.name)
+
+
+class ProductRate(TimeStampedModel):
+    rate = models.PositiveSmallIntegerField(blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name='rates')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='related_rates')
+    session_id = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return '{} star on {} by {}'.format(self.rate,
+                                            self.product.name,
+                                            self.user.get_full_name() or self.session_id)

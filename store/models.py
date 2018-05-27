@@ -193,18 +193,6 @@ class Product(TimeStampedModel):
         return self.name
 
 
-class ProductRate(TimeStampedModel):
-    rate = models.PositiveSmallIntegerField(blank=True, null=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name='rates')
-    user = models.ForeignKey('customer.User', on_delete=models.SET_NULL, null=True, related_name='related_rates')
-    session_id = models.CharField(max_length=200, blank=True, null=True)
-
-    def __str__(self):
-        return '{} star on {} by {}'.format(self.rate,
-                                            self.product.name,
-                                            self.user.get_full_name() or self.session_id)
-
-
 class ProductImage(TimeStampedModel):
     def get_image_path(self, filename):
         filename = get_random_string(length=24) + "." + filename.split('.')[-1]

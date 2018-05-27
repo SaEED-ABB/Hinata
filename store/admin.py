@@ -1,5 +1,6 @@
 from django.contrib import admin
-from store.models import Product, Color, Size, ProductImage, Category, ProductTag, ProductProperty, ProductFilter, FilterOption, ProductRate
+from store.models import Product, Color, Size, ProductImage, Category, ProductTag, ProductProperty, ProductFilter, FilterOption
+# from customer.models import ProductRate
 
 
 class ProductImageInline(admin.StackedInline):
