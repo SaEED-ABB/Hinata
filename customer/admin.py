@@ -44,6 +44,60 @@ class UserAdmin(BaseUserAdmin):
 
     get_user_panel_link.short_description = 'User Panel Link'
 
+    actions = ['really_delete_selected']
+
+    def get_queryset(self, request):
+        qs = super(UserAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(pk=request.user.pk)
+
+    def get_actions(self, request):
+        actions = super(UserAdmin, self).get_actions(request)
+        del actions['delete_selected']
+        if not request.user.is_superuser and 'really_delete_selected' in actions:
+            del actions['really_delete_selected']
+        return actions
+
+    def really_delete_selected(self, request, queryset):
+        for obj in queryset:
+            obj.delete()
+
+        if queryset.count() == 1:
+            message_bit = "1 set_basket entry was"
+        else:
+            message_bit = "%s set_basket entries were" % queryset.count()
+        self.message_user(request, "%s successfully deleted." % message_bit)
+
+    really_delete_selected.short_description = "Delete selected entries"
+
+    def has_add_permission(self, request):
+        auth_perm = request.user.is_authenticated
+        super_perm = request.user.is_superuser
+        return auth_perm and super_perm
+
+    def has_change_permission(self, request, obj=None):
+        if obj is None:
+            return True
+        auth_perm = request.user.is_authenticated
+        staff_perm = request.user.is_staff and request.user == obj
+        super_perm = request.user.is_superuser
+        return auth_perm and (super_perm or staff_perm)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj is None:
+            return True
+        auth_perm = request.user.is_authenticated
+        staff_perm = request.user.is_staff and request.user == obj
+        super_perm = request.user.is_superuser
+        return auth_perm and (super_perm or staff_perm)
+
+    def has_module_permission(self, request):
+        auth_perm = request.user.is_authenticated
+        super_perm = request.user.is_superuser
+        staff_perm = request.user.is_staff
+        return auth_perm and (super_perm or staff_perm)
+
 
 class SelectedProductInline(admin.StackedInline):
     model = SelectedProduct
@@ -53,12 +107,12 @@ class SelectedProductInline(admin.StackedInline):
 class BasketAdmin(admin.ModelAdmin):
     list_display = ('code', 'user', 'phone_number', 'address', 'status', 'payment_type', 'total_price')
 
-    # readonly_fields = ['user', 'phone_number', 'address', 'payment_type', 'total_price']
-    # fieldsets = (
-    #     (None, {
-    #         'fields': ('status', ),
-    #     }),
-    # )
+    readonly_fields = ('code', )
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'phone_number', 'address', 'payment_type', 'total_price', 'status', ),
+        }),
+    )
 
     inlines = [SelectedProductInline]
 
@@ -97,10 +151,10 @@ class BasketAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('comment', 'product', 'user', 'is_approved')
+    list_display = ('comment', 'product', 'user', 'session_name', 'is_approved')
 
     fieldsets = (
-        (None, {'fields': ('comment', 'product')}),
+        (None, {'fields': ('comment', 'product', 'is_approved',)}),
     )
 
     add_fieldsets = (

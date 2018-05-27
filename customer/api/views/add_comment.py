@@ -18,6 +18,7 @@ def add_comment(request):
 
     product_slug = request.POST.get('product_slug')
     comment = request.POST.get('comment')
+    session_name = request.POST.get('session_name')
 
     if not (product_slug and comment):
         res_body = {
@@ -40,12 +41,15 @@ def add_comment(request):
             "success": "Comment for such product added successfully for {}".format(user.get_full_name())
         }
     else:
+        if not session_name:
+            res_body = {"error": "session_name not provided"}
+            return JsonResponse(res_body, status=400)
         if not request.session.session_key:
             request.session.save()
         session_id = request.session.session_key
-        this_product.related_comments.create(comment=comment, session_id=session_id)
+        this_product.related_comments.create(comment=comment, session_id=session_id, session_name=session_name)
         res_body = {
-            "success": "Comment for such product added successfully for {}".format(session_id)
+            "success": "Comment for such product added successfully for {}".format(session_name)
         }
 
     return JsonResponse(res_body, status=201)
