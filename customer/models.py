@@ -106,7 +106,7 @@ class User(AbstractBaseUser, TimeStampedModel, PermissionsMixin):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "uuid": self.uuid,
-            "profile_picture_url": self.profile_picture.url
+            "profile_picture_url": self.profile_picture.url if self.profile_picture else ""
         }
         return context
 
@@ -325,7 +325,7 @@ class Comment(TimeStampedModel):
     product = models.ForeignKey('store.Product', on_delete=models.CASCADE, related_name='related_comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', blank=True, null=True)
     session_id = models.CharField(max_length=200, blank=True, null=True)
-    session_name = models.CharField(max_length=200, blank=True)
+    session_name = models.CharField(max_length=200, blank=True, null=True)
     is_approved = models.NullBooleanField()
 
     class Meta:
