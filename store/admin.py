@@ -21,6 +21,12 @@ class ProductFilterInline(admin.StackedInline):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'name', 'slug', 'material', 'category', 'price', 'view_counter', 'get_rates_average']
 
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'slug', 'material', 'category', 'price'),
+        }),
+    )
+
     inlines = [ProductImageInline, PropertyInline]
 
     actions = ['really_delete_selected']

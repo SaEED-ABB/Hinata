@@ -3,14 +3,14 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import make_password
 from django.views.decorators.http import require_http_methods
 
-from customer.decorators import check_permission_api
+from customer.decorators import check_authentication_status
 
 from ratelimit.decorators import ratelimit
 
 
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['POST'])
-@check_permission_api(['user'])
+@check_authentication_status()
 def change_password(request):
     """
     user can change his password

@@ -1,14 +1,14 @@
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from customer.decorators import check_permission_api
+from customer.decorators import check_authentication_status
 
 from ratelimit.decorators import ratelimit
 
 
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @require_http_methods(['POST'])
-@check_permission_api(['user'])
+@check_authentication_status()
 def edit_user(request):
     """
     user can change his info

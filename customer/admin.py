@@ -97,7 +97,7 @@ class BasketAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('comment', 'product', 'user', 'is_approved')
+    list_display = ('comment', 'product', 'user', 'session_name', 'is_approved')
 
     fieldsets = (
         (None, {'fields': ('comment', 'product')}),
