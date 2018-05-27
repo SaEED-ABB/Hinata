@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import reverse
 from django.utils.crypto import get_random_string
+from django.contrib.auth.models import PermissionsMixin
 
 import uuid as uuid_lib
 
@@ -12,7 +13,7 @@ from store.models import Product, Color, Size
 from store.helpers import validators
 
 
-class User(AbstractBaseUser, TimeStampedModel):
+class User(AbstractBaseUser, TimeStampedModel, PermissionsMixin):
     def generate_picture_path(self, filename):
         filename = get_random_string(length=24) + "." + filename.split('.')[-1]
         path = 'users/profile_pictures/{}'.format(filename)
@@ -20,7 +21,8 @@ class User(AbstractBaseUser, TimeStampedModel):
 
     AC_TYPE = (
         ('user', 'Normal User'),
-        ('admin', 'Admin User')
+        ('admin', 'Admin User'),
+        ('superuser', 'Super User')
     )
     uuid = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
     phone_number = models.CharField(max_length=200, unique=True)
@@ -125,7 +127,7 @@ class User(AbstractBaseUser, TimeStampedModel):
     def is_staff(self):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
-        return self.account_type == 'admin'
+        return self.account_type in ['admin', 'superuser']
 
     def __str__(self):
         return '{}({})'.format(self.phone_number, self.get_full_name())
@@ -147,6 +149,9 @@ class UserAddress(TimeStampedModel):
 
     def __str__(self):
         return "{} - {}".format(self.user.get_full_name(), self.address)
+
+    class Meta:
+        verbose_name_plural = 'user addresses'
 
 
 class Basket(TimeStampedModel):
@@ -175,9 +180,6 @@ class Basket(TimeStampedModel):
     status = models.CharField(choices=STATUS, default='open_checking', max_length=200, blank=True, null=True)
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
     total_price = models.IntegerField(default=0)
-
-    class Meta:
-        ordering = ('-created_at', )
 
     def get_info(self, all_colors_and_sizes_per_product=False):
 

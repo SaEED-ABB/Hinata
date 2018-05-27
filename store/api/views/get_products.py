@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 
 from ratelimit.decorators import ratelimit
 
-from store.models import Product, Category, ProductTags, FilterOption
+from store.models import Product, Category, ProductTag, FilterOption
 from customer.models import Basket, SelectedProduct
 
 
@@ -44,9 +44,9 @@ def get_products(request):
 
     if tag_slug:
         try:
-            tag = ProductTags.objects.get(tag_name=tag_slug)
+            tag = ProductTag.objects.get(tag_name=tag_slug)
             desired_products = desired_products.filter(tags_in=tag)
-        except ProductTags.DoesNotExist:
+        except ProductTag.DoesNotExist:
             res_body = {
                 "error": "no such product_tag"
             }

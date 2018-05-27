@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from django.shortcuts import reverse
 from django.template import defaultfilters
 from django.utils.crypto import get_random_string
+from django.db.models import Avg
 
 from .helpers import validators
 from frontview.models import TimeStampedModel
@@ -41,6 +42,9 @@ class Category(TimeStampedModel):
             cur_cat = cur_cat.parent
         full_name = ' -> '.join(reversed(full_name))
         return full_name
+
+    class Meta:
+        verbose_name_plural = 'categories'
 
 
 class Size(TimeStampedModel):
@@ -77,15 +81,18 @@ class ProductProperty(TimeStampedModel):
     def __str__(self):
         return self.property
 
+    class Meta:
+        verbose_name_plural = 'product properties'
 
-class ProductTags(TimeStampedModel):
+
+class ProductTag(TimeStampedModel):
     tag_name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = defaultfilters.slugify(unidecode(self.tag_name))
-        return super(ProductTags, self).save(*args, **kwargs)
+        return super(ProductTag, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.tag_name
@@ -110,6 +117,14 @@ class ProductFilter(TimeStampedModel):
                 'slug': pro_filter.slug,
                 'options': fil_options
             })
+
+    @classmethod
+    def instantiate_yourself(cls):
+        sort_filter = cls.objects.get_or_create(name='مرتب سازی بر اساس', slug='sort-by')[0]
+        sort_filter.options.get_or_create(name='جدید ترین', slug='newest')
+        sort_filter.options.get_or_create(name='پر بازدید ترین', slug='most-viewed')
+        sort_filter.options.get_or_create(name='محبوب ترین', slug='most-favorite')
+        return sort_filter
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -141,7 +156,7 @@ class Product(TimeStampedModel):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='related_products')
     price = models.IntegerField()
     filter_options = models.ManyToManyField(FilterOption, related_name='filtered_products', blank=True)
-    tags = models.ManyToManyField(ProductTags, related_name='tagged_products', blank=True)
+    tags = models.ManyToManyField(ProductTag, related_name='tagged_products', blank=True)
     sizes = models.ManyToManyField(Size, related_name='sizes', blank=True)
     colors = models.ManyToManyField(Color, related_name='colors', blank=True)
 
@@ -152,6 +167,9 @@ class Product(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse('frontview:product_detail', kwargs={'slug': self.slug})
+
+    def get_rates_average(self):
+        return self.rates.aggregate(Avg('rate'))['rate__avg']
 
     def _get_unique_slug(self):
         slug = defaultfilters.slugify(unidecode(self.name))
@@ -175,6 +193,18 @@ class Product(TimeStampedModel):
         return self.name
 
 
+class ProductRate(TimeStampedModel):
+    rate = models.PositiveSmallIntegerField(blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name='rates')
+    user = models.ForeignKey('customer.User', on_delete=models.SET_NULL, null=True, related_name='related_rates')
+    session_id = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return '{} star on {} by {}'.format(self.rate,
+                                            self.product.name,
+                                            self.user.get_full_name() or self.session_id)
+
+
 class ProductImage(TimeStampedModel):
     def get_image_path(self, filename):
         filename = get_random_string(length=24) + "." + filename.split('.')[-1]
@@ -182,9 +212,9 @@ class ProductImage(TimeStampedModel):
         return path
 
     NAME_CHOICES = (
-        ('front', 'front image'),
-        ('back', 'back image'),
-        ('other', 'other')
+        ('front', 'تصویر جلو'),
+        ('back', 'تصویر پشت'),
+        ('other', 'تصویر عادی')
     )
     name = models.CharField(max_length=200, choices=NAME_CHOICES, default='other')
     image = models.ImageField(upload_to=get_image_path, validators=[validators.file_size])
