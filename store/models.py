@@ -166,7 +166,7 @@ class Product(TimeStampedModel):
         ordering = ('-created_at', )
 
     def get_absolute_url(self):
-        return reverse('frontview:product_detail', kwargs={'slug': self.slug})
+        return reverse('store:product_detail', kwargs={'slug': self.slug})
 
     def get_rates_average(self):
         return self.rates.aggregate(Avg('rate'))['rate__avg']
@@ -194,10 +194,10 @@ class Product(TimeStampedModel):
 
 
 class ProductImage(TimeStampedModel):
-    def get_image_path(self, filename):
-        filename = get_random_string(length=24) + "." + filename.split('.')[-1]
-        path = 'products/images/{}'.format(filename)
-        return path
+    # def get_image_path(self, filename):
+    #     filename = get_random_string(length=24) + "." + filename.split('.')[-1]
+    #     path = 'products/images/{}'.format(filename)
+    #     return path
 
     NAME_CHOICES = (
         ('front', 'تصویر جلو'),
@@ -205,8 +205,26 @@ class ProductImage(TimeStampedModel):
         ('other', 'تصویر عادی')
     )
     name = models.CharField(max_length=200, choices=NAME_CHOICES, default='other')
-    image = models.ImageField(upload_to=get_image_path, validators=[validators.file_size])
+    slug = models.SlugField(unique=True, null=True, blank=True)
+    image = models.ImageField(upload_to='images', validators=[validators.file_size])
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+
+    def get_absolute_url(self):
+        return reverse('store:product_image_detail',
+                       kwargs={'product_slug': self.product.slug, 'image_slug': self.slug})
+
+    def _get_unique_slug(self):
+        slug = defaultfilters.slugify(unidecode(self.image.name))
+        counter = 1
+        while Product.objects.filter(slug=slug).exists():
+            slug = '{}-{}'.format(slug, counter)
+            counter += 1
+        return slug
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self._get_unique_slug()
+        return super(ProductImage, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         if os.path.exists(self.image.path) and os.path.isfile(self.image.path):

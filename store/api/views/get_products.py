@@ -91,7 +91,7 @@ def get_products(request):
         back_image = p.images.filter(name='back').first()
 
         context_products_value = {
-            # "lovers": p.lovers.count(),
+            "detail_page_url": p.get_absolute_url(),
             "slug": p.slug,
             "name": p.name,
             "price": p.price,

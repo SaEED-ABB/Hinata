@@ -1,6 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 
-from store.models import Category, Product, ProductFilter, FilterOption
+from store.models import Category, ProductFilter
 
 
 def index(request):
@@ -9,14 +9,3 @@ def index(request):
     ProductFilter.instantiate_yourself()  # this make "sort_by" filter and its options
 
     return render(request, 'frontview/index.html', context)
-
-
-def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug)
-    product.view_counter += 1
-    product.save()
-
-    # views_counter = request.session.get(product.slug, 0)
-    # request.session[product.slug] = views_counter + 1
-
-    return render(request, 'store/dress.html')
