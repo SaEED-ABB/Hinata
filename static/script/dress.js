@@ -17,23 +17,7 @@ toastr.options = {
   "rtl": true
 }
 
-$(document).ready(function() {
-	new RangeSlider($("#materialRangeSlider"), {
-	    size: 1,
-	    borderSize: 0.4,
-	    percentage: 50
-	});	
-	new RangeSlider($("#priceRangeSlider"), {
-	    size: 1,
-	    borderSize: 0.4,
-	    percentage: 80
-	});	
-	new RangeSlider($("#styleRangeSlider"), {
-	    size: 1,
-	    borderSize: 0.4,
-	    percentage: 60
-	});		
-});
+
 
 $(document).on('mouseover','#previousImg,#nextImg',function(){
 	$(this).find('img').css('visibility','visible');
@@ -45,7 +29,31 @@ $(document).on('mouseout','#previousImg,#nextImg',function(){
 product_slug=window.location.href.split('/')[4];
 $('.likeProduct').attr('product_slug',product_slug);
 $('.basketProduct').attr('product_slug',product_slug);
+$.ajax({
+		type: 'GET',
+		url: '/api/store/get_next_prev_of_product/',
+		dataType: 'JSON',
+		data: {
+	        product_slug: product_slug
+	    },
+		success: function (data) {
+			if(data.next){
+				$('.nextImgHref').attr("href",data.next.link)
+				$('#nextImg').css("background-image",'url('+data.next.image+')')
+			}else{
+				$('#nextImg').css("visibility",'hidden')
+			}
+			if(data.prev){
+				$(".previousImgHref").attr("href",data.prev.link)
+				$('#previousImg').css("background-image",'url('+data.prev.image+')')
+			}else{
+				$('#previousImg').css("visibility",'hidden')
+			}
+		},
+		error: function(){
 
+		}
+	});
 $.ajax({
 	type: 'GET',
 	url: '/api/store/get_product_info/',
@@ -74,12 +82,12 @@ $.ajax({
 			$('.likeProduct').addClass('addToFavorite');
 		}
 		for(var i=0;i<data.images.length-2;i++){
-			$('.images').prepend('<img class="dressImages" src="'+data.images[i+2].other+'">');
+			$('.images').prepend('<a href=""><img class="dressImages" src="'+data.images[i+2].other+'"></a>');
 		}
 		for(var i=0;i<data.comments.length;i++){
 			$('.commentsContainer').append('<div class="comment row">'+
 		           		'<div class="col-sm-2 col-xs-3 commentImgContainer">'+
-		              		'<img class="comment_img  img-responsive" src="http://s3.amazonaws.com/nvest/Blank_Club_Website_Avatar_Gray.jpg" />'+
+		              		'<img class="comment_img  img-responsive" src="'+returnImage(data.comments[i].user_photo_url)+'" />'+
 		            	'</div>'+
 			            '<div class="col-sm-10 col-xs-9" style="padding-right:0">'+
 			                '<h4>'+data.comments[i].name+'</h4>'+
@@ -90,6 +98,13 @@ $.ajax({
 		
 	}
 });
+function returnImage(param){
+	if (param==""){
+		return "http://s3.amazonaws.com/nvest/Blank_Club_Website_Avatar_Gray.jpg"
+	}
+
+	return param
+}
 $(document).on('click touchstart','.basketProduct',function(){
 	var thisElement=$(this);
 	if(logged=="True"){
@@ -180,13 +195,13 @@ $(document).on('click touchstart','.comment_btn',function(){
 	if(logged=="True"){
 		data={
 			comment:$('.textarea-comment').val(),
-			product_slug:window.location.href.split('/')[4]
+			product_slug:product_slug
 		}
 	}else{
 		data={
 			comment:$('.textarea-comment').val(),
-			product_slug:window.location.href.split('/')[4],
-			name: $('.commentName').val(),
+			product_slug:product_slug,
+			session_name: $('.commentName').val(),
 		}
 	}
 
@@ -202,5 +217,23 @@ $(document).on('click touchstart','.comment_btn',function(){
 				toastr.error('خطایی رخ داده است. لطفا مجددا تلاش نمایید.')
 			}
 		});
+
+});
+
+$(document).ready(function() {
+	new RangeSlider($("#materialRangeSlider"), {
+	    size: 1,
+	    percentage: 50
+	});	
+	new RangeSlider($("#priceRangeSlider"), {
+	    size: 1,
+	    borderSize: 0.4,
+	    percentage: 80
+	});	
+	new RangeSlider($("#styleRangeSlider"), {
+	    size: 1,
+	    borderSize: 0.4,
+	    percentage: 60
+	});		
 
 });
