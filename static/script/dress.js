@@ -26,7 +26,7 @@ $(document).on('mouseover','#previousImg,#nextImg',function(){
 $(document).on('mouseout','#previousImg,#nextImg',function(){
 	$(this).find('img').css('visibility','hidden');
 });
-product_slug=window.location.href.split('/')[4];
+product_slug=window.location.href.split('/')[5];
 $('.likeProduct').attr('product_slug',product_slug);
 $('.basketProduct').attr('product_slug',product_slug);
 $.ajax({

@@ -44,11 +44,11 @@ function getProducts(){
 
 				}
 				$('.cards').append("<div class='pCard'>"+
-						"<a class='link' href='/product/"+data.products[i].slug+"' >"+
+						"<a class='link' href='/store/product/"+data.products[i].slug+"' >"+
 							"<img class='img-responsive front' src="+data.products[i].front_image+" />" +
 							"<img class='img-responsive back' style='display: none;' src="+data.products[i].back_image+" />"+
 						"</a>"+
-						"<a class='' href='/product/"+data.products[i].slug+"' >"+
+						"<a class='' href='/store/product/"+data.products[i].slug+"' >"+
 							"<h4 class='text-center' style='margin-top: 16px;margin-bottom: 20px;'>"+data.products[i].name+"</h4>"+
 						"</a>"+
 							"<div class='row' style='margin-bottom: 15px;'> "+
