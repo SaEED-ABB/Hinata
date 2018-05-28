@@ -96,7 +96,8 @@ def get_product_info(request):
 
     for image in ProductImage.objects.filter(product=product):
         context['images'].append({
-            image.name: image.image.url
+            image.name: image.image.url,
+            'detail_page_url': image.get_absolute_url()
         })
 
     return JsonResponse(context, safe=False, status=200)

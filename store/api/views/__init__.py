@@ -7,3 +7,4 @@ from .get_next_prev_of_product import get_next_prev_of_product
 from .get_active_basket_info import get_active_basket_info
 from .get_basket_history import get_basket_history
 from .search_product import search_product
+from .rate_product import rate_product

@@ -344,6 +344,20 @@ class ProductRate(TimeStampedModel):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name='rates')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='related_rates')
     session_id = models.CharField(max_length=200, blank=True, null=True)
+    session_name = models.CharField(max_length=200, blank=True, null=True)
+
+    def update_yourself(self, rate):
+        self.rate = rate
+        self.save()
+        return self.get_info(), 201
+
+    def get_info(self):
+        context = {
+            'rate': self.rate,
+            'product_name': self.product.name,
+            'user_name': self.user.get_full_name() if self.user else self.session_name
+        }
+        return context
 
     def __str__(self):
         return '{} star on {} by {}'.format(self.rate,
