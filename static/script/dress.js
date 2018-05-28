@@ -76,6 +76,18 @@ $.ajax({
 		for(var i=0;i<data.images.length-2;i++){
 			$('.images').prepend('<img class="dressImages" src="'+data.images[i+2].other+'">');
 		}
+		for(var i=0;i<data.comments.length;i++){
+			$('.commentsContainer').append('<div class="comment row">'+
+		           		'<div class="col-sm-2 col-xs-3 commentImgContainer">'+
+		              		'<img class="comment_img  img-responsive" src="http://s3.amazonaws.com/nvest/Blank_Club_Website_Avatar_Gray.jpg" />'+
+		            	'</div>'+
+			            '<div class="col-sm-10 col-xs-9" style="padding-right:0">'+
+			                '<h4>'+data.comments[i].name+'</h4>'+
+			                '<p>'+data.comments[i].comment+'</p>'+
+			            '</div>'+
+		            '</div>');
+		}
+		
 	}
 });
 $(document).on('click touchstart','.basketProduct',function(){
@@ -161,4 +173,34 @@ $(document).on('click touchstart','.likeProduct',function(){
 	}else{
 		toastr.warning('ابتدا وارد سایت شوید.')
 	}
+});
+
+$(document).on('click touchstart','.comment_btn',function(){
+	var thisElement=$(this);
+	if(logged=="True"){
+		data={
+			comment:$('.textarea-comment').val(),
+			product_slug:window.location.href.split('/')[4]
+		}
+	}else{
+		data={
+			comment:$('.textarea-comment').val(),
+			product_slug:window.location.href.split('/')[4],
+			name: $('.commentName').val(),
+		}
+	}
+
+	$.ajax({
+			type: 'POST',
+			url: '/api/customer/add_comment/',
+			dataType: 'JSON',
+			data: data,
+			success: function (data) {
+				toastr.success('نظر شما با موفقیت ارسال شد و پس از تایید در سایت قرار می گیرد.')
+			},
+			error: function(){
+				toastr.error('خطایی رخ داده است. لطفا مجددا تلاش نمایید.')
+			}
+		});
+
 });
