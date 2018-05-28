@@ -134,8 +134,7 @@ h2{
     background: #FFF;
     color: black !important;
     font-size: 14px;
-    padding: 7px 12px;
-    
+    padding: 7% 10%;
     -webkit-transition: all 0.1s;
     -moz-transition: all 0.1s;
     -o-transition: all 0.1s;
@@ -203,4 +202,93 @@ h2{
 }
 .commentImgContainer{
     padding: 0 8px !important;
+}
+
+@media screen and (max-width: 1200px) and (min-width: 992px) {
+    .dressDetail label{
+        width: 12% !important;
+    }
+    .dressDetail .col-md-10{
+        width: 87% !important;
+    }
+}
+
+@media screen and (max-width: 992px) and (min-width: 768px) {
+    .comment_img{
+        width: 70px;
+    }
+}
+
+@media screen and (max-width: 767px) and (min-width: 610px) {
+    #nextImg,#previousImg{
+        margin:auto 2%;
+    }
+    .comment_btn{
+        padding: 7px 10px;
+    }
+    .comment_img{
+        width: 70px;
+    }
+}
+
+@media screen and (max-width: 610px) and (min-width: 420px) {
+    #nextImg,#previousImg{
+        margin:auto 2%;
+    }
+    .comment_btn{
+        padding: 7px 10px;
+    }
+    .comment_img{
+        width: 70px;
+    }
+    .mainContent{
+        padding: 0;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .comment:hover{
+        background: #fff;
+        box-shadow: 0 0 0 0 white;
+        border: 1px solid rgba(0,0,0,0);
+    }
+    #nextImg,#previousImg{
+        margin:auto 2%;
+    }
+    #nextImg img,#previousImg img{
+        width: 80px;
+        height: 80px;
+    }
+    .mainContent .images{
+        padding: 0;
+    }
+    .dressImages {
+        width: 100%;
+        margin: 0 0 4%;
+    }
+    h1{
+        text-align: center;
+    }
+    .dressDetail label{
+        width: 16.6666666% !important;
+    }
+    .dressDetail .col-md-10{
+        width: 82%;
+    }
+    .dressProp {
+         padding: 5px 0 20px; 
+    }
+    .bigButton{
+        width: 100%;
+        margin: 0;
+    }
+    .comment_btn{
+        padding: 7px 10px;
+    }
+    .comment_img{
+        width: 70px;
+    }
+    .mainContent{
+        padding: 0;
+    }
 }
