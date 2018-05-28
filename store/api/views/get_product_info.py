@@ -77,11 +77,20 @@ def get_product_info(request):
 
     for comment in Comment.objects.filter(product=product, is_approved=True):
         if comment.is_approved:
-            user_name = comment.user.get_full_name() if comment.user.is_authenticated else comment.session_name
+            if comment.user:
+                user_name = comment.user.get_full_name()
+                if comment.user.profile_picture:
+                    user_photo_url = comment.user.profile_picture.url
+                else:
+                    user_photo_url = ""
+            else:
+                user_name = comment.session_name
+                user_photo_url = ""
+
             context['comments'].append({
                 "comment": comment.comment,
-                "phone_number": comment.user.phone_number,
                 "name": user_name,
+                "user_photo_url": user_photo_url,
                 "created_at": comment.created_at
             })
 
