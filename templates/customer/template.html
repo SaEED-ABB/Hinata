@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-        <title>{{ title }} | Off Tree</title>
+        <title>{{ title }} | Hinata </title>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <Link href="{% static 'style/plugins/bootstrap-rtl.min.css' %}" rel="stylesheet" />
@@ -16,16 +16,14 @@
 
         <link href="{% static 'style/animate.css' %}" rel="stylesheet">
         <link href="{% static 'style/style.css' %}" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="{% static 'style/manage.css' %}">
+        <link href="{% static 'style/manage.css' %}" rel="stylesheet" type="text/css">
 
         <link rel="stylesheet" type="text/css" href="{% static 'style/font.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'style/nav.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'style/footer.css' %}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 
         <style>
-            html, body{
-                font-family: Samim !important;
-            }
             ul {
                 font-size: 13px !important;
             }
@@ -38,6 +36,7 @@
 
     <body class="rtls">
         <div id="wrapper">
+            {% include "frontview/header.html" %}
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
@@ -58,20 +57,34 @@
                         </li>
                         <li id="dashboard">
                             <a href="">
-                                <i class="fa fa-th-large"></i>
-                                <span class="nav-label">داشبورد</span>
+                                <i class="fas fa-shopping-basket"></i>
+                                <span class="nav-label">سبد خرید</span>
                             </a>
                         </li>
                         <li id="store">
                             <a href="">
-                                <i class="fas fa-gem"></i>
-                                <span class="nav-label">تغییر مشخصات فروشگاه</span>
+                                <i class="fas fa-file-alt"></i>
+                                <span class="nav-label">سفارش ها</span>
                             </a>
                         </li>
                         <li id="owner">
                             <a href="">
-                                <i class="fas fa-chart-bar"></i>
-                                <span class="nav-label">تغییر مشخصات مالک</span>
+                                <i class="fas fa-heart"></i>
+                                <span class="nav-label">علاقه مندی ها</span>
+                            </a>
+        
+                        </li>
+                        <li id="owner">
+                            <a href="">
+                                <i class="fas fa-cog"></i>
+                                <span class="nav-label">تنظیمات</span>
+                            </a>
+        
+                        </li>
+                        <li id="owner">
+                            <a href="/api/customer/logout">
+                                <i class="fa fa-sign-out-alt"></i>
+                                <span class="nav-label">خروج </span>
                             </a>
         
                         </li>
@@ -80,9 +93,9 @@
                 </div>
             </nav>
         
-            <div id="page-wrapper" class="gray-bg dashbard-1">
+            <div id="page-wrapper" class="white-bg dashbard-1">
                 <div class="row border-bottom">
-                    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <!-- <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                         <div class="navbar-header">
                             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#">
                                 <i class="fa fa-bars"></i>
@@ -93,21 +106,22 @@
                         </div>
                         <ul class="nav navbar-top-links navbar-right">
                             <li>
-                                <a href="">
+                                <a href="/api/customer/logout">
                                     <i class="fa fa-sign-out-alt"></i> خروج
                                 </a>
                             </li>
                         </ul>
-                    </nav>
+                    </nav> -->
                 </div>
                 {% block content %}
                 {% endblock %}
             </div>
+            {% include "frontview/footer.html" %}
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <!-- <script type="text/javascript" src="{% static 'script/nav.js' %}"></script> -->
 
-        <!-- Mainly scripts -->
-        <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
-        <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
         <script src="{% static 'js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
         <script>
@@ -166,9 +180,6 @@
         
         <!-- ChartJS-->
         <script src="{% static 'js/plugins/chartJs/Chart.min.js' %}"></script>
-        
-        <!-- Toastr -->
-        <script src="{% static 'js/plugins/toastr/toastr.min.js' %}"></script>
         <script>
             $(document).ready(function () {
                 var this_location = window.location.pathname;

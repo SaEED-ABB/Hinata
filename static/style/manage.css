@@ -1,11 +1,8 @@
-html, body{
-  font-family: 'Samim'!important;
-}
 .nav-label{
-  margin-right: 8px;
+    margin-right: 8px;
 }
 .navbar-minimalize{
-  margin-right: 16px;
+    margin-right: 16px;
 }
 .navbar{
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -13,45 +10,56 @@ html, body{
     background: #fff;
 }
 body{
-  background-color: #fff;
+    background-color: #fff;
 }
 .nav-header{
-  background-color: #fff;
-  background: url('../images/1mback.jpg');
-  background-image: none;
-  padding: 20px 25px;
+    background-color: #fff;
+    background: url('../images/1mback.jpg');
+    background-image: none;
+    padding: 40px 25px 10px;
 }
 .profile-element h3{
-  color: #fff;
-  font-size: 20px;
-  margin-top: 16px;
+    color: #fff;
+    font-size: 20px;
+    margin-top: 16px;
 }
 .nav > li > a {
     color: #fff;
 }
 .nav > li.active{
-  background-color: rgba(0,0,0,0.3);
-  border-right: 4px solid #333;
+    background-color: rgba(0,0,0,0.3);
+    border-right: 4px solid #deff00;
 }
 .navbar-default .nav > li > a:hover, .navbar-default .nav > li > a:focus{
-  background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0,0,0,0.3);
+    border-right: 4px solid #deff00;
 }
 body.mini-navbar .nav-header {
     padding: 0;
     background-color: rgba(0,0,0,0.3);
 }
-.onePack{
-  background: url('../images/1mback.jpg');
+
+/****************************************************/
+html,body{
+    width:100%;
+    height: 100%;
+    margin:0;
+    padding:0;
+    font-family: koodak;
 }
-.threePack{
-  background: url('../images/3mback.jpg');
+.row{
+    margin:0;
 }
-.sixPack{
-  background: url('../images/6mback.jpg');
+#wrapper{
+    background-color:#76007d;
 }
-.proPack{
-  background: url('../images/proback.jpg');
+.myNav{
+    display: none;
 }
-.free{
-  background: #293846 !important;
+.smallNav{
+    display: block !important;
+    position: relative !important;
+}
+.footer{
+    position: relative !important;
 }
