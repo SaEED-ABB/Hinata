@@ -106,12 +106,28 @@ class User(AbstractBaseUser, TimeStampedModel, PermissionsMixin):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "uuid": self.uuid,
-            "profile_picture_url": self.profile_picture.url if self.profile_picture else ""
+            "profile_picture_url": self.profile_picture.url if self.profile_picture else "",
+            "baskets_url": self.get_baskets_url(),
+            "orders_url": self.get_orders_url(),
+            "favorites_url": self.get_favorites_url(),
+            "settings_url": self.get_settings_url(),
         }
         return context
 
+    def get_baskets_url(self):
+        return reverse('customer:user_baskets', kwargs={'uuid': self.uuid})
+
+    def get_orders_url(self):
+        return reverse('customer:user_orders', kwargs={'uuid': self.uuid})
+
+    def get_favorites_url(self):
+        return reverse('customer:user_favorites', kwargs={'uuid': self.uuid})
+
+    def get_settings_url(self):
+        return reverse('customer:user_settings', kwargs={'uuid': self.uuid})
+
     def get_absolute_url(self):
-        return reverse('customer:user_panel', kwargs={'slug': self.uuid})
+        return reverse('customer:user_panel', kwargs={'uuid': self.uuid})
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
