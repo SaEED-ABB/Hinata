@@ -1,15 +1,37 @@
 {% extends "customer/template.html" %}
+{% load staticfiles %}
 
-{% block head %}
-
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="{% static 'style/basket.css' %}">
 {% endblock %}
 
 
-{% block body %}
-
+{% block content %}
+	<div class="row">
+        <h2 class="pageTitle">سبد خرید</h2>
+    </div>
+    <div class="basketContainer row">
+    	<div class="row">
+    		<div class="removeCol"></div>
+    		<div class="prodCol">کالا</div>
+    		<div class="colorCol">رنگ</div>
+    		<div class="sizeCol">سایز</div>
+    		<div class="numCol">تعداد</div>
+    		<div class="priceCol">قیمت</div>
+    	</div>
+    	<div class="row">
+    		<div class="removeCol"><i class="fas fa-times"></i></div>
+    		<div class="prodCol">کالا</div>
+    		<div class="colorCol">رنگ</div>
+    		<div class="sizeCol">سایز</div>
+    		<div class="numCol">تعداد</div>
+    		<div class="priceCol">قیمت</div>
+    	</div>
+    	<div class="row"></div>
+    </div>
 {% endblock %}
 
 
-{% block js %}
-
+{% block footer %}
+    <script src="{% static 'script/basket.js' %}"></script>
 {% endblock %}

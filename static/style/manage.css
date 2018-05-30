@@ -66,3 +66,7 @@ html,body{
 .userNavDiv{
     display: none;
 }
+.pageTitle{
+    padding-top: 3%;
+    padding-right: 3%;
+}

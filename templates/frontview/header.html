@@ -18,7 +18,7 @@
                 <hr style="border-color: #231f20;margin: 10px 0;" />
                 <span class="registerButton">ثبت نام</span>
             {% else %} 
-                <a href="{{ request.user.get_absolute_url }}">{{ request.user.get_full_name }}</a>
+                <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
             {% endif %}
             
         </div>
@@ -44,7 +44,7 @@
                 <span class="slash">/</span>
                 <span class="registerButton">ثبت نام</span>
             {% else %} 
-                <a href="#">{{ request.user.get_full_name }}</a>
+                <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
             {% endif %}
         </div>  
     </div>

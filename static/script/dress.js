@@ -30,30 +30,30 @@ product_slug=window.location.href.split('/')[5];
 $('.likeProduct').attr('product_slug',product_slug);
 $('.basketProduct').attr('product_slug',product_slug);
 $.ajax({
-		type: 'GET',
-		url: '/api/store/get_next_prev_of_product/',
-		dataType: 'JSON',
-		data: {
-	        product_slug: product_slug
-	    },
-		success: function (data) {
-			if(data.next){
-				$('.nextImgHref').attr("href",data.next.link)
-				$('#nextImg').css("background-image",'url('+data.next.image+')')
-			}else{
-				$('#nextImg').css("visibility",'hidden')
-			}
-			if(data.prev){
-				$(".previousImgHref").attr("href",data.prev.link)
-				$('#previousImg').css("background-image",'url('+data.prev.image+')')
-			}else{
-				$('#previousImg').css("visibility",'hidden')
-			}
-		},
-		error: function(){
-
+	type: 'GET',
+	url: '/api/store/get_next_prev_of_product/',
+	dataType: 'JSON',
+	data: {
+        product_slug: product_slug
+    },
+	success: function (data) {
+		if(data.next){
+			$('.nextImgHref').attr("href",data.next.link)
+			$('#nextImg').css("background-image",'url('+data.next.image+')')
+		}else{
+			$('#nextImg').css("visibility",'hidden')
 		}
-	});
+		if(data.prev){
+			$(".previousImgHref").attr("href",data.prev.link)
+			$('#previousImg').css("background-image",'url('+data.prev.image+')')
+		}else{
+			$('#previousImg').css("visibility",'hidden')
+		}
+	},
+	error: function(){
+
+	}
+});
 $.ajax({
 	type: 'GET',
 	url: '/api/store/get_product_info/',

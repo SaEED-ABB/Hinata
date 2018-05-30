@@ -55,33 +55,33 @@
                                 Hinata
                             </div>
                         </li>
-                        <li id="dashboard">
+                        <li id="baskets">
                             <a href="{{ user.get_baskets_url }}">
                                 <i class="fas fa-shopping-basket"></i>
                                 <span class="nav-label">سبد خرید</span>
                             </a>
                         </li>
-                        <li id="store">
+                        <li id="orders">
                             <a href="{{ user.get_orders_url }}">
                                 <i class="fas fa-file-alt"></i>
                                 <span class="nav-label">سفارش ها</span>
                             </a>
                         </li>
-                        <li id="owner">
+                        <li id="favorites">
                             <a href="{{ user.get_favorites_url }}">
                                 <i class="fas fa-heart"></i>
                                 <span class="nav-label">علاقه مندی ها</span>
                             </a>
         
                         </li>
-                        <li id="owner">
+                        <li id="settings">
                             <a href="{{ user.get_settings_url }}">
                                 <i class="fas fa-cog"></i>
                                 <span class="nav-label">تنظیمات</span>
                             </a>
         
                         </li>
-                        <li id="owner">
+                        <li id="">
                             <a href="/api/customer/logout">
                                 <i class="fa fa-sign-out-alt"></i>
                                 <span class="nav-label">خروج </span>
@@ -160,17 +160,9 @@
         <!-- Sparkline demo data  -->
         <script src="{% static 'script/demo/sparkline-demo.js' %}"></script>
         
-        <!-- ChartJS-->
-        <script src="{% static 'script/plugins/chartJs/Chart.min.js' %}"></script>
         <script>
             $(document).ready(function () {
-                var this_location = window.location.pathname;
-                if (this_location == "/store/")
-                    this_location = "dashboard"
-                else if (this_location.split("/")[2] == "edit")
-                    this_location = this_location.split("/")[3];
-                else
-                    this_location = this_location.split("/")[2];
+                var this_location = window.location.href.split( '/')[5];
                 var id = "#" + this_location;
                 $(id).addClass("active");
             });

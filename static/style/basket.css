@@ -1,0 +1,52 @@
+.removeCol,.prodCol,.colorCol,.sizeCol,.numCol,.priceCol{
+	display: inline-block;
+}
+.removeCol{
+	width: 5%;
+}
+.prodCol,.colorCol,.sizeCol{
+	width: 21%;
+}
+.numCol,.priceCol{
+	width: 15%;
+}
+.basketContainer{
+	padding: 2% 13%;
+	text-align: center;
+}
+.basketContainer>.row{
+	border-bottom: 1px solid gray;
+}
+.fa-times{
+	color: red;
+}
+.color{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    margin: auto 3px;
+    background-color: blue;
+    border-radius: 5px;
+    margin-bottom: -5px;
+}
+.size{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border: 1px solid black;
+    padding: 2px 5px;
+    border-radius: 5px;
+    font-size: 1.2em;
+    font-family: koodak;
+    margin: auto 3px;
+    cursor: pointer;
+}
+.scale{
+	border-radius: 5px;
+    border: 1px solid;
+    padding: 5px;
+    outline: none;
+    padding-right: 10px;
+    width: 70px;
+    cursor: pointer;
+}
