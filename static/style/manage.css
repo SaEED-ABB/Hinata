@@ -63,3 +63,6 @@ html,body{
 .footer{
     position: relative !important;
 }
+.userNavDiv{
+    display: none;
+}
