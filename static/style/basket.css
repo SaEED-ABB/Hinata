@@ -24,7 +24,7 @@
     width: 30px;
     height: 30px;
     display: inline-block;
-    margin: auto 3px;
+    margin: 3px 3px;
     background-color: blue;
     border-radius: 5px;
     margin-bottom: -5px;
@@ -38,7 +38,7 @@
     border-radius: 5px;
     font-size: 1.2em;
     font-family: koodak;
-    margin: auto 3px;
+    margin: 3px 3px;
     cursor: pointer;
 }
 .scale{
@@ -49,4 +49,21 @@
     padding-right: 10px;
     width: 70px;
     cursor: pointer;
+}
+.prodImg{
+	width: 100%;
+}
+.prodCol{
+	padding: 2% 0%;
+}
+.bigButton{
+	background-color: white;
+    border: 1.4px solid #9d9a9a;
+    width: 100%;
+    font-size: 1.9em;
+    border-radius: 10px;
+    outline: none;
+}
+.withoutBorder{
+	border-bottom: none !important;
 }
