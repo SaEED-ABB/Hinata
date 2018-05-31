@@ -114,7 +114,6 @@ select{
 .moreButton img{
     cursor: pointer;
 }
-
 .spin{
     -webkit-animation:spin 1s linear infinite;
     -moz-animation:spin 1s linear infinite;

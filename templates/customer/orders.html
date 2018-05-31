@@ -1,15 +1,104 @@
 {% extends "customer/template.html" %}
+{% load staticfiles %}
 
-{% block head %}
 
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="{% static 'style/orders.css' %}">
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 {% endblock %}
 
 
-{% block body %}
-
+{% block content %}
+	<div class="row">
+        <h2 class="pageTitle">سفارش ها</h2>
+    </div>
+    <div class="ordersContainer">
+    	<table class="ordersTable">
+    		<tr class="trHead">
+    			<th>ردیف</th>
+    			<th>کد سفارش</th>
+    			<th>تاریخ ثبت</th>
+    			<th>قیمت</th>
+    			<th>آدرس</th>
+    			<th>وضعیت</th>
+    			<th></th>
+    		</tr>
+    		<tr>
+    			<td>1</td>
+    			<td>KJ093640GS</td>
+    			<td>27/06/1396 <br> 23:59</td>
+    			<td>129000</td>
+    			<td>تهران-خیابان انقلاب-خیابان وصال-کوچه شاهد-پلاک 2</td>
+    			<td>در حال ارسال</td>
+    			<td><i class="fas fa-angle-down"></i></td>
+    		</tr>
+    		<tr>
+    			<td colspan="7">
+    				<div class="secondTableContainer">
+    					<table>
+    						<tr  class="trHead">
+    							<th>کلا</th>
+    							<th>رنگ</th>
+    							<th>سایز</th>
+    							<th>تعداد</th>
+    							<th>قیمت</th>
+    						</tr>
+    						<tr>
+    							<td>
+    								<img src="/static/img/cloth1.jpg" style="max-width: 150px">
+    							</td>
+    							<td>
+    								<div class="color" color_slug="'+array[i].slug+'" style="background-color:red"></div>
+    							</td>
+    							<td>
+    								<div class="size" size_slug="'+array[i].slug+'">46</div>
+    							</td>
+    							<td>2</td>
+    							<td>129000</td>
+    						</tr>
+    					</table>
+    				</div>
+    				<div class="secondTableContainer">
+    					<table>
+    						<tr  class="trHead">
+    							<th>بررسی سفارش</th>
+    							<th>آماده ساززی</th>
+    							<th>ارسال</th>
+    							<th>تحویل کالا</th>
+    						</tr>
+    						<tr>
+    							<td>
+    							</td>
+    							<td>
+    								<div class="color" color_slug="'+array[i].slug+'" style="background-color:red"></div>
+    							</td>
+    							<td>
+    								<div class="size" size_slug="'+array[i].slug+'">46</div>
+    							</td>
+    							<td>2</td>
+    						</tr>
+    						<tr>
+    							<td>
+    							</td>
+    							<td>
+    								<div class="color" color_slug="'+array[i].slug+'" style="background-color:red"></div>
+    							</td>
+    							<td>
+    								<div class="size" size_slug="'+array[i].slug+'">46</div>
+    							</td>
+    							<td>2</td>
+    						</tr>
+    					</table>
+    				</div>
+    				<div class="secondTableContainer"></div>
+    			</td>
+    		</tr>
+    	</table>
+    </div>
 {% endblock %}
 
 
-{% block js %}
-
+{% block footer %}
+	<script src="{% static 'script/orders.js' %}"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 {% endblock %}
