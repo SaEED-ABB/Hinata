@@ -97,6 +97,7 @@ class User(AbstractBaseUser, TimeStampedModel, PermissionsMixin):
                 "product_slug": favorite_product.slug,
                 "images": images,
                 "price": favorite_product.price,
+                "is_in_user_basket": self.baskets.get_or_create(status=Basket.OPEN_CHECKING)[0].selected_products.filter(product=favorite_product).exists()
             })
         return context
 
