@@ -105,7 +105,7 @@ class SelectedProductInline(admin.StackedInline):
 
 
 class BasketAdmin(admin.ModelAdmin):
-    list_display = ('code', 'user', 'phone_number', 'address', 'status', 'payment_type', 'total_price')
+    list_display = ('code', 'user', 'phone_number', 'address', 'status', 'payment_type', 'total_price', 'paid_at')
 
     readonly_fields = ('code', )
     fieldsets = (
