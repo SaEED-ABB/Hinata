@@ -2,20 +2,32 @@
 {% load staticfiles %}
 
 
-{% block head %}
+{% block header %}
 	<link rel="stylesheet" type="text/css" href="{% static 'style/favorites.css' %}">
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 {% endblock %}
 
 
-{% block body %}
+{% block content %}
 	<div class="row">
         <h2 class="pageTitle">علاقه مندی ها</h2>
+    </div>
+     <div class="favoriteContainer row">
+    	<div class="row">
+    		<div class="row">
+    			<img src="">
+    			<img src="">
+    			<img src="">
+    		</div>
+    		<div class="row">
+    			
+    		</div>
+    	</div>
     </div>
 {% endblock %}
 
 
-{% block js %}
-	<script src="{% static 'script/favorites.js' %}"></script>
+{% block footer %}
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script src="{% static 'script/favorites.js' %}"></script>
 {% endblock %}

@@ -41,7 +41,6 @@ function getProducts(){
 					var basketText="<i class='fas fa-shopping-basket basketProduct addToBasket' style='color:#00da00;' product_slug="+data.products[i].slug+"></i>";
 				}else{
 					var basketText="<i class='fas fa-shopping-basket basketProduct' style='color:#949494;font-size:26px;' product_slug="+data.products[i].slug+"></i>";
-
 				}
 				$('.cards').append("<div class='pCard'>"+
 						"<a class='link' href='/store/product/"+data.products[i].slug+"' >"+
@@ -51,16 +50,15 @@ function getProducts(){
 						"<a class='' href='/store/product/"+data.products[i].slug+"' >"+
 							"<h4 class='text-center' style='margin-top: 16px;margin-bottom: 20px;'>"+data.products[i].name+"</h4>"+
 						"</a>"+
-							"<div class='row' style='margin-bottom: 15px;'> "+
-								"<div class='col-sm-6 cardIcons' style='margin-top: 6px;'> "+
-									basketText+
-									favoriteText+
-								"</div> "+
-								"<div class='col-sm-6 cardPrice'> "+
-									"<span class='productPrice'>"+data.products[i].price+"</span>"+
-								"</div>"+
+						"<div class='row' style='margin-bottom: 15px;'> "+
+							"<div class='col-sm-6 cardIcons' style='margin-top: 6px;'> "+
+								basketText+
+								favoriteText+
 							"</div> "+
-
+							"<div class='col-sm-6 cardPrice'> "+
+								"<span class='productPrice'>"+data.products[i].price+"</span>"+
+							"</div>"+
+						"</div> "+
 					"</div>"
 				);
 				$('.moreButton img').removeClass('spin');
