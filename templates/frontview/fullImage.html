@@ -2,13 +2,29 @@
 {% load static %}
 
 {% block head %}
-	<link rel="stylesheet" type="text/css" href="style/fullImage.css">
+	<link rel="stylesheet" type="text/css" href="/static/style/fullImage.css">
 {% endblock %}
 
 {% block body %}
 	<div class="fullImage">
-		<a href="#">
-			<img src="img/cloth1.jpg">
+		<a href="/store/product/timana/">
+			<img src="{{ image.image.url }}">
 		</a>
 	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$('.fullImage a').attr('href','/store/product/'+window.location.href.split('/')[5]+'/')
+		windowH=$(window).height()
+		docH=$(document).height()
+		$( "a" ).mousemove(function( event ) {
+		  var pageCoords = "( " + event.pageX + ", " + event.pageY + " )";
+		  var clientCoords = "( " + event.clientX + ", " + event.clientY + " )";
+		  console.log("( event.pageX, event.pageY ) : " + pageCoords ,windowH,docH);
+		  console.log("( event.clientX, event.clientY ) : " + clientCoords );
+		  $( "a" ).scrollTop((event.clientY/windowH)*docH );
+		  window.scrollTo(0,(event.clientY/windowH)*docH)
+		});
+	</script>
 {% endblock %}

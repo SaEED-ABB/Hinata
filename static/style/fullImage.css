@@ -4,17 +4,25 @@ html,body{
 	margin:0;
 	padding:0;
 	font-family: koodak;
+/*	-ms-overflow-style: none;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -ms-overflow-style: none;
+    */
 }
 .row{
 	margin:0;
 }
 .fullImage{
-	width: 100%;	
+	width: 100%;
 }
 .fullImage a{
+	cursor: url(https://static.zara.net/stdstatic/1.69.0-b.2/images/superzoom_close.cur), pointer;
 }
 img{
 	width: 100%;
 	height: auto;
-	cursor: url(../img/exit.png),auto;
+}
+::-webkit-scrollbar { 
+    display: none;  // Safari and Chrome
 }

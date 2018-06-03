@@ -82,7 +82,7 @@ $.ajax({
 			$('.likeProduct').addClass('addToFavorite');
 		}
 		for(var i=0;i<data.images.length-2;i++){
-			$('.images').prepend('<a href=""><img class="dressImages" src="'+data.images[i+2].other+'"></a>');
+			$('.images').prepend('<a href="'+data.images[i+2].detail_page_url+'"><img class="dressImages" src="'+data.images[i+2].other+'"></a>');
 			$('.swiper-wrapper').prepend('<div class="swiper-slide"><img class="dressImages" src="'+data.images[i+2].other+'"></div>');
 
 		}
@@ -231,17 +231,17 @@ $(document).ready(function() {
     });
     $('#ex1').slider({
 		formatter: function(value) {
-			
+			 
 		}
 	});
 	$('#ex2').slider({
 		formatter: function(value) {
-			
+			 
 		}
 	});
 	 $('#ex3').slider({
 		formatter: function(value) {
-			
+			 
 		}
 	});
 	new RangeSlider($("#materialRangeSlider"), {
