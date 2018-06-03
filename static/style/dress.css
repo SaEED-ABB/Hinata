@@ -297,4 +297,16 @@ h2{
     .mainContent{
         padding: 0;
     }
+    .images{
+        display: none;
+    }
+    .imagesPhone{
+        display: block !important;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
 }

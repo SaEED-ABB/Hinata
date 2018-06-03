@@ -237,4 +237,15 @@ select{
     .mainContent{
         padding: 0 !important;
     }
+    .swiper-container{
+        display: block !important;
+        width: 100%;
+        height: auto;
+    }
+    .link{
+        display: none;
+    }
+    .pCard:hover{
+        box-shadow:none ;
+    }
 }

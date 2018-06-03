@@ -83,6 +83,8 @@ $.ajax({
 		}
 		for(var i=0;i<data.images.length-2;i++){
 			$('.images').prepend('<a href=""><img class="dressImages" src="'+data.images[i+2].other+'"></a>');
+			$('.swiper-wrapper').prepend('<div class="swiper-slide"><img class="dressImages" src="'+data.images[i+2].other+'"></div>');
+
 		}
 		for(var i=0;i<data.comments.length;i++){
 			$('.commentsContainer').append('<div class="comment row">'+
@@ -221,6 +223,12 @@ $(document).on('click touchstart','.comment_btn',function(){
 });
 
 $(document).ready(function() {
+	var swiper = new Swiper('.swiper-container', {
+      pagination: {
+        el: '.swiper-pagination',
+        dynamicBullets: true,
+      },
+    });
 	new RangeSlider($("#materialRangeSlider"), {
 	    size: 1,
 	    percentage: 50

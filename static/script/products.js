@@ -13,7 +13,7 @@ toastr.options = {
   "timeOut": "5000",
   "extendedTimeOut": "1000",
   "showEasing": "swing",
-  "hideEasing": "linear",
+  "hideEasing": "linear", 
   "showMethod": "fadeIn",
   "hideMethod": "fadeOut",
   "rtl": true
@@ -47,6 +47,13 @@ function getProducts(){
 							"<img class='img-responsive front' src="+data.products[i].front_image+" />" +
 							"<img class='img-responsive back' style='display: none;' src="+data.products[i].back_image+" />"+
 						"</a>"+
+						'<div class="swiper-container" style="display:none">'+
+						    '<div class="swiper-wrapper">'+
+						    	"<div class='swiper-slide'><img src="+data.products[i].front_image+" /></div>"+
+								"<div class='swiper-slide'><img src="+data.products[i].back_image+" /></div>"+
+						    '</div>'+
+						    '<div class="swiper-pagination"></div>'+
+						'</div>'+
 						"<a class='' href='/store/product/"+data.products[i].slug+"' >"+
 							"<h4 class='text-center' style='margin-top: 16px;margin-bottom: 20px;'>"+data.products[i].name+"</h4>"+
 						"</a>"+
@@ -62,6 +69,12 @@ function getProducts(){
 					"</div>"
 				);
 				$('.moreButton img').removeClass('spin');
+				var swiper = new Swiper('.swiper-container', {
+			      	pagination: {
+				        el: '.swiper-pagination',
+				        dynamicBullets: true,
+			      	},
+			    });
 			}
 			if(!data.more){
 				$('.moreButton').css('display','none');
@@ -170,3 +183,11 @@ $(document).on('click touchstart','.likeProduct',function(){
 		toastr.warning('ابتدا وارد سایت شوید.')
 	}
 });
+$(document).ready(function(){
+	var swiper = new Swiper('.swiper-container', {
+      pagination: {
+        el: '.swiper-pagination',
+        dynamicBullets: true,
+      },
+    });
+})
