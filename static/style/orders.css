@@ -2,12 +2,14 @@
 	padding: 2% 5%;
 	text-align: center;
 }
-.ordersTable{
+.openOrdersTable,.closedOrdersTable{
 	width: 100%;
 	text-align: center;
 }
 th, td{
 	border: 1px solid #acacac;
+	padding: 1%;
+    font-size: 1.5rem;
 }
 th{
 	text-align: center;
@@ -42,4 +44,19 @@ th{
     font-family: koodak;
     margin: 3px 3px;
     cursor: pointer;
+}
+.levelsImg{
+	width: 150px;
+}
+.productImg{
+	width: 150px;
+}
+.redBack{
+	background-color: #ff5f94;
+}
+.greenBack{
+	background-color: #9afe51;
+}
+.yellowBack{
+	background-color: #fff600;
 }
