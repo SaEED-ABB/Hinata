@@ -129,6 +129,35 @@ h2{
 }
 
 
+.slider.slider-horizontal{
+    width: 83.333333% !important;
+}
+.rangeSlider .slider-selection {
+    background: green;
+}
+.rangeSlider .slider-handle {
+    background: green;
+}
+.slider-handle {
+    background-image: -webkit-linear-gradient(top,green 0,green 100%);
+    background-image: -o-linear-gradient(top,green 0,green 100%);
+    background-image: linear-gradient(to bottom,green 0,green 100%);
+}
+.slider-selection {
+    background-image: -webkit-linear-gradient(top,green 0,green 100%);
+    background-image: -o-linear-gradient(top,green 0,green 100%);
+    background-image: linear-gradient(to bottom,green 0,green 100%);
+    -webkit-box-shadow: none;
+    box-shadow:none;
+
+}
+.slider-track{
+    background-image: -webkit-linear-gradient(top,#ddddda 0,#ddddda 100%);
+    background-image: -o-linear-gradient(top,#ddddda 0,#ddddda 100%);
+    background-image: linear-gradient(to bottom,#ddddda 0,#ddddda 100%);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
 .comment_btn{
     border: 1px solid rgba(0,0,0,0.2);
     background: #FFF;

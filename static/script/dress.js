@@ -229,6 +229,21 @@ $(document).ready(function() {
         dynamicBullets: true,
       },
     });
+    $('#ex1').slider({
+		formatter: function(value) {
+			
+		}
+	});
+	$('#ex2').slider({
+		formatter: function(value) {
+			
+		}
+	});
+	 $('#ex3').slider({
+		formatter: function(value) {
+			
+		}
+	});
 	new RangeSlider($("#materialRangeSlider"), {
 	    size: 1,
 	    percentage: 50

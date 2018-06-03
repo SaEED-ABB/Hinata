@@ -246,6 +246,6 @@ select{
         display: none;
     }
     .pCard:hover{
-        box-shadow:none ;
+        box-shadow:none;
     }
 }
