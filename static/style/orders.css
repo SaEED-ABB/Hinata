@@ -60,3 +60,18 @@ th{
 .yellowBack{
 	background-color: #fff600;
 }
+.tickImg{
+	width: 40px;
+}
+.linkButtonAllow{
+	color: #4030a0;
+    cursor: pointer;
+}
+.linkButtonDis{
+	color: #a7a7a7;
+    cursor: not-allowed;
+}
+.linkButton{
+	color: #4030a0;
+    cursor: not-allowed;
+}

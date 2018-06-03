@@ -67,9 +67,9 @@
 		margin-right:auto;
 		background-color: white;
 		height: 50px;
-		box-shadow: 0 4px 5px grey;
+		box-shadow: 0 4px 5px grey; 
 	}
-	.userNavDiv,.hinataSlogan,.hinataLogo{
+	.userNavDiv,.myNav .hinataSlogan,.myNav .hinataLogo{
 		display: none
 	}
 	.menuBarImg{
