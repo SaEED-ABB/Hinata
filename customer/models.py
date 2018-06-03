@@ -5,20 +5,21 @@ from django.shortcuts import reverse
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import PermissionsMixin
 
+import os
 import uuid as uuid_lib
 
 from .managers import UserManager
 from frontview.models import TimeStampedModel
 from store.models import Product, Color, Size
-from store.helpers import validators
+from store.helpers import validators, solar_date_converter
+
+
+def generate_picture_path(instance, filename):
+    # if instance.pk:
+    return 'users/profile_pictures/user_{}/{}_{}'.format(instance.phone_number, get_random_string(6), filename)
 
 
 class User(AbstractBaseUser, TimeStampedModel, PermissionsMixin):
-    def generate_picture_path(self, filename):
-        filename = get_random_string(length=24) + "." + filename.split('.')[-1]
-        path = 'users/profile_pictures/{}'.format(filename)
-        return path
-
     AC_TYPE = (
         ('user', 'Normal User'),
         ('admin', 'Admin User'),
@@ -42,6 +43,11 @@ class User(AbstractBaseUser, TimeStampedModel, PermissionsMixin):
         ordering = ('-created_at', )
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+    def delete(self, *args, **kwargs):
+        if os.path.exists(self.profile_picture.path) and os.path.isfile(self.profile_picture.path):
+            os.remove(self.profile_picture.path)
+        return super(User, self).delete(*args, **kwargs)
 
     def get_full_name(self):
         full_name = '%s %s' % (self.first_name, self.last_name)
@@ -197,10 +203,15 @@ class Basket(TimeStampedModel):
     status = models.CharField(choices=STATUS, default='open_checking', max_length=200, blank=True, null=True)
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
     total_price = models.IntegerField(default=0)
+    paid_at = models.DateTimeField(blank=True, null=True)
 
     def get_info(self, all_colors_and_sizes_per_product=False):
 
         context = {
+            "code": self.code,
+            "address": self.address if self.address else "",
+            "paid_at": solar_date_converter.get_solar_date(self.paid_at),
+            "updated_at": solar_date_converter.get_solar_date(self.updated_at),
             "total_price": self.total_price,
             "status": self.status,
             "products": [],
