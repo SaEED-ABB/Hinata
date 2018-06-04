@@ -64,10 +64,10 @@ $.ajax({
 	success: function (data) {
 		$('.dressProp h1').html(data.name);
 		for(var i=0;i<data.colors.length;i++){
-			$('.colors').append('<div class="color" id="'+data.colors[i].id+'" style="background-color:'+data.colors[i].color_code+'"></div>');
+			$('.colors').append('<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 0 5px;"><div class="color" id="'+data.colors[i].id+'" style="background-color:'+data.colors[i].color_code+'"></div></div>');
 		}
 		for(var i=0;i<data.sizes.length;i++){
-			$('.sizes').prepend('<div class="size" id="'+data.sizes[i].id+'">'+data.sizes[i].name+'</div>');
+			$('.sizes').prepend('<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 0 5px;"><div class="size" id="'+data.sizes[i].id+'">'+data.sizes[i].name+'</div></div>');
 		}
 		$('.price').html(data.price + ' تومان');
 		for(var i=0;i<data.properties.length;i++){
@@ -260,3 +260,25 @@ $(document).ready(function() {
 	});		
 
 });
+
+$(document).on('click touchstart','.color',function(){
+	$(this).parent().siblings().css({ 'box-shadow' : 'none'})
+	if($(this).parent().css('box-shadow')!="none"){
+		$(this).parent().css('box-shadow','none')
+		$(this).parent().css('margin','0 5px')
+	}else{
+		$(this).parent().css('box-shadow','0 0 10px 5px '+ $(this).css('background-color'))
+		$(this).parent().css('margin','0 10px')
+	}
+})
+
+$(document).on('click touchstart','.size',function(){
+	$(this).parent().siblings().css({ 'box-shadow' : 'none'})
+	if($(this).parent().css('box-shadow')!="none"){
+		$(this).parent().css('box-shadow','none')
+		$(this).parent().css('margin','0 5px')
+	}else{
+		$(this).parent().css('box-shadow','0 0 10px 5px gray')
+		$(this).parent().css('margin','0 10px')
+	}
+})

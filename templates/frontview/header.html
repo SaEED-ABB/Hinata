@@ -1,13 +1,15 @@
 {% load static %}
 <nav class="myNav row" style="">
     <div class="col-sm-3 col-xs-6 menuBarDiv">
-        <img class="menuBarImg" src="{% static 'img/menuBar.png' %}">
+        <img class="menuBarImg" onclick="openNav()" src="{% static 'img/menuBar.png' %}">
     </div>
     <div class="col-sm-6 col-xs-6 logoDiv">
         <div class="hinataLogo">
-            <img src="{% static 'img/logo.png' %}">
+            <a href="/">
+                <img src="{% static 'img/logo.png' %}">
+            </a>
         </div>
-        <h1 class="hinataText">Hinata</h1>
+        <h1 class="hinataText"><a href="/">Hinata</a></h1>
         <h2 class="hinataSlogan">WE LOVE FASHION</h2>
     </div>
     <div class="col-sm-3 userNavDiv">
@@ -20,20 +22,21 @@
             {% else %} 
                 <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
             {% endif %}
-            
-        </div>
+          </div>
     </div>
 </nav>
 
 <nav class="myNav row smallNav" style="display: none;">
     <div class="col-sm-3 col-xs-6 menuBarDiv">
-        <img class="menuBarImg" src="{% static 'img/menuBar.png' %}">
+        <img class="menuBarImg" onclick="openNav()" src="{% static 'img/menuBar.png' %}">
     </div>
     <div class="col-sm-6 col-xs-6 logoDiv">
         <div class="hinataLogo">
-            <img src="{% static 'img/logo.png' %}">
+            <a href="/">
+                <img src="{% static 'img/logo.png' %}">
+            </a>
         </div>
-        <h1 class="hinataText">Hinata</h1>
+        <h1 class="hinataText"><a href="/">Hinata</a></h1>
         <h2 class="hinataSlogan">WE LOVE FASHION</h2>
     </div>
     <div class="col-sm-3 userNavDiv">
@@ -71,6 +74,14 @@
             <img style="width: 100%;" src="{% static 'img/menu.jpg' %}">
         </div>
     </div>
+</div>
+
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Clients</a>
+    <a href="#">Contact</a>
 </div>
 
 <div class="loginPopBack PopBack row">

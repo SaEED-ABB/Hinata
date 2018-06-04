@@ -60,10 +60,15 @@ h2{
     width: 30px;
     height: 30px;
     display: inline-block;
-    margin: auto 3px;
+    margin: 1px 1px;
     background-color: blue;
     border-radius: 5px;
     margin-bottom: -5px;
+    cursor: pointer;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    -o-transition: all 1s;
+    transition: all 1s;
 }
 .size{
     width: 30px;
@@ -74,8 +79,18 @@ h2{
     border-radius: 5px;
     font-size: 1.2em;
     font-family: koodak;
-    margin: auto 3px;
+    margin: 1px 1px;
     cursor: pointer;
+    -webkit-transition: all 1s;
+    -moz-transition: all 1s;
+    -o-transition: all 1s;
+    transition: all 1s;
+}
+.shadowDiv{
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
 }
 .scale{
 	border-radius: 5px;

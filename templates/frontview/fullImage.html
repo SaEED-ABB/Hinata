@@ -23,7 +23,6 @@
 		  var clientCoords = "( " + event.clientX + ", " + event.clientY + " )";
 		  console.log("( event.pageX, event.pageY ) : " + pageCoords ,windowH,docH);
 		  console.log("( event.clientX, event.clientY ) : " + clientCoords );
-		  $( "a" ).scrollTop((event.clientY/windowH)*docH );
 		  window.scrollTo(0,(event.clientY/windowH)*docH)
 		});
 	</script>
