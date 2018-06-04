@@ -199,41 +199,64 @@ a:hover,a:focus{
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
-    z-index: 99; /* Stay on top */
+    z-index: 110; /* Stay on top */
     top: 0; /* Stay at the top */
     right: 0;
-    background-color: #111; /* Black*/
+    background-color: #fefefe; /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 
 /* The navigation menu links */
 .sidenav a {
-    padding: 8px 8px 8px 32px;
+    padding: 8px 25px 8px 25px;
     text-decoration: none;
     font-size: 25px;
     color: #818181;
     display: block;
     transition: 0.3s; 
+	border-bottom: .5px solid #e2e2e2;
 }
 
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
-    color: #f1f1f1;
+    color: black;
 }
 
 /* Position and style the close button (top right corner) */
 .sidenav .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+    width: 100%;
+    text-align: left;
+	background-color: #f5f5f5;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
+}
+
+#mySidenav .phoneMenuUserImg{
+	width: 35px;
+	text-align: center;
+}
+.phoneName{
+	font-size: 1.8rem;
+    margin: auto 1rem;
+}
+.shadow{
+	display: none;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0,0,0,0.4);
+	z-index: 100;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+.phoneMenuImg{
+	width: 60px;
+	height: 60px;
 }

@@ -77,11 +77,34 @@
 </div>
 
 <div id="mySidenav" class="sidenav">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-    <a href="#">Contact</a>
+    <a class="closebtn" onclick="closeNav()">&times;</a>
+    {% if request.user.is_anonymous %}
+    <a href="#" style="text-align: center; ">
+        <span class="col-xs-6">
+            ورود
+        </span>
+        <span class="col-xs-6">
+            عضویت
+        </span>
+    </a>
+    {% else %} 
+    <a style="text-align: center;padding: 20px;" href="{{ user.get_baskets_url }}">
+        <img class="phoneMenuUserImg" src="{% static 'img/user.png' %}">
+        <span class="phoneName">{{ request.user.get_full_name }}</span>
+    </a>
+    {% endif %}
+    <a href="#">
+        <img class="img-circle phoneMenuImg" src="{% static 'img/cloth1.jpg' %}">
+        <span class="phoneName">مانتو جلوباز</span>
+    </a>
+    <a href="#">
+        <img class="img-circle phoneMenuImg" src="{% static 'img/cloth1.jpg' %}">
+        <span class="phoneName">مانتو بهاره</span>
+    </a>
+    <a href="#">
+        <img class="img-circle phoneMenuImg" src="{% static 'img/cloth1.jpg' %}">
+        <span class="phoneName">کت و شلوار</span>
+    </a>
 </div>
 
 <div class="loginPopBack PopBack row">
@@ -101,6 +124,9 @@
         <input type="text" name="password2R"><br>
         <button id="signup" type="submit">ورود</button>
     </div>
+</div>
+<div class="shadow" onclick="closeNav()">
+    
 </div>
 <script type="text/javascript">
     var logged='{{ request.user.is_authenticated }}';

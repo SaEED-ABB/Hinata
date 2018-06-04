@@ -27,10 +27,12 @@ $(document).on('click touchstart','.registerPopBack',function(e){
 	$('.registerPop').fadeOut();
 });
 $(document).on('click touchstart','.menuBarImg',function(){
-	if($('.menu').css('display')=='none'){
-		$('.menu').slideDown();
-	}else{
-		$('.menu').slideUp();
+	if(window.innerWidth>768){
+		if($('.menu').css('display')=='none'){
+			$('.menu').slideDown();
+		}else{
+			$('.menu').slideUp();
+		}
 	}
 });
 $(document).on('click touchstart','#entrance',function(){
@@ -69,10 +71,14 @@ $(document).on('click touchstart','#signup',function(){
 });
 /* Set the width of the side navigation to 250px */
 function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
+	if(window.innerWidth<=768){
+    	document.getElementById("mySidenav").style.width = "250px";
+    	$('.shadow').css('display','block')
+    }
 }
 
 /* Set the width of the side navigation to 0 */
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+    $('.shadow').css('display','none')
 }
