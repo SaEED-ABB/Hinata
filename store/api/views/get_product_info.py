@@ -44,7 +44,7 @@ def get_product_info(request):
         "sizes": [],
         "comments": [],
         "images": [],
-        "average_rate": product.get_rates_average()
+        "average_rate": product.get_rates_average(),
     }
 
     user = request.user

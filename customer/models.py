@@ -368,20 +368,29 @@ class Comment(TimeStampedModel):
 
 
 class ProductRate(TimeStampedModel):
-    rate = models.PositiveSmallIntegerField(blank=True, null=True)
+    rate_fabric = models.PositiveSmallIntegerField(blank=True, null=True)
+    rate_beauty = models.PositiveSmallIntegerField(blank=True, null=True)
+    rate_manner = models.PositiveSmallIntegerField(blank=True, null=True)
+    rate_price = models.PositiveSmallIntegerField(blank=True, null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name='rates')
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='related_rates')
     session_id = models.CharField(max_length=200, blank=True, null=True)
     session_name = models.CharField(max_length=200, blank=True, null=True)
 
-    def update_yourself(self, rate):
-        self.rate = rate
+    def update_yourself(self, rate_fabric, rate_beauty, rate_manner, rate_price):
+        self.rate_fabric = rate_fabric
+        self.rate_beauty = rate_beauty
+        self.rate_manner = rate_manner
+        self.rate_price = rate_price
         self.save()
-        return self.get_info(), 201
+        return {"success": "You successfully rated product {}".format(self.product.name)}, 201
 
     def get_info(self):
         context = {
-            'rate': self.rate,
+            'rate_fabric': self.rate_fabric,
+            'rate_beauty': self.rate_beauty,
+            'rate_manner': self.rate_manner,
+            'rate_price': self.rate_price,
             'product_name': self.product.name,
             'user_name': self.user.get_full_name() if self.user else self.session_name
         }

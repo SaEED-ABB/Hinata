@@ -169,7 +169,17 @@ class Product(TimeStampedModel):
         return reverse('store:product_detail', kwargs={'slug': self.slug})
 
     def get_rates_average(self):
-        return self.rates.aggregate(Avg('rate'))['rate__avg']
+        fabric = self.rates.aggregate(Avg('rate_fabric'))['rate_fabric__avg']
+        beauty = self.rates.aggregate(Avg('rate_beauty'))['rate_beauty__avg']
+        manner = self.rates.aggregate(Avg('rate_manner'))['rate_manner__avg']
+        price = self.rates.aggregate(Avg('rate_price'))['rate_price__avg']
+        context = {
+            "fabric": fabric if fabric else "",
+            "beauty": beauty if beauty else "",
+            "manner": manner if manner else "",
+            "price": price if price else ""
+        }
+        return context
 
     def _get_unique_slug(self):
         slug = defaultfilters.slugify(unidecode(self.name))
