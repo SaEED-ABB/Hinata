@@ -58,7 +58,7 @@ a:hover,a:focus{
 	width: 37px;
 	float: right;
 }
-.userNavDiv div{
+.userNavDiv .loggedDiv{
 	margin-top: 12px;
 	font-size: 1.7rem;
 }
@@ -228,7 +228,7 @@ ul.menuList{
 .sidenav a {
     padding: 8px 25px 8px 25px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 1.8rem;
     color: #818181;
     display: block;
     transition: 0.3s; 

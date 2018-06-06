@@ -12,17 +12,19 @@
         <h1 class="hinataText"><a href="/">Hinata</a></h1>
         <h2 class="hinataSlogan">WE LOVE FASHION</h2>
     </div>
-    <div class="col-sm-3 userNavDiv">
+    <div class="col-sm-3 userNavDiv" style="text-align: center;">
         <img src="{% static 'img/user.png' %}">
-        <div class="col-xs-5" style="text-align: right;">
-            {% if request.user.is_anonymous %}
-                <span class="loginButton">ورود</span>
-                <hr style="border-color: #231f20;margin: 10px 0;" />
-                <span class="registerButton">ثبت نام</span>
-            {% else %} 
-                <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
-            {% endif %}
-          </div>
+        {% if request.user.is_anonymous %}
+        <div class="col-xs-5" style="text-align: right;font-size: 1.4rem">
+            <span class="loginButton">ورود</span>
+            <hr style="border-color: #231f20;margin: 4px 0;" />
+            <span class="registerButton">ثبت نام</span>
+        </div>
+        {% else %} 
+        <div class="loggedDiv col-xs-5" style="text-align: right;white-space: nowrap;">
+            <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
+        </div>
+        {% endif %}
     </div>
 </nav>
 
@@ -39,23 +41,24 @@
         <h1 class="hinataText"><a href="/">Hinata</a></h1>
         <h2 class="hinataSlogan">WE LOVE FASHION</h2>
     </div>
-    <div class="col-sm-3 userNavDiv">
+    <div class="col-sm-3 userNavDiv" style="text-align: center;">
         <img src="{% static 'img/user.png' %}">
-        <div class="col-xs-5">
-            {% if request.user.is_anonymous %}
-                <span class="loginButton">ورود</span>
-                <span class="slash">/</span>
-                <span class="registerButton">ثبت نام</span>
-            {% else %} 
-                <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
-            {% endif %}
-        </div>  
+        {% if request.user.is_anonymous %}
+        <div class="col-xs-5" style="text-align: right;margin-top: 7px;white-space: nowrap;">
+            <span class="loginButton">ورود</span>
+            <span class="slash">/</span>
+            <span class="registerButton">ثبت نام</span>
+        </div> 
+        {% else %} 
+        <div class="col-xs-5" style="text-align: right;white-space: nowrap;margin-top: 7px">
+            <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
+        </div> 
+        {% endif %}
     </div>
 </nav>
 
 <div class="menu" style="display: none;text-align: center;">
     <div class="row">
-
         <div class="col-sm-6 submenu">
             <ul class="menuList" style="">
                 <li>مانتو جلوباز</li>
@@ -65,7 +68,6 @@
                 <li>مانتو جلوباز</li>
                 <li>مانتو مجلسی</li>
             </ul>
-
         </div>
         <div class="col-sm-6 submenu">
             <img src="{% static 'img/menu.jpg' %}">
@@ -76,13 +78,19 @@
 <div id="mySidenav" class="sidenav">
     <a class="closebtn" onclick="closeNav()">&times;</a>
     {% if request.user.is_anonymous %}
-    <a href="#" style="text-align: center; ">
-        <span class="col-xs-6">
-            ورود
-        </span>
-        <span class="col-xs-6">
-            عضویت
-        </span>
+    <a href="#" style="text-align: center; padding:0">
+        <div class="" style="width: 49%;display: inline-block;padding:10px 0;border-left: 1px solid #e2e2e2;">
+            <img class="phoneMenuUserImg row" src="{% static 'img/userCheck.png' %}">
+            <span class="row">
+                ورود
+            </span>
+        </div>
+        <div class="" style="width: 49%;display: inline-block;padding:10px 0">
+            <img class="phoneMenuUserImg row" src="{% static 'img/userPlus.png' %}">
+            <span class="row">
+                عضویت
+            </span>
+        </div>
     </a>
     {% else %} 
     <a style="text-align: center;padding: 20px;" href="{{ user.get_baskets_url }}">

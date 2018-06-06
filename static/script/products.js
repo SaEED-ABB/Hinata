@@ -191,3 +191,6 @@ $(document).ready(function(){
       },
     });
 })
+$(document).on('change','select',function(){
+	getProducts();
+});

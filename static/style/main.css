@@ -12,9 +12,6 @@ html,body,.backImg{
 	background-size: cover;
 	position: relative;
 }
-nav{
-	position: absolute !important;
-}
 .row{
 	margin:0;
 }
