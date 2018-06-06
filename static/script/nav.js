@@ -82,3 +82,15 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
     $('.shadow').css('display','none')
 }
+$(document).on('mouseover','.menuItem',function(){
+	var idNumber=$(this).attr('id')[8]
+	console.log(idNumber)
+	// $("#menuItemImg"+idNumber).css('display','block')
+	$("#menuItemImg"+idNumber).fadeIn('200')
+
+})
+$(document).on('mouseout','.menuItem',function(){
+	var idNumber=$(this).attr('id')[8]
+	console.log(idNumber)
+	$("#menuItemImg"+idNumber).css('display','none')
+})

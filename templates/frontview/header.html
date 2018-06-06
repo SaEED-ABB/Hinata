@@ -60,17 +60,23 @@
 <div class="menu" style="display: none;text-align: center;">
     <div class="row">
         <div class="col-sm-6 submenu">
-            <ul class="menuList" style="">
-                <li>مانتو جلوباز</li>
-                <li>مانتو مجلسی</li>
-                <li>مانتو بهاره</li>
-                <li>مانتو گرم و نرم</li>
-                <li>مانتو جلوباز</li>
-                <li>مانتو مجلسی</li>
+            <ul class="menuList"  style="">
+                <li id="menuItem1" class="menuItem">مانتو جلوباز</li>
+                <li id="menuItem2" class="menuItem">مانتو مجلسی</li>
+                <li id="menuItem3" class="menuItem">مانتو بهاره</li>
+                <li id="menuItem4" class="menuItem">مانتو گرم و نرم</li>
+                <li id="menuItem5" class="menuItem">مانتو جلوباز</li>
+                <li id="menuItem6" class="menuItem">مانتو مجلسی</li>
             </ul>
         </div>
         <div class="col-sm-6 submenu">
-            <img src="{% static 'img/menu.jpg' %}">
+            <img class="menuMainImg" src="{% static 'img/logo.png' %}">
+            <img class="menuImg" id="menuItemImg1" src="{% static 'img/cloth1.jpg' %}">
+            <img class="menuImg" id="menuItemImg2" src="{% static 'img/menu.jpg' %}">
+            <img class="menuImg" id="menuItemImg3" src="{% static 'img/menu.jpg' %}">
+            <img class="menuImg" id="menuItemImg4" src="{% static 'img/menu.jpg' %}">
+            <img class="menuImg" id="menuItemImg5" src="{% static 'img/menu.jpg' %}">
+            <img class="menuImg" id="menuItemImg6 " src="{% static 'img/menu.jpg' %}">
         </div>
     </div>
 </div>
