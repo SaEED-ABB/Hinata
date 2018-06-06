@@ -76,6 +76,7 @@ $(document).on('click','.fa-times',function(){
 
 $(document).on('click touchstart','.color',function(){
 	$(this).parent().siblings().css({ 'box-shadow' : 'none'})
+	$(this).parent().siblings().css('margin','0 5px')
 	if($(this).parent().css('box-shadow')!="none"){
 		$(this).parent().css('box-shadow','none')
 		$(this).parent().css('margin','0 5px')
@@ -87,6 +88,7 @@ $(document).on('click touchstart','.color',function(){
 
 $(document).on('click touchstart','.size',function(){
 	$(this).parent().siblings().css({ 'box-shadow' : 'none'})
+	$(this).parent().siblings().css('margin','0 5px')
 	if($(this).parent().css('box-shadow')!="none"){
 		$(this).parent().css('box-shadow','none')
 		$(this).parent().css('margin','0 5px')
