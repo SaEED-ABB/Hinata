@@ -7,7 +7,7 @@ def products(request):
     context = {
         'title': 'محصولات',
         'categories': Category.objects.all(),
-        'filters': ProductFilter.get_all_info()
+        'filters': ProductFilter.objects.all()
     }
     return render(request, 'store/products.html', context)
 
