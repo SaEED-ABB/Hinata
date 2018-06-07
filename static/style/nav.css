@@ -1,14 +1,19 @@
+.navContainer{
+	position: relative;
+	width: 100%;
+	height: 20%;
+}
 .myNav{
 	position: relative;
 	z-index: 98;
 	width: 100%;
 	background-color: rgba(0,0,0,0);
-	height: 20%;
+	height: 100%;
 	box-shadow: 0 1px 2px #8e8e8e;
-	-webkit-transition: all 1s;
-    -moz-transition: all 1s;
- 	-o-transition: all 1s;
-    transition: all 1s;
+	/*-webkit-transition: all ease-out 0.5s;
+    -moz-transition: all  ease-out 0.5s;
+ 	-o-transition: all  ease-out 0.5s;
+    transition: all  ease-out 0.5s;*/
 }
 a:hover,a:focus{
 	text-decoration: none;
@@ -97,53 +102,53 @@ a:hover,a:focus{
 	margin-right:auto;
 	background-color: white;
 	height: 50px;
-	    box-shadow: 0 1px 2px #8e8e8e;
-	-webkit-transition: all 1s;
-    -moz-transition: all 1s;
-    -o-transition: all 1s;
-    transition: all 1s;
+	box-shadow: 0 1px 2px #8e8e8e;
+/*	-webkit-transition: all ease-out 0.5s;
+    -moz-transition: all  ease-out 0.5s;
+ 	-o-transition: all  ease-out 0.5s;
+    transition: all  ease-out 0.5s;*/
 }
 .smallNav .hinataSlogan , .smallNav .hinataLogo{
 	display: none;
-	-webkit-transition: all 1s;
+	/*-webkit-transition: all 1s;
     -moz-transition: all 1s;
     -o-transition: all 1s;
-    transition: all 1s;
+    transition: all 1s;*/
 }
 .smallNav .menuBarImg{
     top: 30%;
     right: 20px;
     height: auto;
     width: 30px;
-    -webkit-transition: all 1s;
+    /*-webkit-transition: all 1s;
     -moz-transition: all 1s;
     -o-transition: all 1s;
-    transition: all 1s;
+    transition: all 1s;*/
 }
 .smallNav .logoDiv{
 	padding: 1px;
-	-webkit-transition: all 1s;
+	/*-webkit-transition: all 1s;
     -moz-transition: all 1s;
     -o-transition: all 1s;
-    transition: all 1s;
+    transition: all 1s;*/
 }
 .smallNav .hinataText{
 	font-size: 30pt;
 	padding-left: 20px;
-	-webkit-transition: all 1s;
+	/*-webkit-transition: all 1s;
     -moz-transition: all 1s;
     -o-transition: all 1s;
-    transition: all 1s;
+    transition: all 1s;*/
 }
 .smallNav .userNavDiv{
 	padding-top:7px;
 }
 .smallNav .userNavDiv img{
 	width: 30px;
-	-webkit-transition: all 1s;
+	/*-webkit-transition: all 1s;
     -moz-transition: all 1s;
     -o-transition: all 1s;
-    transition: all 1s;
+    transition: all 1s;*/
 }	
 .menu{
 	width:100%;
@@ -152,6 +157,7 @@ a:hover,a:focus{
 	position: absolute;
 	padding: 2% 7%;
 	z-index: 2;
+	/*top: 50px;*/
 }
 .menuList{
 	list-style-type: none;

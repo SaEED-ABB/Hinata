@@ -1,9 +1,26 @@
+// $(document).ready(function(){
+// 	$(window).scroll(function(){
+// 		if(window.top.pageYOffset>=94){
+// 			$('.smallNav').css('display','block');
+// 		}else{
+// 			$('.smallNav').css('display','none');
+// 		}
+// 	});
+// });
 $(document).ready(function(){
 	$(window).scroll(function(){
-		if(window.top.pageYOffset>=94){
-			$('.smallNav').css('display','block');
+		if(window.top.pageYOffset>0){
+			// $('.myNav').css('height','20%');
+			$('.myNav').addClass('smallNav');
+			$('.menu').css('position','fixed');
+			$('.menu').css({'top':'50px'});
+
 		}else{
-			$('.smallNav').css('display','none');
+			// $('.myNav').css('height','100%');
+			$('.myNav').removeClass('smallNav');
+			$('.menu').css('position','absolute');
+			$('.menu').css({'top':''});
+
 		}
 	});
 });
