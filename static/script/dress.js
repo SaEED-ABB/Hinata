@@ -64,10 +64,10 @@ $.ajax({
 	success: function (data) {
 		$('.dressProp h1').html(data.name);
 		for(var i=0;i<data.colors.length;i++){
-			$('.colors').append('<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 0 5px;"><div class="color" id="'+data.colors[i].id+'" style="background-color:'+data.colors[i].color_code+'"></div></div>');
+			$('.colors').append('<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 0 5px;"><div class="color" color_slug="'+data.colors[i].slug+'" style="background-color:'+data.colors[i].color_code+'"></div></div>');
 		}
 		for(var i=0;i<data.sizes.length;i++){
-			$('.sizes').prepend('<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 0 5px;"><div class="size" id="'+data.sizes[i].id+'">'+data.sizes[i].name+'</div></div>');
+			$('.sizes').prepend('<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 0 5px;"><div class="size" size_slug="'+data.sizes[i].slug+'">'+data.sizes[i].name+'</div></div>');
 		}
 		$('.price').html(data.price + ' تومان');
 		for(var i=0;i<data.properties.length;i++){
@@ -116,7 +116,9 @@ $(document).on('click touchstart','.basketProduct',function(){
 				url: '/api/store/add_to_basket/',
 				dataType: 'JSON',
 				data: {
-			        product_slug: $(this).attr('product_slug')
+			        product_slug: $(this).attr('product_slug'),
+			        color_slug:$('[desired_color=true]').attr('color_slug'),
+			        size_slug:$('[desired_size=true]').attr('size_slug')
 			    },
 				success: function (data) {
 					thisElement.addClass('addToBasket');
@@ -267,9 +269,11 @@ $(document).on('click touchstart','.color',function(){
 	if($(this).parent().css('box-shadow')!="none"){
 		$(this).parent().css('box-shadow','none')
 		$(this).parent().css('margin','0 5px')
+		$(this).attr('desired_color','false')
 	}else{
 		$(this).parent().css('box-shadow','0 0 10px 5px '+ $(this).css('background-color'))
 		$(this).parent().css('margin','0 10px')
+		$(this).attr('desired_color','true')
 	}
 })
 
@@ -279,8 +283,10 @@ $(document).on('click touchstart','.size',function(){
 	if($(this).parent().css('box-shadow')!="none"){
 		$(this).parent().css('box-shadow','none')
 		$(this).parent().css('margin','0 5px')
+		$(this).attr('desired_size','false')
 	}else{
 		$(this).parent().css('box-shadow','0 0 10px 5px gray')
 		$(this).parent().css('margin','0 10px')
+		$(this).attr('desired_size','true')
 	}
 })

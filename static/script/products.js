@@ -22,23 +22,38 @@ toastr.options = {
 getProducts();
 function getProducts(){
 	$('.moreButton img').addClass('spin');
+	var data={};
+	data.page=pageCount;
+	data.category="s"
+	for (var i = 0; $('.selectBoxes').find('select').length >i; i++) {
+		if(i==0){
+			data.filter_slug_sort_by=$('.selectBoxes').find('select').eq(i).attr('filter_slug')
+			data.filter_option_slug_sort_by=$('.selectBoxes').find('select').eq(i).val()
+		}
+		if(i==1){
+			data.filter_slug_1=$('.selectBoxes').find('select').eq(i).attr('filter_slug')
+			data.filter_option_slug_1=$('.selectBoxes').find('select').eq(i).val()
+		}
+		if(i==2){
+			data.filter_slug_2=$('.selectBoxes').find('select').eq(i).attr('filter_slug')
+			data.filter_option_slug_2=$('.selectBoxes').find('select').eq(i).val()
+		}
+		
+	}
 	$.ajax({
 		type: 'GET',
 		url: '/api/store/get_products',
 		dataType: 'JSON',
-		data: {
-	        category: 's',
-	        page: pageCount
-	    },
+		data:data,
 		success: function (data) {
 			for(var i=0; i<data.products.length;i++){
-				if(data.products[i].is_favorite){
-					var favoriteText="<i class='fas fa-heart likeProduct addToFavorite' style='color:red;' product_slug="+data.products[i].slug+" ></i>";
+				if(data.products[i].is_in_user_favorites){
+					var favoriteText="<i class='fas fa-heart likeProduct addToFavorite' style='color:red;font-size:26px;' product_slug="+data.products[i].slug+" ></i>";
 				}else{
 					var favoriteText="<i class='fas fa-heart likeProduct' style='color:#949494;font-size:26px;' product_slug="+data.products[i].slug+" ></i>";
 				}
-				if(data.products[i].is_in_basket){
-					var basketText="<i class='fas fa-shopping-basket basketProduct addToBasket' style='color:#00da00;' product_slug="+data.products[i].slug+"></i>";
+				if(data.products[i].is_in_user_active_basket){
+					var basketText="<i class='fas fa-shopping-basket basketProduct addToBasket' style='color:#00da00;font-size:26px;' product_slug="+data.products[i].slug+"></i>";
 				}else{
 					var basketText="<i class='fas fa-shopping-basket basketProduct' style='color:#949494;font-size:26px;' product_slug="+data.products[i].slug+"></i>";
 				}
@@ -192,5 +207,6 @@ $(document).ready(function(){
     });
 })
 $(document).on('change','select',function(){
+	$('.cards').html('');
 	getProducts();
 });

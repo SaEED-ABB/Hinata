@@ -20,8 +20,8 @@
 
 			{% for filter in filters %}
 		        <div class="col-sm-3 col-xs-12">
-					<select>
-						<option value="{{ filter.slug }}" hidden>{{ filter.name }}</option>
+					<select filter_slug="{{ filter.slug }}">
+						<option value="0" hidden>{{ filter.name }}</option>
 		            {% for option in filter.options.all %}
 		                <option value="{{ option.slug }}">{{ option.name }}</option>
 		            {% endfor %}
