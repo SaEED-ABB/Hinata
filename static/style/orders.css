@@ -75,3 +75,28 @@ th{
 	color: #4030a0;
     cursor: not-allowed;
 }
+.modal-header{
+    text-align: center;
+    padding: 10px 15px;
+}
+.modalBigButton{
+    background-color: white;
+    border: 1.4px solid #9d9a9a;
+    width: 220px;
+    font-size: 1.9rem;
+    border-radius: 10px;
+    outline: none;
+    margin: 12px;
+}
+    
+.modal-body{
+    text-align: center;
+}
+.modal-body textarea{
+    width: 100%;
+    height: 130px;
+    margin: 12px 0 40px;
+    border-radius: 5px;
+    padding: 25px;
+    resize: none;
+}

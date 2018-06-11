@@ -327,3 +327,28 @@ ul.menuList{
 	z-index: 3;
 	display: none;
 }
+.modal-header{
+	text-align: center;
+	padding: 10px 15px;
+}
+.modalBigButton{
+	background-color: white;
+    border: 1.4px solid #9d9a9a;
+    width: 220px;
+    font-size: 1.9rem;
+    border-radius: 10px;
+    outline: none;
+    margin: 12px;
+}
+    
+.modal-body{
+	text-align: center;
+}
+.modal-body input{
+	width: 220px;
+	border:none;
+	border-bottom: 1px solid #9d9a9a;
+	font-size: 1.4rem;
+	margin: 12px;
+	outline: none;
+}

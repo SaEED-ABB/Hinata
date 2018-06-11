@@ -17,9 +17,9 @@
         <img src="{% static 'img/user.png' %}">
         {% if request.user.is_anonymous %}
         <div class="col-xs-5" style="text-align: right;font-size: 1.4rem">
-            <span class="loginButton">ورود</span>
+            <span class="loginButton" data-toggle="modal" data-target="#loginModal">ورود</span>
             <hr style="border-color: #231f20;margin: 4px 0;" />
-            <span class="registerButton">ثبت نام</span>
+            <span class="registerButton" data-toggle="modal" data-target="#registerModal">ثبت نام</span>
         </div>
         {% else %} 
         <div class="loggedDiv col-xs-5" style="text-align: right;white-space: nowrap;">
@@ -70,9 +70,9 @@
         <img src="{% static 'img/user.png' %}">
         {% if request.user.is_anonymous %}
         <div class="col-xs-5" style="text-align: right;margin-top: 7px;white-space: nowrap;">
-            <span class="loginButton">ورود</span>
+            <span class="loginButton" data-toggle="modal" data-target="#loginModal">ورود</span>
             <span class="slash">/</span>
-            <span class="registerButton">ثبت نام</span>
+            <span class="registerButton" data-toggle="modal" data-target="#registerModal">ثبت نام</span>
         </div> 
         {% else %} 
         <div class="col-xs-5" style="text-align: right;white-space: nowrap;margin-top: 7px">
@@ -88,13 +88,13 @@
     <a class="closebtn" onclick="closeNav()">&times;</a>
     {% if request.user.is_anonymous %}
     <a href="#" style="text-align: center; padding:0">
-        <div class="" style="width: 49%;display: inline-block;padding:10px 0;border-left: 1px solid #e2e2e2;">
+        <div class="" style="width: 49%;display: inline-block;padding:10px 0;border-left: 1px solid #e2e2e2;" data-toggle="modal" data-target="#loginModal">
             <img class="phoneMenuUserImg row" src="{% static 'img/userCheck.png' %}">
             <span class="row">
                 ورود
             </span>
         </div>
-        <div class="" style="width: 49%;display: inline-block;padding:10px 0">
+        <div class="" style="width: 49%;display: inline-block;padding:10px 0" data-toggle="modal" data-target="#registerModal">
             <img class="phoneMenuUserImg row" src="{% static 'img/userPlus.png' %}">
             <span class="row">
                 عضویت
@@ -121,7 +121,7 @@
     </a>
 </div>
 
-<div class="loginPopBack PopBack row">
+<!-- <div class="loginPopBack PopBack row">
     <div class="loginPop Pop col-lg-4 col-lg-offset-4 col-md-3 col-md-offset-4 col-sm-12 col-xs-12">
         <input type="text" name="phone_numberL"><br>
         <input type="text" name="passwordL"><br>
@@ -138,10 +138,56 @@
         <input type="text" name="password2R"><br>
         <button id="signup" type="submit">ورود</button>
     </div>
-</div>
-<div class="shadow" onclick="closeNav()">
+</div> -->
+<div class="shadow" onclick="closeNav()"></div>
     
+<!-- Modal -->
+<div id="loginModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ورود</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" name="phone_numberL" placeholder="شماره موبایل"><br>
+                <input type="password" name="passwordL"  style="margin-bottom: 27px;" placeholder="رمز عبور"><br>
+                <button type="submit" id="entrance" class="modalBigButton">ورود</button>
+            </div>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div> -->
+        </div>
+    </div>
 </div>
+
+
+<!-- Modal -->
+<div id="registerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">عضویت</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" name="first_nameR" placeholder="نام"><br>
+                <input type="text" name="last_nameR" placeholder="نام خانوادگی"><br>
+                <input type="text" name="phone_numberR" placeholder="شماره موبایل"><br>
+                <input type="password" name="password1R" placeholder="رمز عبور"><br>
+                <input type="password" name="password2R" style="margin-bottom: 27px;" placeholder="ایید رمز عبور"><br>
+                <button id="signup" type="submit" class="modalBigButton">ورود</button>
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
     var logged='{{ request.user.is_authenticated }}';
 </script>

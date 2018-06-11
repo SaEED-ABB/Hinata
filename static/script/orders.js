@@ -124,11 +124,21 @@ function makeProductTables(array){
 		}
 	return text;
 }
-$(document).on('click','.fa-angle-down',function(){
-	var thisEle=$(this)
-	thisEle.attr('data-fa-transform','rotate-90')
-	console.log(thisEle.parent().parent().attr('class'))
-	thisEle.parent().parent().siblings('.'+thisEle.parent().parent().attr('class')).slideUp(2000)
+var rotate_factor=0
+jQuery.fn.rotate = function(degrees) {
+    $(this).css({'transform' : 'rotate('+ degrees +'deg)','transition':'all 0.3s'});
+    return $(this);
+};
+$(document).on('click','.fa-angle-down',function(e){
+    var thisEle=$(this)
+    if(rotate_factor%2!=0){
+        thisEle.parent().parent().siblings('.'+thisEle.parent().parent().attr('class')).slideUp(100)        
+    }else{
+        thisEle.parent().parent().siblings('.'+thisEle.parent().parent().attr('class')).slideDown(100)
+    }
+    rotate_factor += 1;
+    var rotate_angle = (180 * rotate_factor) % 360;
+    thisEle.rotate(rotate_angle);
 })
 function statusTdMaker(status){
 	var statusType=status.split('_')[0]
@@ -140,7 +150,9 @@ function statusTdMaker(status){
 			return '<td class="yellowBack">در حال آماده سازی</td>'
 		}else if(statusLevel=='sending'){
 			return '<td class="yellowBack">در حال ارسال</td>'
-		}
+		}else{
+            return '<td class="greenBack">تحویل سفارش</td>'
+        }
 	}else{
 		if(statusLevel=='canceled'){
 			return '<td class="redBack">لغو سفارش</td>'
@@ -166,7 +178,7 @@ function makeStatusRows(status){
     				'<img class="levelsImg" src="/static/img/img4.jpg"><br><img class="tickImg" src="/static/img/more.png">'+
     			'</td></tr>'+
     			'<tr><td>'+
-    				'<span  class="linkButtonAllow">لغو سفارش</span>'+
+    				'<span  class="linkButtonAllow" data-toggle="modal" data-target="#cancelOrderModal">لغو سفارش</span>'+
     			'</td><td>'+
     				'<span  class="linkButton">لغو سفارش</span>'+
     			'</td><td>'+
@@ -187,7 +199,7 @@ function makeStatusRows(status){
     			'<tr><td>'+
     				'<span class="linkButtonDis">لغو سفارش</span>'+
     			'</td><td>'+
-    				'<span  class="linkButtonAllow">لغو سفارش</span>'+
+    				'<span  class="linkButtonAllow" data-toggle="modal" data-target="#cancelOrderModal">لغو سفارش</span>'+
     			'</td><td>'+
     				
     			'</td><td>'+
@@ -212,6 +224,25 @@ function makeStatusRows(status){
     			'</td><td>'+
     				'<span  class="linkButton">بازگشت کالا</span>'+
     			'</td></tr>'
+    }else if(statusLevel=='delivering'){
+        return  '<tr><td>'+
+                    '<img class="levelsImg" src="/static/img/img1.jpg"><br><img class="tickImg" src="/static/img/tick.png">'+
+                '</td><td>'+
+                    '<img class="levelsImg" src="/static/img/img2.jpg"><br><img class="tickImg" src="/static/img/tick.png">'+
+                '</td><td>'+
+                    '<img class="levelsImg" src="/static/img/img3.jpg"><br><img class="tickImg" src="/static/img/tick.png">'+
+                '</td><td>'+
+                    '<img class="levelsImg" src="/static/img/img4.jpg"><br><img class="tickImg" src="/static/img/tick.png">'+
+                '</td></tr>'+
+                '<tr><td>'+
+                    '<span  class="linkButtonDis">لغو سفارش</span>'+
+                '</td><td>'+
+                    '<span  class="linkButtonDis">لغو سفارش</span>'+
+                '</td><td>'+
+                    
+                '</td><td>'+
+                    '<span  class="linkButtonAllow" data-toggle="modal" data-target="#backOrderModal">بازگشت کالا</span>'+
+                '</td></tr>'
 	}else if(statusLevel=='canceled'){
 		return 	'<tr><td>'+
     				'<img class="levelsImg" src="/static/img/img1.jpg"><br><img class="tickImg" src="/static/img/tick.png">'+
