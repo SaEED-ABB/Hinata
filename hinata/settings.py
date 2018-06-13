@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'colorfield',
     'customer',
     'store',
+    'zarinpal',
 ]
 
 AUTH_USER_MODEL = 'customer.User'

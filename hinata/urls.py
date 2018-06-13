@@ -33,6 +33,7 @@ urlpatterns = [
     path('', include('frontview.urls')),
     path('store/', include('store.urls')),
     path('user/', include('customer.urls')),
+    path('zarinpal/', include('zarinpal.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -29,10 +29,12 @@ class User(AbstractBaseUser, TimeStampedModel, PermissionsMixin):
     phone_number = models.CharField(max_length=200, unique=True)
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     account_type = models.CharField(max_length=200, blank=True, null=True, choices=AC_TYPE, default='user')
     favorites = models.ManyToManyField('store.Product', related_name='lovers', blank=True)
     profile_picture = models.ImageField(upload_to=generate_picture_path, validators=[validators.file_size], blank=True, null=True)
+    money = models.IntegerField(default=0)
+    email = models.EmailField(blank=True, null=True)
 
     objects = UserManager()
 
@@ -158,13 +160,19 @@ class User(AbstractBaseUser, TimeStampedModel, PermissionsMixin):
 
 class UserAddress(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
+    state = models.CharField(max_length=200)
+    city = models.CharField(max_length=200)
+    postal_code = models.CharField(max_length=200)
     address = models.TextField()
-    phone_number = models.CharField(max_length=200, blank=True, null=True)
+    phone_number = models.CharField(max_length=200)
 
     def get_info(self):
         context = {
             "id": self.id,
             "user": self.user.get_full_name(),
+            "state": self.state,
+            "city": self.city,
+            "postal_code": self.postal_code,
             "address": self.address,
             "phone_number": self.phone_number
         }
@@ -179,16 +187,23 @@ class UserAddress(TimeStampedModel):
 
 class Basket(TimeStampedModel):
     OPEN_CHECKING = 'open_checking'
+    OPEN_PREPARING = 'open_preparing'
+    OPEN_SENDING = 'open_sending'
+    OPEN_DELIVERING = 'open_delivering'
+
+    CLOSED_CANCELED = 'closed_canceled'
+    CLOSED_RETURNED = 'closed_returned'
+    CLOSED_DELIVERED = 'closed_delivered'
 
     STATUS = (
-        ('closed_canceled', 'Closed -> Canceled'),
-        ('closed_returned', 'Closed -> Returned'),
-        ('closed_delivered', 'Closed -> Delivered'),
+        (CLOSED_CANCELED, 'Closed -> Canceled'),
+        (CLOSED_RETURNED, 'Closed -> Returned'),
+        (CLOSED_DELIVERED, 'Closed -> Delivered'),
 
         (OPEN_CHECKING, 'Open -> Checking'),
-        ('open_preparing', 'Open -> Preparing'),
-        ('open_sending', 'Open -> Sending'),
-        ('open_delivering', 'Open -> Delivering')
+        (OPEN_PREPARING, 'Open -> Preparing'),
+        (OPEN_SENDING, 'Open -> Sending'),
+        (OPEN_DELIVERING, 'Open -> Delivering')
     )
 
     PAYMENT_TYPE = (
@@ -204,6 +219,39 @@ class Basket(TimeStampedModel):
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
     total_price = models.IntegerField(default=0)
     paid_at = models.DateTimeField(blank=True, null=True)
+
+    @classmethod
+    def get_or_create_active_basket(cls):
+        return cls.objects.get_or_create(status=cls.OPEN_CHECKING)[0]
+
+    @classmethod
+    def cancel_this_order(cls, basket):
+        if basket.status in [cls.OPEN_CHECKING, cls.OPEN_PREPARING]:
+            basket.status = cls.CLOSED_CANCELED
+            basket.save()
+            context = {
+                "success": "order status successfully changed to 'canceled'"
+            }
+            status = 201
+        else:
+            context = {
+                "error": "too late to cancel this order or the order already have been closed somehow"
+            }
+            status = 400
+
+        return context, status
+
+    @classmethod
+    def return_this_order(cls, basket):
+        basket.status = cls.CLOSED_RETURNED
+        basket.user.money += basket.total_price
+        basket.user.save()
+        basket.save()
+        context = {
+            "success": "{}'s basket successfully canceled and {} T. added to his account money."
+        }
+        status = 201
+        return context, status
 
     def get_info(self, all_colors_and_sizes_per_product=False):
 
