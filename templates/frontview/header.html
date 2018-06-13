@@ -1,4 +1,5 @@
 {% load static %}
+<div class="navContainer">
 <nav class="myNav row" style="">
     <div class="col-sm-3 col-xs-6 menuBarDiv">
         <img class="menuBarImg" onclick="openNav()" src="{% static 'img/menuBar.png' %}">
@@ -12,19 +13,45 @@
         <h1 class="hinataText"><a href="/">Hinata</a></h1>
         <h2 class="hinataSlogan">WE LOVE FASHION</h2>
     </div>
-    <div class="col-sm-3 userNavDiv">
+    <div class="col-sm-3 userNavDiv" style="text-align: center;">
         <img src="{% static 'img/user.png' %}">
-        <div class="col-xs-5" style="text-align: right;">
-            {% if request.user.is_anonymous %}
-                <span class="loginButton">ورود</span>
-                <hr style="border-color: #231f20;margin: 10px 0;" />
-                <span class="registerButton">ثبت نام</span>
-            {% else %} 
-                <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
-            {% endif %}
-          </div>
+        {% if request.user.is_anonymous %}
+        <div class="col-xs-5" style="text-align: right;font-size: 1.4rem">
+            <span class="loginButton" data-toggle="modal" data-target="#loginModal">ورود</span>
+            <hr style="border-color: #231f20;margin: 4px 0;" />
+            <span class="registerButton" data-toggle="modal" data-target="#registerModal">ثبت نام</span>
+        </div>
+        {% else %} 
+        <div class="loggedDiv col-xs-5" style="text-align: right;white-space: nowrap;">
+            <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
+        </div>
+        {% endif %}
     </div>
 </nav>
+ <div class="menu" style="display: none;text-align: center;">
+    <div class="row">
+        <div class="col-sm-6 submenu">
+            <ul class="menuList"  style="">
+                <li id="menuItem1" class="menuItem">مانتو جلوباز</li>
+                <li id="menuItem2" class="menuItem">مانتو مجلسی</li>
+                <li id="menuItem3" class="menuItem">مانتو بهاره</li>
+                <li id="menuItem4" class="menuItem">مانتو گرم و نرم</li>
+                <li id="menuItem5" class="menuItem">مانتو جلوباز</li>
+                <li id="menuItem6" class="menuItem">مانتو مجلسی</li>
+            </ul>
+        </div>
+        <div class="col-sm-6 submenu">
+            <img class="menuMainImg" src="{% static 'img/logo.png' %}">
+            <img class="menuImg" id="menuItemImg1" src="{% static 'img/cloth1.jpg' %}">
+            <img class="menuImg" id="menuItemImg2" src="{% static 'img/menu.jpg' %}">
+            <img class="menuImg" id="menuItemImg3" src="{% static 'img/menu.jpg' %}">
+            <img class="menuImg" id="menuItemImg4" src="{% static 'img/menu.jpg' %}">
+            <img class="menuImg" id="menuItemImg5" src="{% static 'img/menu.jpg' %}">
+            <img class="menuImg" id="menuItemImg6 " src="{% static 'img/menu.jpg' %}">
+        </div>
+    </div>
+</div>
+</div>
 
 <nav class="myNav row smallNav" style="display: none;">
     <div class="col-sm-3 col-xs-6 menuBarDiv">
@@ -39,50 +66,40 @@
         <h1 class="hinataText"><a href="/">Hinata</a></h1>
         <h2 class="hinataSlogan">WE LOVE FASHION</h2>
     </div>
-    <div class="col-sm-3 userNavDiv">
+    <div class="col-sm-3 userNavDiv" style="text-align: center;">
         <img src="{% static 'img/user.png' %}">
-        <div class="col-xs-5">
-            {% if request.user.is_anonymous %}
-                <span class="loginButton">ورود</span>
-                <span class="slash">/</span>
-                <span class="registerButton">ثبت نام</span>
-            {% else %} 
-                <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
-            {% endif %}
-        </div>  
+        {% if request.user.is_anonymous %}
+        <div class="col-xs-5" style="text-align: right;margin-top: 7px;white-space: nowrap;">
+            <span class="loginButton" data-toggle="modal" data-target="#loginModal">ورود</span>
+            <span class="slash">/</span>
+            <span class="registerButton" data-toggle="modal" data-target="#registerModal">ثبت نام</span>
+        </div> 
+        {% else %} 
+        <div class="col-xs-5" style="text-align: right;white-space: nowrap;margin-top: 7px">
+            <a href="{{ user.get_baskets_url }}">{{ request.user.get_full_name }}</a>
+        </div> 
+        {% endif %}
     </div>
 </nav>
 
-<div class="menu" style="display: none;text-align: center;">
-    <div class="row">
 
-        <div class="col-sm-6 submenu">
-            <ul class="menuList" style="">
-                <li>مانتو جلوباز</li>
-                <li>مانتو مجلسی</li>
-                <li>مانتو بهاره</li>
-                <li>مانتو گرم و نرم</li>
-                <li>مانتو جلوباز</li>
-                <li>مانتو مجلسی</li>
-            </ul>
-
-        </div>
-        <div class="col-sm-6 submenu">
-            <img src="{% static 'img/menu.jpg' %}">
-        </div>
-    </div>
-</div>
 
 <div id="mySidenav" class="sidenav">
     <a class="closebtn" onclick="closeNav()">&times;</a>
     {% if request.user.is_anonymous %}
-    <a href="#" style="text-align: center; ">
-        <span class="col-xs-6">
-            ورود
-        </span>
-        <span class="col-xs-6">
-            عضویت
-        </span>
+    <a href="#" style="text-align: center; padding:0">
+        <div class="" style="width: 49%;display: inline-block;padding:10px 0;border-left: 1px solid #e2e2e2;" data-toggle="modal" data-target="#loginModal">
+            <img class="phoneMenuUserImg row" src="{% static 'img/userCheck.png' %}">
+            <span class="row">
+                ورود
+            </span>
+        </div>
+        <div class="" style="width: 49%;display: inline-block;padding:10px 0" data-toggle="modal" data-target="#registerModal">
+            <img class="phoneMenuUserImg row" src="{% static 'img/userPlus.png' %}">
+            <span class="row">
+                عضویت
+            </span>
+        </div>
     </a>
     {% else %} 
     <a style="text-align: center;padding: 20px;" href="{{ user.get_baskets_url }}">
@@ -104,7 +121,7 @@
     </a>
 </div>
 
-<div class="loginPopBack PopBack row">
+<!-- <div class="loginPopBack PopBack row">
     <div class="loginPop Pop col-lg-4 col-lg-offset-4 col-md-3 col-md-offset-4 col-sm-12 col-xs-12">
         <input type="text" name="phone_numberL"><br>
         <input type="text" name="passwordL"><br>
@@ -121,10 +138,56 @@
         <input type="text" name="password2R"><br>
         <button id="signup" type="submit">ورود</button>
     </div>
-</div>
-<div class="shadow" onclick="closeNav()">
+</div> -->
+<div class="shadow" onclick="closeNav()"></div>
     
+<!-- Modal -->
+<div id="loginModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ورود</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" name="phone_numberL" placeholder="شماره موبایل"><br>
+                <input type="password" name="passwordL"  style="margin-bottom: 27px;" placeholder="رمز عبور"><br>
+                <button type="submit" id="entrance" class="modalBigButton">ورود</button>
+            </div>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div> -->
+        </div>
+    </div>
 </div>
+
+
+<!-- Modal -->
+<div id="registerModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">عضویت</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" name="first_nameR" placeholder="نام"><br>
+                <input type="text" name="last_nameR" placeholder="نام خانوادگی"><br>
+                <input type="text" name="phone_numberR" placeholder="شماره موبایل"><br>
+                <input type="password" name="password1R" placeholder="رمز عبور"><br>
+                <input type="password" name="password2R" style="margin-bottom: 27px;" placeholder="ایید رمز عبور"><br>
+                <button id="signup" type="submit" class="modalBigButton">ورود</button>
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
     var logged='{{ request.user.is_authenticated }}';
 </script>

@@ -2,15 +2,221 @@
 {% load staticfiles %}
 
 {% block header %}
-
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'style/settings.css' %}">
+    <link href="{% static 'style/plugins/iCheck/custom.css' %}" rel="stylesheet">
 {% endblock %}
 
 
 {% block content %}
 
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins" style="margin-top: 20px;    margin-bottom: 0;">
+            <div class="ibox-title  back-change">
+                <h5>آپلود عکس
+                    <small>عکس خود را آپلود و ویرایش کنید.</small>
+                </h5>
+            </div>
+            <div class="ibox-content">
+                    <div class="row">
+                        <!-- <div class="col-md-6">
+                            <div class="image-crop">
+                                <img src="{% static 'images/twitter.png' %}">
+                            </div>
+                        </div> -->
+                        <div class="col-md-6">
+                            <h4>پیش نمایش</h4>
+                            <div class="img-preview">
+                                {% if request.user.father_user.photo %}
+                                <img width="60" height="60" alt="image" class="img-circle" src="{{ request.user.father_user.photo.url }}" />
+                                {% else %}
+                                <img width="60" height="60" alt="image" class="img-circle" src="http://s3.amazonaws.com/nvest/Blank_Club_Website_Avatar_Gray.jpg"/>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>انتخاب عکس</h4>
+                            <form id="form1" runat="server" action="" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <!-- <input name="image_type" type="hidden" value="user_image" />
+                                <input type="file" name="image" id="imgInp" class="inputfile inputfile-4 btn btn-default text-center" data-multiple-caption="{count} files selected"
+                                    multiple style="padding: 30px" />
+                                <br/>
+                                <br/> -->
+                                <div class="fileUpload btn btn-default">
+                                    <span>برای انتخاب عکس کلیک کنید</span>
+                                    <input name="image_type" type="hidden" value="user_image" />
+                                    <input  type="file" name="image" id="imgInp" class="upload" />
+                                </div>
+                                <button type="submit" id="upload" class="btn comment_btn">آپلود
+                                    <i class="fa fa-upload"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            <!-- <div class="ibox-content" style="text-align: center;">
+                <button type="button" class="btn btn-w-m btn-success btn-lg">ذخیره تغییرات</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+<div class="row wrapper wrapper-content animated fadeInRight">
+    <div class="col-md-6">
+        <div class="ibox-title">
+            <h5>ویرایش آدرس هها
+                <small> رمز عبور خود را تغییر دهید.</small>
+            </h5>
+        </div>
+        <div class="ibox-content" style="margin-bottom: 20px;">
+            <div class="form-horizontal">
+                <div class="form-group adrressContainer">
+                    <div class="col-sm-9">
+                        <div class="i-checks"><label> <input type="radio" value="option1" name="a"> <i></i>خیابان ژاندارمری - پلاک 63 - انتشارات نگاه</label></div>
+                    </div>
+                    <div class="col-sm-3 addressIcons">
+                        <i class="fas fa-edit"></i>
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group adrressContainer">
+                    <div class="col-sm-9">
+                        <div class="i-checks"><label> <input type="radio" value="option1" name="a"> <i></i>خیابان ژاندارمری - پلاک 63 - انتشارات نگاه</label></div>
+                    </div>
+                    <div class="col-sm-3 addressIcons">
+                        <i class="fas fa-edit"></i>
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-sm-9">
+                        <button id="addAddrress" class="btn comment_btn" type="submit"  data-toggle="modal" data-target="#addAddressModal">افزودن آدرس جدید</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="ibox-title">
+            <h5>تغییر اطلاعات
+                <small> اطلاعات حساب کاربری خود را تغییر دهید</small>
+            </h5>
+        </div>
+        <div class="ibox-content">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">نام</label>
+                    <div class="col-sm-9">
+                        <input id="first_name" type="text" name="first_name" value="{{ first_name }}" class="form-control">
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">نام خانوادگی</label>
+                    <div class="col-sm-9">
+                        <input id="last_name" type="text" name="last_name" value="{{ last_name }}" class="form-control">
+                    </div>
+                </div>
+<!--                 <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">ایمیل</label>
+                    <div class="col-sm-9">
+                        <input name="old_email" type="hidden" value="{{ email }}" />
+                        <input id="email" type="text" name="email" value="{{ email }}" class="form-control">
+                    </div>
+                </div> -->
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">شماره تلفن</label>
+                    <div class="col-sm-9">
+                        <input id="phone_number" type="text" name="phone_number" value="" disabled class="form-control">
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <button id="edit_info" class="btn comment_btn">اعمال تغییرات</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="ibox-title">
+            <h5>تغییر رمز عبور
+                <small> رمز عبور خود را تغییر دهید.</small>
+            </h5>
+        </div>
+        <div class="ibox-content" style="margin-bottom: 20px;">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">رمز عبور فعلی</label>
+                    <div class="col-sm-9">
+                        <input id="old_pass" type="password" placeholder="رمز عبور فعلی" class="form-control">
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">رمز عبور جدید</label>
+                    <div class="col-sm-9">
+                        <input id="new_pass" type="password" placeholder="رمز عبور جدید" class="form-control">
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">تایید رمز عبور</label>
+                    <div class="col-sm-9">
+                        <input id="new_pass_repeat" type="password" placeholder="تایید رمز عبور" class="form-control">
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-sm-9">
+                        <button id="changePassword" class="btn comment_btn" type="submit">تغییر رمز</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="addAddressModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ورود</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" name="phone_numberL" placeholder="شماره موبایل"><br>
+                <input type="password" name="passwordL"  style="margin-bottom: 27px;" placeholder="رمز عبور"><br>
+                <button type="submit" id="entrance" class="modalBigButton">ورود</button>
+            </div>
+          <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div> -->
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 
 {% block footer %}
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="{% static 'script/settings.js' %}"></script>
+    <!-- iCheck -->
+    <script src="{% static 'script/plugins/iCheck/icheck.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
 
-{% endblock %}
+{% endblock %}    

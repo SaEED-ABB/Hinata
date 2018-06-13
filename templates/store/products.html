@@ -14,16 +14,21 @@
 		<h3>سوکا و هیناتا</h3>
 		<h4>زیبا بپوشید و زیبا زندگی کنید </h4>
 	</div>
+	
 	<div class="row mainContent">
 		<div class="row selectBoxes">
-			<div class="col-sm-3 col-xs-12">
-				<select>
-					<option>مرتب سازی بر اساس</option>
-					<option>2</option>
-					<option>3</option>
-				</select>
-			</div>
-			<div class="col-sm-3 col-xs-12">
+
+			{% for filter in filters %}
+		        <div class="col-sm-3 col-xs-12">
+					<select filter_slug="{{ filter.slug }}">
+						<option value="0" hidden>{{ filter.name }}</option>
+		            {% for option in filter.options.all %}
+		                <option value="{{ option.slug }}">{{ option.name }}</option>
+		            {% endfor %}
+			        </select>
+				</div>
+			{% endfor %}
+			<!-- <div class="col-sm-3 col-xs-12">
 				<select>
 					<option>لباس های مخصوص افراد</option>
 					<option>2</option>
@@ -36,7 +41,7 @@
 					<option>2</option>
 					<option>3</option>
 				</select>
-			</div>
+			</div> -->
 		</div>
 		<div class="row cards">
 			
@@ -51,5 +56,5 @@
 {% block js %}
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script type="text/javascript" src="{% static 'script/products.js' %}"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.2/js/swiper.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.3.2/js/swiper.min.js"></script>
 {% endblock %}
