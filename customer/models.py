@@ -231,6 +231,8 @@ class Basket(TimeStampedModel):
     canceled_at = models.DateTimeField(blank=True, null=True)
     returned_at = models.DateTimeField(blank=True, null=True)
 
+    verify_return_request = models.NullBooleanField()
+
     @classmethod
     def get_or_create_active_basket(cls):
         return cls.objects.get_or_create(status=cls.OPEN_CHECKING)[0]
@@ -258,14 +260,10 @@ class Basket(TimeStampedModel):
 
     def return_this_order(self):
         if self.status == self.CLOSED_DELIVERED:
-            self.status = self.CLOSED_RETURNED
-            self.returned_at = timezone.now()
-            how_much_paid = self.how_much_paid_online + self.how_much_paid_at_home
-            if how_much_paid > 0:
-                self.user.money += how_much_paid
-                self.user.save()
+            self.verify_return_request = False
+            self.save()
             context = {
-                "success": "{}'s basket successfully canceled.".format(self.user.get_full_name())
+                "success": "{} requested to cancel his/her order. wait for the admin to verify.".format(self.user.get_full_name())
             }
             status = 201
         else:
@@ -383,10 +381,15 @@ class Basket(TimeStampedModel):
             sel_pro.delete()
         return super(Basket, self).delete(*args, **kwargs)
 
-    # def save(self, *args, **kwargs):
-    #     for sel_pro in self.selected_products.all():
-    #         self.total_price += sel_pro.price
-    #     return super(Basket, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if self.verify_return_request is True and self.returned_at is None:
+            self.status = self.CLOSED_RETURNED
+            self.returned_at = timezone.now()
+            how_much_paid = self.how_much_paid_online + self.how_much_paid_at_home
+            if how_much_paid > 0:
+                self.user.money += how_much_paid
+                self.user.save()
+        return super(Basket, self).save(*args, **kwargs)
 
     def __str__(self):
         return "{}'s basket({})".format(self.user.get_full_name(), self.code)
