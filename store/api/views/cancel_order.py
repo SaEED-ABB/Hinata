@@ -27,6 +27,6 @@ def cancel_order(request):
         }
         return JsonResponse(res_body, status=403)
 
-    res_body, status = Basket.cancel_this_order(basket)
+    res_body, status = basket.cancel_this_order()
 
     return JsonResponse(res_body, status)

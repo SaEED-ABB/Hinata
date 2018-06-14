@@ -6,15 +6,15 @@ from zeep import Client
 
 MERCHANT = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
 client = Client('https://www.zarinpal.com/pg/services/WebGate/wsdl')
-amount = 1000  # Toman / Required
-description = "توضیحات مربوط به تراکنش را در این قسمت وارد کنید"  # Required
 email = 'email@example.com'  # Optional
 mobile = '09123456789'  # Optional
-CallbackURL = 'http://localhost:8000/verify/'  # Important: need to edit for realy server.
 
 
 def send_request(request):
-    # price = request.POST.get('price')
+    amount = request.POST.get('price')
+    description = "توضیحات مربوط به تراکنش را در این قسمت وارد کنید"  # Required
+    CallbackURL = 'http://localhost:8000/verify/'  # Important: need to edit for realy server.
+
     result = client.service.PaymentRequest(MERCHANT, amount, description, email, mobile, CallbackURL)
     if result.Status == 100:
         return redirect('https://www.zarinpal.com/pg/StartPay/' + str(result.Authority))
@@ -24,6 +24,7 @@ def send_request(request):
 
 def verify(request):
     if request.GET.get('Status') == 'OK':
+        amount = request.POST.get('amount')
         result = client.service.PaymentVerification(MERCHANT, request.GET['Authority'], amount)
         if result.Status == 100:
             return HttpResponse('Transaction success.\nRefID: ' + str(result.RefID))

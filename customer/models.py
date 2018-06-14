@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from django.shortcuts import reverse
 from django.utils.crypto import get_random_string
 from django.contrib.auth.models import PermissionsMixin
@@ -193,11 +194,13 @@ class Basket(TimeStampedModel):
 
     CLOSED_CANCELED = 'closed_canceled'
     CLOSED_RETURNED = 'closed_returned'
+    CLOSED_RETURNING = 'closed_returning'
     CLOSED_DELIVERED = 'closed_delivered'
 
     STATUS = (
         (CLOSED_CANCELED, 'Closed -> Canceled'),
         (CLOSED_RETURNED, 'Closed -> Returned'),
+        (CLOSED_RETURNING, 'CLOSED -> Returning'),
         (CLOSED_DELIVERED, 'Closed -> Delivered'),
 
         (OPEN_CHECKING, 'Open -> Checking'),
@@ -207,28 +210,35 @@ class Basket(TimeStampedModel):
     )
 
     PAYMENT_TYPE = (
-        ('paid_with_cash', 'Paid With Cash'),
-        ('paid_with_e-pay', 'Paid With E-Pay')
+        ('pay_at_home', 'پرداخت درب منزل'),
+        ('pay_online', 'پرداخت آنلاین')
     )
 
     code = models.UUIDField(db_index=True, default=uuid_lib.uuid4, editable=False)
     user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='baskets')
     phone_number = models.CharField(max_length=200, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-    status = models.CharField(choices=STATUS, default='open_checking', max_length=200, blank=True, null=True)
+    status = models.CharField(choices=STATUS, default=OPEN_CHECKING, max_length=200, blank=True, null=True)
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
     total_price = models.IntegerField(default=0)
+
     paid_at = models.DateTimeField(blank=True, null=True)
+    delivered_at = models.DateTimeField(blank=True, null=True)
+    canceled_at = models.DateTimeField(blank=True, null=True)
+    returned_at = models.DateTimeField(blank=True, null=True)
 
     @classmethod
     def get_or_create_active_basket(cls):
         return cls.objects.get_or_create(status=cls.OPEN_CHECKING)[0]
 
-    @classmethod
-    def cancel_this_order(cls, basket):
-        if basket.status in [cls.OPEN_CHECKING, cls.OPEN_PREPARING]:
-            basket.status = cls.CLOSED_CANCELED
-            basket.save()
+    def cancel_this_order(self):
+        if self.status in [self.OPEN_CHECKING, self.OPEN_PREPARING]:
+            self.status = self.CLOSED_CANCELED
+            self.canceled_at = timezone.now()
+            if self.paid_at is not None:
+                self.user.money += self.total_price
+                self.user.save()
+            self.save()
             context = {
                 "success": "order status successfully changed to 'canceled'"
             }
@@ -241,16 +251,23 @@ class Basket(TimeStampedModel):
 
         return context, status
 
-    @classmethod
-    def return_this_order(cls, basket):
-        basket.status = cls.CLOSED_RETURNED
-        basket.user.money += basket.total_price
-        basket.user.save()
-        basket.save()
-        context = {
-            "success": "{}'s basket successfully canceled and {} T. added to his account money."
-        }
-        status = 201
+    def return_this_order(self):
+        if self.status == self.CLOSED_DELIVERED:
+            self.status = self.CLOSED_RETURNED
+            self.returned_at = timezone.now()
+            if self.paid_at is not None:
+                self.user.money += self.total_price
+                self.user.save()
+            self.save()
+            context = {
+                "success": "{}'s basket successfully canceled.".format(self.user.get_full_name())
+            }
+            status = 201
+        else:
+            context = {
+                "error": "Your basket status should be 'delivered' and at most 7 days past from pay time to be able to return the order."
+            }
+            status = 400
         return context, status
 
     def get_info(self, all_colors_and_sizes_per_product=False):

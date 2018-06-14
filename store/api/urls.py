@@ -12,5 +12,8 @@ urlpatterns = [
     path('get_history/', views.get_basket_history, name="get_basket_history"),
     path('search_product/', views.search_product, name="search_product"),
     path('get_active_basket_info/', views.get_active_basket_info, name='get_active_basket_info'),
-    path('rate_product/', views.rate_product, name='rate_product')
+    path('rate_product/', views.rate_product, name='rate_product'),
+
+    path('return_order/', views.return_order, name='return_order'),
+    path('cancel_order/', views.cancel_order, name='cancel_order'),
 ]

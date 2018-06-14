@@ -10,7 +10,7 @@ from customer.decorators import check_permission_api
 @require_http_methods(['POST'])
 @ratelimit(key='ip', rate='500/h', method=ratelimit.ALL, block=True)
 @check_permission_api(['user'])
-def cancel_order(request):
+def return_order(request):
     basket_code = request.POST.get('basket_code')
 
     try:
@@ -27,6 +27,6 @@ def cancel_order(request):
         }
         return JsonResponse(res_body, status=403)
 
-    res_body, status = Basket.return_this_order(basket)
+    res_body, status = basket.return_this_order()
 
     return JsonResponse(res_body, status)

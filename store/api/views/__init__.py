@@ -8,3 +8,5 @@ from .get_active_basket_info import get_active_basket_info
 from .get_basket_history import get_basket_history
 from .search_product import search_product
 from .rate_product import rate_product
+from .cancel_order import cancel_order
+from .return_order import return_order
