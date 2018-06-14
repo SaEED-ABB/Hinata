@@ -10,3 +10,4 @@ from .search_product import search_product
 from .rate_product import rate_product
 from .cancel_order import cancel_order
 from .return_order import return_order
+from .pay_order import pay_order, verify_pay_order

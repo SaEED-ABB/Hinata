@@ -194,13 +194,13 @@ class Basket(TimeStampedModel):
 
     CLOSED_CANCELED = 'closed_canceled'
     CLOSED_RETURNED = 'closed_returned'
-    CLOSED_RETURNING = 'closed_returning'
+    # CLOSED_RETURNING = 'closed_returning'
     CLOSED_DELIVERED = 'closed_delivered'
 
     STATUS = (
         (CLOSED_CANCELED, 'Closed -> Canceled'),
         (CLOSED_RETURNED, 'Closed -> Returned'),
-        (CLOSED_RETURNING, 'CLOSED -> Returning'),
+        # (CLOSED_RETURNING, 'CLOSED -> Returning'),
         (CLOSED_DELIVERED, 'Closed -> Delivered'),
 
         (OPEN_CHECKING, 'Open -> Checking'),
@@ -222,7 +222,11 @@ class Basket(TimeStampedModel):
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=200, blank=True, null=True)
     total_price = models.IntegerField(default=0)
 
-    paid_at = models.DateTimeField(blank=True, null=True)
+    how_much_paid_online = models.IntegerField(default=0)
+    how_much_paid_at_home = models.IntegerField(default=0)
+    paid_online_at = models.DateTimeField(blank=True, null=True)
+    paid_at_home_at = models.DateTimeField(blank=True, null=True)
+
     delivered_at = models.DateTimeField(blank=True, null=True)
     canceled_at = models.DateTimeField(blank=True, null=True)
     returned_at = models.DateTimeField(blank=True, null=True)
@@ -235,8 +239,9 @@ class Basket(TimeStampedModel):
         if self.status in [self.OPEN_CHECKING, self.OPEN_PREPARING]:
             self.status = self.CLOSED_CANCELED
             self.canceled_at = timezone.now()
-            if self.paid_at is not None:
-                self.user.money += self.total_price
+            how_much_paid = self.how_much_paid_online + self.how_much_paid_at_home
+            if how_much_paid > 0:
+                self.user.money += how_much_paid
                 self.user.save()
             self.save()
             context = {
@@ -255,10 +260,10 @@ class Basket(TimeStampedModel):
         if self.status == self.CLOSED_DELIVERED:
             self.status = self.CLOSED_RETURNED
             self.returned_at = timezone.now()
-            if self.paid_at is not None:
-                self.user.money += self.total_price
+            how_much_paid = self.how_much_paid_online + self.how_much_paid_at_home
+            if how_much_paid > 0:
+                self.user.money += how_much_paid
                 self.user.save()
-            self.save()
             context = {
                 "success": "{}'s basket successfully canceled.".format(self.user.get_full_name())
             }
@@ -275,7 +280,10 @@ class Basket(TimeStampedModel):
         context = {
             "code": self.code,
             "address": self.address if self.address else "",
-            "paid_at": solar_date_converter.get_solar_date(self.paid_at),
+            "paid_online_at": solar_date_converter.get_solar_date(self.paid_online_at),
+            "paid_at_home_at": solar_date_converter.get_solar_date(self.paid_at_home_at),
+            "how_much_paid_online": self.how_much_paid_online,
+            "how_much_paid_at_home": self.how_much_paid_at_home,
             "updated_at": solar_date_converter.get_solar_date(self.updated_at),
             "total_price": self.total_price,
             "status": self.status,
