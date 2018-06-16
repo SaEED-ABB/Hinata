@@ -105,7 +105,8 @@ class SelectedProductInline(admin.StackedInline):
 
 
 class BasketAdmin(admin.ModelAdmin):
-    list_display = ('code', 'user', 'phone_number', 'address', 'status', 'payment_type', 'total_price', 'paid_online_at', 'paid_at_home_at')
+    list_display = ('code', 'user', 'phone_number', 'address', 'status', 'payment_type', 'total_price',
+                    'paid_online_at', 'paid_at_home_at', 'get_factor_pdf_link')
 
     readonly_fields = ('code', )
     fieldsets = (
@@ -115,6 +116,11 @@ class BasketAdmin(admin.ModelAdmin):
     )
 
     inlines = [SelectedProductInline]
+
+    def get_factor_pdf_link(self, obj):
+        return format_html('<a href="{url}">{url}</a>', url=obj.get_factor_pdf_absolute_url())
+
+    get_factor_pdf_link.short_description = 'Factor PDF Link'
 
     actions = ['really_delete_selected']
 

@@ -237,6 +237,9 @@ class Basket(TimeStampedModel):
     def get_or_create_active_basket(cls):
         return cls.objects.get_or_create(status=cls.OPEN_CHECKING)[0]
 
+    def get_factor_pdf_absolute_url(self):
+        return reverse('customer:order_pdf', kwargs={'basket_code': self.code, })
+
     def cancel_this_order(self):
         if self.status in [self.OPEN_CHECKING, self.OPEN_PREPARING]:
             self.status = self.CLOSED_CANCELED
@@ -276,13 +279,16 @@ class Basket(TimeStampedModel):
     def get_info(self, all_colors_and_sizes_per_product=False):
 
         context = {
+            "factor_pdf_url": self.get_factor_pdf_absolute_url(),
             "code": self.code,
             "address": self.address if self.address else "",
-            "paid_online_at": solar_date_converter.get_solar_date(self.paid_online_at),
-            "paid_at_home_at": solar_date_converter.get_solar_date(self.paid_at_home_at),
+            "phone_number": self.phone_number if self.phone_number else "",
+            "paid_online_at": solar_date_converter.get_solar_date(self.paid_online_at) if self.paid_online_at else "",
+            "paid_at_home_at": solar_date_converter.get_solar_date(self.paid_at_home_at) if self.paid_at_home_at else "",
             "how_much_paid_online": self.how_much_paid_online,
             "how_much_paid_at_home": self.how_much_paid_at_home,
-            "updated_at": solar_date_converter.get_solar_date(self.updated_at),
+            "updated_at": solar_date_converter.get_solar_date(self.updated_at) if self.updated_at else "",
+            "created_at": solar_date_converter.get_solar_date(self.created_at) if self.created_at else "",
             "total_price": self.total_price,
             "status": self.status,
             "products": [],
