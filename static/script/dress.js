@@ -97,7 +97,7 @@ $.ajax({
 			            '</div>'+
 		            '</div>');
 		}
-		
+
 	}
 });
 function returnImage(param){
@@ -231,35 +231,35 @@ $(document).ready(function() {
         dynamicBullets: true,
       },
     });
-    $('#ex1').slider({
-		formatter: function(value) {
-			 
-		}
+  $('#ex1').slider({
+	formatter: function(value) {
+
+	}
 	});
 	$('#ex2').slider({
 		formatter: function(value) {
-			 
+
 		}
 	});
 	 $('#ex3').slider({
 		formatter: function(value) {
-			 
+
 		}
 	});
 	new RangeSlider($("#materialRangeSlider"), {
 	    size: 1,
 	    percentage: 50
-	});	
+	});
 	new RangeSlider($("#priceRangeSlider"), {
 	    size: 1,
 	    borderSize: 0.4,
 	    percentage: 80
-	});	
+	});
 	new RangeSlider($("#styleRangeSlider"), {
 	    size: 1,
 	    borderSize: 0.4,
 	    percentage: 60
-	});		
+	});
 
 });
 

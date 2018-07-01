@@ -30,7 +30,7 @@ $.ajax({
 		}
 		$('.basketContainer').append('<div class="row withoutBorder">'+
 	    		'<div class="removeCol"></div>'+
-	    		'<div class="prodCol"><button class="bigButton">خرید</button></div>'+
+	    		'<div class="prodCol"><button class="bigButton" data-toggle="modal" data-target="#registerModal">خرید</button></div>'+
 	    		'<div class="colorCol"></div>'+
 	    		'<div class="sizeCol"></div>'+
 	    		'<div class="numCol">'+total_count+'</div>'+
@@ -44,14 +44,14 @@ $.ajax({
 function makeColors(array,slug){
 	var text="";
 	for (var i =0; i < array.length; i++) {
-		text+='<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 0 5px;"><div class="color" color_slug="'+array[i].slug+'" style="background-color:'+array[i].code+'"></div></div>';
+		text+='<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 10px 10px 10px;"><div class="color" color_slug="'+array[i].slug+'" style="background-color:'+array[i].code+'"></div></div>';
 	}
 	return text;
 }
 function makeSizes(array,slug){
 	var text="";
 	for (var i =0; i < array.length; i++) {
-		text+='<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 0 5px;"><div class="size" size_slug="'+array[i].slug+'">'+array[i].name+'</div></div>';
+		text+='<div class="shadowDiv" style="display:inline-block;border-radius: 5px;margin: 10px 10px 10px;"><div class="size" size_slug="'+array[i].slug+'">'+array[i].name+'</div></div>';
 	}
 	return text;
 }
@@ -76,24 +76,24 @@ $(document).on('click','.fa-times',function(){
 
 $(document).on('click touchstart','.color',function(){
 	$(this).parent().siblings().css({ 'box-shadow' : 'none'})
-	$(this).parent().siblings().css('margin','0 5px')
+	$(this).parent().siblings().css('margin','10px 10px 10px')
 	if($(this).parent().css('box-shadow')!="none"){
 		$(this).parent().css('box-shadow','none')
-		$(this).parent().css('margin','0 5px')
+		$(this).parent().css('margin','10px 10px 10px')
 	}else{
 		$(this).parent().css('box-shadow','0 0 10px 5px '+ $(this).css('background-color'))
-		$(this).parent().css('margin','0 10px')
+		$(this).parent().css('margin','10px 10px 10px')
 	}
 })
 
 $(document).on('click touchstart','.size',function(){
 	$(this).parent().siblings().css({ 'box-shadow' : 'none'})
-	$(this).parent().siblings().css('margin','0 5px')
+	$(this).parent().siblings().css('margin','10px 10px 10px')
 	if($(this).parent().css('box-shadow')!="none"){
 		$(this).parent().css('box-shadow','none')
-		$(this).parent().css('margin','0 5px')
+		$(this).parent().css('margin','10px 10px 10px')
 	}else{
 		$(this).parent().css('box-shadow','0 0 10px 5px gray')
-		$(this).parent().css('margin','0 10px')
+		$(this).parent().css('margin','10px 10px 10px')
 	}
 })

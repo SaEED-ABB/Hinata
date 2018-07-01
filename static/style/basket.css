@@ -82,3 +82,6 @@
 .withoutBorder{
 	border-bottom: none !important;
 }
+.basketContainer>.row>div{
+    vertical-align: middle;
+}
